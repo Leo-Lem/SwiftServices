@@ -7,7 +7,7 @@ public extension RemoteDatabaseService {
     try await fetchAndCollect(Query<T>("id", .equal, id)).first
   }
 
-  func fetch<T: RemoteModelConvertible>(convertible: T) async throws -> T? {
+  func fetch<T: RemoteModelConvertible>(_ convertible: T) async throws -> T? {
     try await fetch(with: convertible.stringID)
   }
 
