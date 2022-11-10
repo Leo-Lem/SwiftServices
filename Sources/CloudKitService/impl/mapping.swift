@@ -8,7 +8,7 @@ import RemoteDatabaseService
 extension CloudKitService {
   func mapToRemoteModel<T: RemoteModelConvertible>(_ convertible: T) async throws -> T.RemoteModel {
     convertible.mapProperties(
-      onto: try await fetch(with: convertible.stringID, T.self) ?? (try create(convertible))
+      onto: try await fetch(with: convertible.id, T.self) ?? (try create(convertible))
     )
   }
 
@@ -16,7 +16,7 @@ extension CloudKitService {
     try verifyIsRemoteModel(
       CKRecord(
         recordType: T.typeID,
-        recordID: .init(recordName: convertible.stringID)
+        recordID: .init(recordName: convertible.id.description)
       ),
       T.self
     )

@@ -3,6 +3,6 @@
 public enum RemoteDatabaseChange {
   case status(RemoteDatabaseStatus),
        published(any RemoteModelConvertible),
-       unpublished(any RemoteModelConvertible.Type),
+       unpublished(id: any CustomStringConvertible, any RemoteModelConvertible.Type),
        remote
 }

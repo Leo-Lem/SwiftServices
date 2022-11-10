@@ -5,9 +5,9 @@ import Queries
 import RemoteDatabaseService
 
 extension CloudKitService {
-  func fetch<T: RemoteModelConvertible>(with id: String, _: T.Type = T.self) async throws -> T.RemoteModel? {
+  func fetch<T: RemoteModelConvertible>(with id: T.ID, _: T.Type = T.self) async throws -> T.RemoteModel? {
     do {
-      return try verifyIsRemoteModel(try await database.record(for: .init(recordName: id)), T.self)
+      return try verifyIsRemoteModel(try await database.record(for: .init(recordName: id.description)), T.self)
     } catch let error as CKError where error.code == .unknownItem {
       return nil
     }

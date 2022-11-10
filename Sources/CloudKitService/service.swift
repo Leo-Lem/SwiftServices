@@ -38,10 +38,10 @@ open class CloudKitService: RemoteDatabaseService {
     }
   }
 
-  public func unpublish<T: RemoteModelConvertible>(with id: String, _: T.Type = T.self) async throws {
+  public func unpublish<T: RemoteModelConvertible>(with id: T.ID, _: T.Type = T.self) async throws {
     try await mapToCloudKitError {
-      try await database.deleteRecord(withID: CKRecord.ID(recordName: id))
-      didChange.send(.unpublished(T.self))
+      try await database.deleteRecord(withID: CKRecord.ID(recordName: id.description))
+      didChange.send(.unpublished(id: id, T.self))
     }
   }
 

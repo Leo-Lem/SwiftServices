@@ -16,7 +16,7 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
     return convertible
   }
 
-  public func unpublish<T: RemoteModelConvertible>(with id: String, _: T.Type = T.self) async throws {
+  public func unpublish<T: RemoteModelConvertible>(with id: T.ID, _: T.Type = T.self) async throws {
     print("Deleted model with \(id)!")
   }
 

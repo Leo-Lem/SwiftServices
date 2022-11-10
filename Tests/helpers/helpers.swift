@@ -4,7 +4,7 @@ import RemoteDatabaseService
 
 extension RemoteDatabaseServiceTests {
   func fetch<T: RemoteModelConvertible>(_ convertible: T) async throws -> T? {
-    try await service.fetch(with: convertible.stringID)
+    try await service.fetch(with: convertible.id)
   }
 
   func deleteAll() async {

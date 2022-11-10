@@ -17,12 +17,12 @@ class RemoteDatabaseServiceTests: XCTestCase {
   func testPublishing() async throws {
     let convertible = Example1()
 
-    var result = try await service.exists(with: convertible.stringID, type(of: convertible))
+    var result = try await service.exists(with: convertible.id, type(of: convertible))
     XCTAssertFalse(result, "Remote model exists without publishing.")
 
     try await service.publish(convertible)
 
-    result = try await service.exists(with: convertible.stringID, type(of: convertible))
+    result = try await service.exists(with: convertible.id, type(of: convertible))
     XCTAssertTrue(result, "Remote model does not exist after publishing.")
   }
 
@@ -31,12 +31,12 @@ class RemoteDatabaseServiceTests: XCTestCase {
 
     try await service.publish(convertible)
 
-    var result = try await service.exists(with: convertible.stringID, type(of: convertible))
+    var result = try await service.exists(with: convertible.id, type(of: convertible))
     XCTAssertTrue(result, "Remote model does not exist after publishing.")
 
-    try await service.unpublish(with: convertible.stringID, type(of: convertible))
+    try await service.unpublish(with: convertible.id, type(of: convertible))
 
-    result = try await service.exists(with: convertible.stringID, type(of: convertible))
+    result = try await service.exists(with: convertible.id, type(of: convertible))
     XCTAssertFalse(result, "Remote model still exists after unpublishing.")
   }
 

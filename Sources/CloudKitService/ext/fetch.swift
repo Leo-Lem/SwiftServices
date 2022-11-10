@@ -4,7 +4,7 @@ import CloudKit
 import RemoteDatabaseService
 
 public extension CloudKitService {
-  func fetch<T: RemoteModelConvertible>(with id: String) async throws -> T? {
+  func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
     try await mapToCloudKitError {
       do {
         return try await fetch(with: id, T.self)
