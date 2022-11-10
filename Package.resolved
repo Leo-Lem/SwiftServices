@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "queries",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Queries",
+      "state" : {
+        "branch" : "main",
+        "revision" : "58b6da26764e72a2438ac465da4bbd1938d5e194"
+      }
+    }
+  ],
+  "version" : 2
+}
