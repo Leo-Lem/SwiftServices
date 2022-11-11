@@ -44,6 +44,17 @@ open class CloudKitService: RemoteDatabaseService {
       didChange.send(.unpublished(id: id, T.self))
     }
   }
+  
+  public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
+    try await mapToCloudKitError {
+      do {
+        return try await fetch(with: id, T.self)
+          .flatMap(T.init)
+      } catch let error as CKError where error.code == .unknownItem {
+        return nil
+      }
+    }
+  }
 
   public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<T, Error> {
     fetch(query)

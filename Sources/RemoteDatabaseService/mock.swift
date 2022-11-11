@@ -24,4 +24,9 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
     print("Fetched \(query)!")
     return.init { return nil }
   }
+  
+  public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
+    print("Fetched with \(id)!")
+    return nil
+  }
 }

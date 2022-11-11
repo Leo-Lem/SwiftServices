@@ -13,5 +13,6 @@ public protocol RemoteDatabaseService {
 
   func unpublish<T: RemoteModelConvertible>(with id: T.ID, _: T.Type) async throws
 
+  func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T?
   func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<T, Error>
 }
