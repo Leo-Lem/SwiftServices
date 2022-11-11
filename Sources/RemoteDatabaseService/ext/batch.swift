@@ -6,9 +6,18 @@ public extension RemoteDatabaseService {
     try await ids.compactMap(fetch)
   }
   
+  func fetch<T: RemoteModelConvertible>(with ids: [T.ID]) -> AsyncThrowingStream<T, Error> {
+    ids.compactMap(fetch)
+  }
+  
   @_disfavoredOverload
   func fetch<T: RemoteModelConvertible>(with ids: T.ID...) async throws -> [T] {
     try await fetch(with: ids)
+  }
+  
+  @_disfavoredOverload
+  func fetch<T: RemoteModelConvertible>(with ids: T.ID...) -> AsyncThrowingStream<T, Error> {
+    fetch(with: ids)
   }
   
   // publish
