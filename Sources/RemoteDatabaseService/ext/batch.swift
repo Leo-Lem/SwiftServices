@@ -1,6 +1,17 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
 public extension RemoteDatabaseService {
+  // fetch
+  func fetch<T: RemoteModelConvertible>(with ids: [T.ID]) async throws -> [T] {
+    try await ids.compactMap(fetch)
+  }
+  
+  @_disfavoredOverload
+  func fetch<T: RemoteModelConvertible>(with ids: T.ID...) async throws -> [T] {
+    try await fetch(with: ids)
+  }
+  
+  // publish
   @discardableResult
   func publish<T: RemoteModelConvertible>(_ convertibles: [T]) async throws -> [T] {
     for convertible in convertibles { try await publish(convertible) }
@@ -24,6 +35,8 @@ public extension RemoteDatabaseService {
   func publish<T: RemoteModelConvertible>(_ convertibles: T...) async throws -> [T] {
     try await publish(convertibles)
   }
+  
+  // unpublish
   
   func unpublish<T: RemoteModelConvertible>(_ convertibles: [T]) async throws {
     for convertible in convertibles { try await unpublish(convertible) }
