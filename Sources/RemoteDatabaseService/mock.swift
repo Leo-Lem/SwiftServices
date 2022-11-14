@@ -20,9 +20,9 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
     print("Deleted model with \(id)!")
   }
 
-  public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<T, Error> {
+  public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error> {
     print("Fetched \(query)!")
-    return.init { return nil }
+    return .init { return nil }
   }
   
   public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {

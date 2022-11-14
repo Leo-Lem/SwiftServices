@@ -13,52 +13,58 @@ extension CloudKitService {
     }
   }
 
-  func fetchAndCollect<T: RemoteModelConvertible>(_ query: Query<T>) async throws -> [T.RemoteModel] {
-    try await fetch(query).collect()
-  }
-
-  func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<T.RemoteModel, Error> {
+  func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T.RemoteModel], Error> {
     fetch(
       ckQuery: getCKQuery(from: query),
-      maxItems: query.options.maxItems
+      maxItems: query.options.maxItems,
+      batchSize: query.options.batchSize
     )
-    .map { try self.verifyIsRemoteModel($0, T.self) }
+    .map { records in
+      try records.map {
+        try self.verifyIsRemoteModel($0, T.self)
+      }
+    }
   }
 }
 
 extension CloudKitService {
-  func fetch(ckQuery: CKQuery, maxItems: Int?) -> AsyncThrowingStream<CKRecord, Error> {
-    AsyncThrowingStream { continuation in
-      Task { [weak self] in
-        do {
-          guard let database = self?.database else { return continuation.finish() }
+  func fetch(ckQuery: CKQuery, maxItems: Int?, batchSize: Int) -> AsyncThrowingStream<[CKRecord], Error> {
+    AsyncThrowingStream { [weak self] continuation in
+      do {
+        guard let database = self?.database else { return continuation.finish() }
 
-          var count = 0
-          var cursor: CKQueryOperation.Cursor?
+        var count = 0,
+            cursor: CKQueryOperation.Cursor?
 
-          let result = try await database.records(matching: ckQuery, resultsLimit: 1)
-          cursor = result.queryCursor
-          if let record = try result.matchResults.first?.1.get() {
-            continuation.yield(record)
-          }
+        try handleResult(
+          try await database.records(matching: ckQuery, resultsLimit: batchSize)
+        )
 
-          while let c = cursor {
-            let result = try await database.records(continuingMatchFrom: c, resultsLimit: 1)
-            cursor = result.queryCursor
-            count += 1
-            if let record = try result.matchResults.first?.1.get() {
-              continuation.yield(record)
-            }
-
-            if let max = maxItems, count > max {
-              continuation.finish()
-            }
-          }
-
-          continuation.finish()
-        } catch {
-          continuation.finish(throwing: error)
+        while let c = cursor {
+          try handleResult(
+            try await database.records(continuingMatchFrom: c, resultsLimit: batchSize)
+          )
         }
+
+        continuation.finish()
+
+        func handleResult(_ result: CKQueryOperationResult) throws {
+          cursor = result.queryCursor
+
+          continuation.yield(
+            try result.matchResults
+              .map(\.1)
+              .map { try $0.get() }
+          )
+
+          count += batchSize
+
+          if let max = maxItems, count > max {
+            continuation.finish()
+          }
+        }
+      } catch {
+        continuation.finish(throwing: error)
       }
     }
   }

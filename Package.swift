@@ -13,19 +13,20 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/Leo-Lem/Queries", branch: "main"),
+    .package(url: "https://github.com/Leo-Lem/ExtendedConcurrency", branch: "main"),
   ],
   targets: [
     .target(
       name: "RemoteDatabaseService",
-      dependencies: ["Queries"]
+      dependencies: ["Queries", "ExtendedConcurrency"]
     ),
     .target(
       name: "CloudKitService",
-      dependencies: ["RemoteDatabaseService", "Queries"]
+      dependencies: ["RemoteDatabaseService", "Queries", "ExtendedConcurrency"]
     ),
     .testTarget(
       name: "RemoteDatabaseServiceTests",
-      dependencies: ["RemoteDatabaseService", "CloudKitService", "Queries"],
+      dependencies: ["RemoteDatabaseService", "CloudKitService", "Queries", "ExtendedConcurrency"],
       path: "Tests"
     )
   ]

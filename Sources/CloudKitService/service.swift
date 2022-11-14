@@ -2,26 +2,27 @@
 
 import CloudKit
 import Combine
+import ExtendedConcurrency
 import Queries
 import RemoteDatabaseService
 
 open class CloudKitService: RemoteDatabaseService {
   public internal(set) var status: RemoteDatabaseStatus = .unavailable
-  
+
   public let didChange = PassthroughSubject<RemoteDatabaseChange, Never>()
 
   let container: CKContainer
-  private let scope: CKDatabase.Scope
+  private let scope: CloudKit.CKDatabase.Scope
   var database: CKDatabase { container.database(with: scope) }
 
   private let tasks = Tasks()
 
-  public init(_ container: CKContainer, scope: CKDatabase.Scope = .public) async {
+  public init(_ container: CKContainer, scope: CloudKit.CKDatabase.Scope = .public) async {
     self.container = container
     self.scope = scope
-    
+
     tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
-    
+
     await updateStatus()
   }
 
@@ -31,9 +32,9 @@ open class CloudKitService: RemoteDatabaseService {
       try await database.save(
         try verifyIsCKRecord(remoteModel: try await mapToRemoteModel(convertible))
       )
-      
+
       didChange.send(.published(convertible))
-      
+
       return convertible
     }
   }
@@ -44,7 +45,7 @@ open class CloudKitService: RemoteDatabaseService {
       didChange.send(.unpublished(id: id, T.self))
     }
   }
-  
+
   public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
     try await mapToCloudKitError {
       do {
@@ -56,9 +57,9 @@ open class CloudKitService: RemoteDatabaseService {
     }
   }
 
-  public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<T, Error> {
+  public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error> {
     fetch(query)
-      .map(T.init)
+      .map { $0.map(T.init) }
       .mapError(mapToCloudKitError)
   }
 }

@@ -10,7 +10,7 @@ class RemoteDatabaseServiceTests: XCTestCase {
   override func setUp() async throws {
     try XCTSkipIf(
       service == nil,
-      "Subclass these tests and insert an implementation of the private database service in the initializer!"
+      "Subclass these tests and insert an implementation of the remote database service in the initializer!"
     )
   }
 
