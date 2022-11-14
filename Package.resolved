@@ -1,12 +1,21 @@
 {
   "pins" : [
     {
+      "identity" : "extendedconcurrency",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/ExtendedConcurrency",
+      "state" : {
+        "branch" : "main",
+        "revision" : "75e8f17321573a180877b22803e7989b2e89cc8b"
+      }
+    },
+    {
       "identity" : "queries",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Leo-Lem/Queries",
       "state" : {
         "branch" : "main",
-        "revision" : "58b6da26764e72a2438ac465da4bbd1938d5e194"
+        "revision" : "8d3fe0b2a82d21609649b4342d312b56c6aab25e"
       }
     }
   ],
