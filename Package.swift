@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
   name: "Key-Value Storage Service",
+  platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [
     .library(
       name: "KeyValueStorageService",
@@ -13,12 +14,14 @@ let package = Package(
       ]
     )
   ],
-  dependencies: [],
+  dependencies: [
+    .package(url: "https://github.com/Leo-Lem/Concurrency", branch: "main")
+  ],
   targets: [
     .target(name: "KeyValueStorageService"),
     .target(
       name: "UserDefaultsStorageService",
-      dependencies: ["KeyValueStorageService"]
+      dependencies: ["KeyValueStorageService", "Concurrency"]
     ),
     .testTarget(
       name: "KeyValueStorageServiceTests",

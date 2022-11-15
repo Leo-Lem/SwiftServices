@@ -1,9 +1,11 @@
 //	Created by Leopold Lemmermann on 29.10.22.
 
 public protocol KeyValueStorageService {
-  func insert<T>(_ item: T, for key: String) throws
+  func store<T, Key: CustomStringConvertible>(_ item: T, for key: Key)
   
-  func load<T>(for key: String) throws -> T?
+  func load<T, Key: CustomStringConvertible>(for key: Key) -> T?
   
-  func delete(for key: String) throws
+  func delete<Key: CustomStringConvertible>(for key: Key)
+  
+  func allKeys() -> [String]
 }

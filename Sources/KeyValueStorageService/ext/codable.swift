@@ -3,20 +3,21 @@
 import Foundation
 
 public extension KeyValueStorageService {
-  func insert<T: Encodable>(
+  func store<T: Encodable>(
     object: T,
     encoder: JSONEncoder = .init(),
     for key: String
   ) throws {
-    try insert(try encoder.encode(object), for: key)
+    store(try encoder.encode(object), for: key)
   }
 
   func fetchObject<T: Decodable>(
     decoder: JSONDecoder = .init(),
     for key: String
   ) throws -> T? {
-    if let data: Data = try load(for: key) {
-      return try decoder.decode(T.self, from: data)
-    } else { return nil }
+    try (load(for: key) as Data?)
+      .flatMap { data in
+        try decoder.decode(T.self, from: data)
+      }
   }
 }
