@@ -1,12 +1,21 @@
 {
   "pins" : [
     {
-      "identity" : "extendedconcurrency",
+      "identity" : "concurrency",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Leo-Lem/ExtendedConcurrency",
+      "location" : "https://github.com/Leo-Lem/Concurrency",
       "state" : {
         "branch" : "main",
-        "revision" : "75e8f17321573a180877b22803e7989b2e89cc8b"
+        "revision" : "9704ba702dfc5ab422355ca9dbe1397b3b54b061"
+      }
+    },
+    {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Errors",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a0ff60b9d086f3cbc56eac5807a7c8b9f775b23d"
       }
     },
     {

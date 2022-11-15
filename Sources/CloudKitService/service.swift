@@ -2,7 +2,7 @@
 
 import CloudKit
 import Combine
-import ExtendedConcurrency
+import Concurrency
 import Queries
 import RemoteDatabaseService
 

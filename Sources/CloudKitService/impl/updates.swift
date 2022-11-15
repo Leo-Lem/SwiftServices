@@ -2,6 +2,7 @@
 
 import CloudKit
 import RemoteDatabaseService
+import Errors
 
 extension CloudKitService {
   func statusUpdateOnCloudKitChange() -> Task<Void, Never> {

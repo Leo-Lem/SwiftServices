@@ -1,7 +1,7 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
 import Queries
-import ExtendedConcurrency
+import Concurrency
 
 public extension RemoteDatabaseService {
   func fetch<T: RemoteModelConvertible>(_ convertible: T) async throws -> T? {
