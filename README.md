@@ -20,3 +20,12 @@ An abstraction for accessing a remote database (e.g., CloudKit).
 2. Specify a String identifier for the remote database type (e.g., a recordType).
 3. Mapping to the remote database model: A method mapProperties, taking an instance of the remote database model and returning said instance after modification.
 4. Mapping from the remote database model: An initializer taking an instance of the remote database model.
+
+### Note on implementing the CloudKit service
+
+You have to declare these conformances, in order to use the regular CloudKit container and database:
+
+```swift
+extension CKContainer: CloudKitContainer {}
+extension CKDatabase: CloudKitDatabase {}
+```

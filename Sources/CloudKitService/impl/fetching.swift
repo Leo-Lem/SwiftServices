@@ -48,7 +48,10 @@ extension CloudKitService {
 
         continuation.finish()
 
-        func handleResult(_ result: CKQueryOperationResult) throws {
+        func handleResult(_ result: (
+          matchResults: [(CKRecord.ID, Result<CKRecord, Error>)],
+          queryCursor: CKQueryOperation.Cursor?
+        )) throws {
           cursor = result.queryCursor
 
           continuation.yield(

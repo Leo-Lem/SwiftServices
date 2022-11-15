@@ -11,13 +11,13 @@ open class CloudKitService: RemoteDatabaseService {
 
   public let didChange = PassthroughSubject<RemoteDatabaseChange, Never>()
 
-  let container: CKContainer
-  private let scope: CloudKit.CKDatabase.Scope
-  var database: CKDatabase { container.database(with: scope) }
+  let container: CloudKitContainer
+  private let scope: CloudKitDatabaseScope
+  var database: CloudKitDatabase { container.database(with: scope) }
 
   private let tasks = Tasks()
 
-  public init(_ container: CKContainer, scope: CloudKit.CKDatabase.Scope = .public) async {
+  public init(_ container: CloudKitContainer, scope: CloudKitDatabaseScope = .public) async {
     self.container = container
     self.scope = scope
 

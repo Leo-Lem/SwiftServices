@@ -1,7 +1,7 @@
 //  Created by Leopold Lemmermann on 08.10.22.
 
 import Queries
-import RemoteDatabaseService
+@testable import RemoteDatabaseService
 import XCTest
 
 class RemoteDatabaseServiceTests: XCTestCase {
@@ -42,7 +42,7 @@ class RemoteDatabaseServiceTests: XCTestCase {
 
   func testFetching() async throws {
     let convertibles = createHeterogenousTestData(10)
-    
+
     try await service.publish(convertibles)
 
     let result = try await service.fetchAndCollect(Query<Example1>(true))

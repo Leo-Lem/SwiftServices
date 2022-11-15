@@ -1,22 +1,20 @@
 //	Created by Leopold Lemmermann on 14.11.22.
 
 import CloudKit
-import protocol CloudKitService.CKContainer
-import protocol CloudKitService.CKDatabase
-import typealias CloudKitService.CKQueryOperationResult
+import CloudKitService
 
-class MockCKContainer: CKContainer {
-  private let database = MockCKDatabase(),
+class MockCloudKitContainer: CloudKitContainer {
+  private let database = MockCloudKitDatabase(),
               status = CKAccountStatus.available
 
   init() {}
 
-  func database(with scope: CloudKit.CKDatabase.Scope) -> CKDatabase { database }
+  func database(with databaseScope: CloudKitDatabaseScope) -> CloudKitDatabase { database }
 
   func accountStatus() -> CKAccountStatus { status }
 }
 
-class MockCKDatabase: CKDatabase {
+class MockCloudKitDatabase: CloudKitDatabase {
   private var store = [CKRecord]()
 
   init() {}
@@ -31,8 +29,13 @@ class MockCKDatabase: CKDatabase {
 
   func records(
     matching query: CKQuery,
+    inZoneWith: CKRecordZone.ID? = nil,
+    desiredKeys: [CKRecord.FieldKey]? = nil,
     resultsLimit: Int = CKQueryOperation.maximumResults
-  ) async throws -> CKQueryOperationResult {
+  ) async throws -> (
+    matchResults: [(CKRecord.ID, Result<CKRecord, Error>)],
+    queryCursor: CKQueryOperation.Cursor?
+  ) {
     let matches = store.filter { record in
       record.recordType == query.recordType && query.predicate.evaluate(with: record)
     }
@@ -46,8 +49,12 @@ class MockCKDatabase: CKDatabase {
 
   func records(
     continuingMatchFrom cursor: CKQueryOperation.Cursor,
+    desiredKeys: [CKRecord.FieldKey]? = nil,
     resultsLimit: Int = CKQueryOperation.maximumResults
-  ) async throws -> CKQueryOperationResult {
+  ) async throws -> (
+    matchResults: [(CKRecord.ID, Result<CKRecord, Error>)],
+    queryCursor: CKQueryOperation.Cursor?
+  ) {
     // haven't found a way to initiaize the cursor yet
     ([], nil)
   }
