@@ -1,0 +1,7 @@
+# HapticsService
+
+<#Description#>
+
+## CoreHapticsService
+
+<#Description#>
