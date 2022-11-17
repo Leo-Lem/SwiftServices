@@ -11,7 +11,8 @@ let service = Target.target(
 let implementation = Target.target(
   name: "CoreSpotlightService",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "Errors"
   ]
 )
 
@@ -40,7 +41,7 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-//let dependency = Package.Dependency.package(url: <#String#>, branch: <#T##String#>)
+let dependency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -48,6 +49,6 @@ let package = Package(
   name: library.name,
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [/*dependency*/],
+  dependencies: [dependency],
   targets: [service, implementation, serviceTests, implementationTests]
 )

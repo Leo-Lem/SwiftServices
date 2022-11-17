@@ -1,7 +1,7 @@
 # IndexingService
 
-<#Description#>
+An abstration for indexing items.
 
 ## CoreSpotlightService
 
-<#Description#>
+An implementation is provided for CoreSpotlight.

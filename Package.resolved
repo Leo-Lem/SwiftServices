@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Errors",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a48d26f633d2db8e196d307cdd541fc50d48bd85"
+      }
+    }
+  ],
+  "version" : 2
+}
