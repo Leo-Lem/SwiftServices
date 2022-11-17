@@ -3,10 +3,10 @@
 @testable import KeyValueStorageService
 import XCTest
 
-class BaseTests: XCTestCase {
-  var service: KeyValueStorageService!
+open class KeyValueStorageServiceTests: XCTestCase {
+  public var service: KeyValueStorageService!
   
-  override func setUpWithError() throws {
+  open override func setUpWithError() throws {
     try XCTSkipIf(
       service == nil,
       "Subclass these tests and insert an implementation of the private database service in the initializer!"

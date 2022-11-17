@@ -5,7 +5,7 @@ import Concurrency
 import Foundation
 import KeyValueStorageService
 
-open class UserDefaultsStorageService: KeyValueStorageService {
+open class UserDefaultsService: KeyValueStorageService {
   let local: UserDefaults
   let cloud: NSUbiquitousKeyValueStore?
 
@@ -66,7 +66,7 @@ open class UserDefaultsStorageService: KeyValueStorageService {
   }
 }
 
-private extension UserDefaultsStorageService {
+private extension UserDefaultsService {
   func updateLocal(_: Notification) {
     guard let cloud = cloud, !ignoreChanges else { return }
 

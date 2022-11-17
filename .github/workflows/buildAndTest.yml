@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SCHEME: "Key-Value Storage Service"
+  SCHEME: "KeyValueStorageService"
 
 jobs:
   buildAndTest-Swift:

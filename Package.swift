@@ -2,34 +2,53 @@
 
 import PackageDescription
 
-let package = Package(
-  name: "Key-Value Storage Service",
-  platforms: [.iOS(.v13), .macOS(.v10_15)],
-  products: [
-    .library(
-      name: "KeyValueStorageService",
-      targets: [
-        "KeyValueStorageService",
-        "UserDefaultsStorageService"
-      ]
-    )
-  ],
+// MARK: - (TARGETS)
+
+let service = Target.target(
+  name: "KeyValueStorageService"
+)
+
+let implementation = Target.target(
+  name: "UserDefaultsService",
   dependencies: [
-    .package(url: "https://github.com/Leo-Lem/Concurrency", branch: "main")
-  ],
-  targets: [
-    .target(name: "KeyValueStorageService"),
-    .target(
-      name: "UserDefaultsStorageService",
-      dependencies: ["KeyValueStorageService", "Concurrency"]
-    ),
-    .testTarget(
-      name: "KeyValueStorageServiceTests",
-      dependencies: [
-        "KeyValueStorageService",
-        "UserDefaultsStorageService"
-      ],
-      path: "Tests"
-    )
+    .target(name: service.name),
+    "Concurrency"
   ]
+)
+
+let serviceTests = Target.target(
+  name: "\(service.name)Tests",
+  dependencies: [
+    .target(name: service.name)
+  ],
+  path: "Tests/\(service.name)Tests"
+)
+
+let implementationTests = Target.testTarget(
+  name: "\(implementation.name)Tests",
+  dependencies: [
+    .target(name: implementation.name),
+    .target(name: serviceTests.name)
+  ]
+)
+
+// MARK: - (PRODUCTS)
+
+let library = Product.library(
+  name: service.name,
+  targets: [service.name, implementation.name]
+)
+
+// MARK: - (DEPENDENCIES)
+
+let dependency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency", branch: "main")
+
+// MARK: - (PACKAGE)
+
+let package = Package(
+  name: library.name,
+  platforms: [.iOS(.v13), .macOS(.v10_15)],
+  products: [library],
+  dependencies: [dependency],
+  targets: [service, implementation, serviceTests, implementationTests]
 )
