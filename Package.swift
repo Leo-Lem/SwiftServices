@@ -11,23 +11,8 @@ let service = Target.target(
 let implementation = Target.target(
   name: "CoreHapticsService",
   dependencies: [
-    .target(name: service.name)
-  ]
-)
-
-let serviceTests = Target.target(
-  name: "\(service.name)Tests",
-  dependencies: [
-    .target(name: service.name)
-  ],
-  path: "Tests/\(service.name)Tests"
-)
-
-let implementationTests = Target.testTarget(
-  name: "\(implementation.name)Tests",
-  dependencies: [
-    .target(name: implementation.name),
-    .target(name: serviceTests.name)
+    .target(name: service.name),
+    "Errors"
   ]
 )
 
@@ -40,7 +25,7 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-//let dependency = Package.Dependency.package(url: <#String#>, branch: <#T##String#>)
+let dependency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -48,6 +33,6 @@ let package = Package(
   name: library.name,
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [/*dependency*/],
-  targets: [service, implementation, serviceTests, implementationTests]
+  dependencies: [dependency],
+  targets: [service, implementation]
 )
