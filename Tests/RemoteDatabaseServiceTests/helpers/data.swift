@@ -5,8 +5,11 @@ import RemoteDatabaseService
 extension RemoteDatabaseServiceTests {
   func createHeterogenousTestData(_ count: Int = 2) -> [any RemoteModelConvertible] {
     var convertibles = [any RemoteModelConvertible]()
-    for _ in 0 ..< count / 2 { convertibles.append(Example1.example) }
-    for _ in 0 ..< count / 2 { convertibles.append(Example2.example) }
+    for _ in 0 ..< count / 2 {
+      (Example1.example as? any RemoteModelConvertible).flatMap { convertibles.append($0) }}
+    for _ in 0 ..< count / 2 {
+      (Example2.example as? any RemoteModelConvertible).flatMap { convertibles.append($0) }
+    }
     return convertibles
   }
 

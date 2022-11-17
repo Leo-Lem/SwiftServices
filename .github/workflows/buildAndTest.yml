@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SCHEME: "Remote Database Service"
+  SCHEME: "RemoteDatabaseService"
 
 jobs:
   buildAndTest-Swift:

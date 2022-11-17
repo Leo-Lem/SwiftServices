@@ -5,12 +5,14 @@ import RemoteDatabaseService
 import Errors
 
 extension CloudKitService {
+  @available(iOS 15, macOS 12, *)
   func statusUpdateOnCloudKitChange() -> Task<Void, Never> {
     NotificationCenter.default
       .publisher(for: .CKAccountChanged)
       .getTask(operation: updateStatus)
   }
-
+  
+  @available(iOS 15, macOS 12, *)
   func periodicRefresh(every interval: TimeInterval) -> Task<Void, Never> {
     Timer
       .publish(every: interval, on: .main, in: .default)

@@ -21,7 +21,9 @@ open class CloudKitService: RemoteDatabaseService {
     self.container = container
     self.scope = scope
 
-    tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
+    if #available(iOS 15, macOS 12, *) {
+      tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
+    }
 
     await updateStatus()
   }
