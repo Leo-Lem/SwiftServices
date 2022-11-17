@@ -1,6 +1,6 @@
 # IndexingService
 
-An abstration for indexing items.
+An abstraction of a service for indexing items.
 
 ## CoreSpotlightService
 
