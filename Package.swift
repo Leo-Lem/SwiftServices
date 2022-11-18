@@ -5,13 +5,17 @@ import PackageDescription
 // MARK: - (TARGETS)
 
 let service = Target.target(
-  name: "PushNotificationService"
+  name: "PushNotificationService",
+  dependencies: [
+    "Concurrency"
+  ]
 )
 
 let implementation = Target.target(
   name: "UserNotificationsService",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "Concurrency"
   ]
 )
 
@@ -40,7 +44,7 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-//let dependency = Package.Dependency.package(url: <#String#>, branch: <#T##String#>)
+let concurrency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -48,6 +52,6 @@ let package = Package(
   name: library.name,
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [/*dependency*/],
+  dependencies: [concurrency],
   targets: [service, implementation, serviceTests, implementationTests]
 )

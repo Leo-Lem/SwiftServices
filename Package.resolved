@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "concurrency",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Concurrency",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ab64082640cd3e67ac099e242f55717418749b1"
+      }
+    }
+  ],
+  "version" : 2
+}
