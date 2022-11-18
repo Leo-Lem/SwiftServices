@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "concurrency",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Concurrency.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ab64082640cd3e67ac099e242f55717418749b1"
+      }
+    },
+    {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Errors.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a48d26f633d2db8e196d307cdd541fc50d48bd85"
+      }
+    },
+    {
+      "identity" : "previews",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Previews.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "762cbcab3fdfc298d3ca14e8abe3cade78193c22"
+      }
+    }
+  ],
+  "version" : 2
+}

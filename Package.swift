@@ -5,20 +5,26 @@ import PackageDescription
 // MARK: - (TARGETS)
 
 let service = Target.target(
-  name: "InAppPurchaseService"
+  name: "InAppPurchaseService",
+  dependencies: [
+    "Previews"
+  ]
 )
 
 let implementation = Target.target(
   name: "StoreKitService",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "Concurrency",
+    "Errors"
   ]
 )
 
 let serviceTests = Target.target(
   name: "\(service.name)Tests",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "Previews"
   ],
   path: "Tests/\(service.name)Tests"
 )
@@ -40,7 +46,9 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-//let dependency = Package.Dependency.package(url: <#String#>, branch: <#T##String#>)
+let concurrency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency.git", branch: "main")
+let errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors.git", branch: "main")
+let previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews.git", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -48,6 +56,6 @@ let package = Package(
   name: library.name,
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [/*dependency*/],
+  dependencies: [concurrency, errors, previews],
   targets: [service, implementation, serviceTests, implementationTests]
 )
