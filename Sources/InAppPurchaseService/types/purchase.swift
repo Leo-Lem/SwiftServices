@@ -19,8 +19,8 @@ public struct Purchase: Identifiable {
     self.desc = desc
     self.price = price
   }
+}
 
-  public enum Result {
-    case success, pending, cancelled
-  }
+public extension Purchase {
+  func getPurchaseID<ID: PurchaseID>() -> ID? { ID(rawValue: id) }
 }

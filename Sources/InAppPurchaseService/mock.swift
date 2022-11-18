@@ -3,14 +3,14 @@
 import Combine
 import Previews
 
-open class MockInAppPurchaseService<PurchaseID: RawRepresentable<String> & CaseIterable >: InAppPurchaseService {
+open class MockInAppPurchaseService: InAppPurchaseService {
   public let didChange = PassthroughSubject<PurchaseChange, Never>()
 
   var purchases = [Purchase]()
   var purchased = [Purchase]()
 
-  public init() {
-    purchases = PurchaseID.allCases.map(Self.examplePurchase)
+  public init<ID: PurchaseID>(_: ID.Type) {
+    purchases = ID.allCases.map(Self.examplePurchase)
     purchases.first.flatMap { purchased.append($0) }
   }
 
@@ -18,7 +18,7 @@ open class MockInAppPurchaseService<PurchaseID: RawRepresentable<String> & CaseI
     isPurchased ? self.purchased : self.purchases
   }
 
-  public func purchase(id: PurchaseID) async throws -> Purchase.Result {
+  public func purchase<ID: PurchaseID>(id: ID) async throws -> Purchase.Result {
     guard let purchase = purchases.first(where: { $0.id == id.rawValue }) else {
       throw PurchaseError.other(nil)
     }
@@ -29,7 +29,7 @@ open class MockInAppPurchaseService<PurchaseID: RawRepresentable<String> & CaseI
 }
 
 extension MockInAppPurchaseService {
-  static func examplePurchase(with id: PurchaseID) -> Purchase {
+  static func examplePurchase<ID: PurchaseID>(with id: ID) -> Purchase {
     Purchase(
       id: id.rawValue,
       name: .random(in: 10 ..< 25, using: .letters),

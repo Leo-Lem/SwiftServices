@@ -13,8 +13,7 @@ An abstraction of a service for handling in-app purchases.
 
 - Define a type (preferrably an enum), with your purchase IDs.
 - Add their identifier as a raw String value.
-- Conform to CaseIterable.
-- Pass this ID type as a generic argument to your InAppPurchaseService.
+- Conform to PurchaseID.
 
 ## StoreKitService
 

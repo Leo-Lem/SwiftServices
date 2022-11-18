@@ -6,7 +6,7 @@ import InAppPurchaseService
 import StoreKit
 
 @available(iOS 15, macOS 12, *)
-open class StoreKitService<PurchaseID: RawRepresentable<String> & CaseIterable>: InAppPurchaseService {
+open class StoreKitService: InAppPurchaseService {
   public let didChange = PassthroughSubject<PurchaseChange, Never>()
 
   var products = Set<Product>()
@@ -14,8 +14,8 @@ open class StoreKitService<PurchaseID: RawRepresentable<String> & CaseIterable>:
 
   let tasks = Tasks()
 
-  public init() async {
-    await fetchProducts(for: Array(PurchaseID.allCases))
+  public init<ID: PurchaseID>(_: ID.Type) async {
+    await fetchProducts(for: Array(ID.allCases))
     tasks.add(updateOnRemoteChange())
   }
 
@@ -24,7 +24,7 @@ open class StoreKitService<PurchaseID: RawRepresentable<String> & CaseIterable>:
       .map(Purchase.init)
   }
 
-  public func purchase(id: PurchaseID) async throws -> Purchase.Result {
+  public func purchase<ID: PurchaseID>(id: ID) async throws -> Purchase.Result {
     try await handleError {
       let product = products.first { $0.id == id.rawValue }!
       let result = try await product.purchase()

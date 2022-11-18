@@ -1,9 +1,8 @@
 //	Created by Leopold Lemmermann on 18.11.22.
 
 public extension InAppPurchaseService {
-  func getIDs(isPurchased: Bool) -> [PurchaseID] {
+  func getPurchaseIDs<ID: PurchaseID>(isPurchased: Bool) -> [ID] {
     getPurchases(isPurchased: isPurchased)
-      .map(\.id)
-      .compactMap(PurchaseID.init)
+      .compactMap { $0.getPurchaseID() }
   }
 }

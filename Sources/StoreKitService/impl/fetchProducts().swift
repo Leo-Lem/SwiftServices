@@ -3,10 +3,11 @@
 import Errors
 import Concurrency
 import StoreKit
+import InAppPurchaseService
 
 @available(iOS 15, macOS 12, *)
 extension StoreKitService {
-  func fetchProducts(for purchaseIDs: [PurchaseID]) async {
+  func fetchProducts<ID: PurchaseID>(for purchaseIDs: [ID]) async {
     let rawIDs = await purchaseIDs.map(\.rawValue)
     
     await printError {
