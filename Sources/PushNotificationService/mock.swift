@@ -2,7 +2,7 @@
 
 import Combine
 
-open class MockNotificationService: PushNotificationService {
+open class MockPushNotificationService: PushNotificationService {
   public let didChange = PassthroughSubject<PushNotificationChange, Never>()
 
   public var permissionStatus: PermissionStatus = .authorized
