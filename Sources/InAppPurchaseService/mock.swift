@@ -9,7 +9,7 @@ open class MockInAppPurchaseService: InAppPurchaseService {
   var purchases = [Purchase]()
   var purchased = [Purchase]()
 
-  public init<ID: PurchaseID>(_: ID.Type) {
+  public init<ID: PurchaseIdentifiable>(_: ID.Type) {
     purchases = ID.allCases.map(Self.examplePurchase)
     purchases.first.flatMap { purchased.append($0) }
   }
@@ -18,7 +18,7 @@ open class MockInAppPurchaseService: InAppPurchaseService {
     isPurchased ? self.purchased : self.purchases
   }
 
-  public func purchase<ID: PurchaseID>(id: ID) async throws -> Purchase.Result {
+  public func purchase<ID: PurchaseIdentifiable>(id: ID) async throws -> Purchase.Result {
     guard let purchase = purchases.first(where: { $0.id == id.rawValue }) else {
       throw PurchaseError.other(nil)
     }
@@ -29,7 +29,7 @@ open class MockInAppPurchaseService: InAppPurchaseService {
 }
 
 extension MockInAppPurchaseService {
-  static func examplePurchase<ID: PurchaseID>(with id: ID) -> Purchase {
+  static func examplePurchase<ID: PurchaseIdentifiable>(with id: ID) -> Purchase {
     Purchase(
       id: id.rawValue,
       name: .random(in: 10 ..< 25, using: .letters),

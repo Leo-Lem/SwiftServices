@@ -7,7 +7,7 @@ import InAppPurchaseService
 
 @available(iOS 15, macOS 12, *)
 extension StoreKitService {
-  func fetchProducts<ID: PurchaseID>(for purchaseIDs: [ID]) async {
+  func fetchProducts<ID: PurchaseIdentifiable>(for purchaseIDs: [ID]) async {
     let rawIDs = await purchaseIDs.map(\.rawValue)
     
     await printError {

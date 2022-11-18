@@ -22,5 +22,5 @@ public struct Purchase: Identifiable {
 }
 
 public extension Purchase {
-  func getPurchaseID<ID: PurchaseID>() -> ID? { ID(rawValue: id) }
+  func getPurchaseID<ID: PurchaseIdentifiable>() -> ID? { ID(rawValue: id) }
 }

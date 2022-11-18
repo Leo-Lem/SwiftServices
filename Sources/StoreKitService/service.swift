@@ -14,7 +14,7 @@ open class StoreKitService: InAppPurchaseService {
 
   let tasks = Tasks()
 
-  public init<ID: PurchaseID>(_: ID.Type) async {
+  public init<ID: PurchaseIdentifiable>(_: ID.Type) async {
     await fetchProducts(for: Array(ID.allCases))
     tasks.add(updateOnRemoteChange())
   }
@@ -24,7 +24,7 @@ open class StoreKitService: InAppPurchaseService {
       .map(Purchase.init)
   }
 
-  public func purchase<ID: PurchaseID>(id: ID) async throws -> Purchase.Result {
+  public func purchase<ID: PurchaseIdentifiable>(id: ID) async throws -> Purchase.Result {
     try await handleError {
       let product = products.first { $0.id == id.rawValue }!
       let result = try await product.purchase()

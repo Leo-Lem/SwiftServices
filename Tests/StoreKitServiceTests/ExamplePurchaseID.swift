@@ -2,6 +2,6 @@
 
 import InAppPurchaseService
 
-public enum ExamplePurchaseID: String, PurchaseID {
+public enum ExamplePurchaseID: String, PurchaseIdentifiable {
   case fullVersion
 }
