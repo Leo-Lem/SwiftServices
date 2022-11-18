@@ -21,9 +21,6 @@ public struct Purchase: Identifiable {
   }
 
   public enum Result {
-    case success,
-         pending,
-         cancelled,
-         failed(Error? = nil)
+    case success, pending, cancelled
   }
 }

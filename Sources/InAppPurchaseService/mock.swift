@@ -1,34 +1,35 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
 import Combine
-import Concurrency
 import Previews
 
-open class MockPurchaseService<PurchaseID>: InAppPurchaseService
-where PurchaseID: RawRepresentable<String> & CaseIterable {
+open class MockPurchaseService<PurchaseID: RawRepresentable<String> & CaseIterable >: InAppPurchaseService {
   public let didChange = PassthroughSubject<PurchaseChange, Never>()
 
   var purchases = [Purchase]()
   var purchased = [Purchase]()
-  
+
   public init() {
     purchases = PurchaseID.allCases.map(Self.examplePurchase)
     purchases.first.flatMap { purchased.append($0) }
   }
-  
+
   public func getPurchases(isPurchased: Bool) -> [Purchase] {
     isPurchased ? self.purchased : self.purchases
   }
 
-  public func purchase(id: PurchaseID) async -> Purchase.Result {
-    await sleep(for: .seconds(1))
-    purchases
-      .first { $0.id == id.rawValue }
-      .flatMap { purchased.append($0) }
+  public func purchase(id: PurchaseID) async throws -> Purchase.Result {
+    guard let purchase = purchases.first(where: { $0.id == id.rawValue }) else {
+      throw PurchaseError.other(nil)
+    }
+
+    purchased.append(purchase)
     return .success
   }
-  
-  private static func examplePurchase(with id: MockPurchaseService.PurchaseID) -> Purchase {
+}
+
+extension MockPurchaseService {
+  static func examplePurchase(with id: MockPurchaseService.PurchaseID) -> Purchase {
     Purchase(
       id: id.rawValue,
       name: .random(in: 10 ..< 25, using: .letters),

@@ -7,5 +7,5 @@ public protocol InAppPurchaseService {
   var didChange: PassthroughSubject<PurchaseChange, Never> { get }
   
   func getPurchases(isPurchased: Bool) -> [Purchase]
-  func purchase(id: PurchaseID) async -> Purchase.Result
+  func purchase(id: PurchaseID) async throws -> Purchase.Result
 }
