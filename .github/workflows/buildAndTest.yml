@@ -14,12 +14,12 @@ env:
   SCHEME: "InAppPurchaseService"
 
 jobs:
-  buildAndTest-Swift:
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build and test (Swift)
-        run: swift test
+  # buildAndTest-Swift:
+  #   runs-on: macos-12
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Build and test (Swift)
+  #       run: swift test
 
   buildAndTest-iOS:
     runs-on: macos-12
@@ -28,9 +28,9 @@ jobs:
       - name: Build and test ( iOS)
         run: xcodebuild test -scheme "$SCHEME" -destination "platform=iOS Simulator,OS=16.0,name=iPhone SE (3rd generation)"
 
-  buildAndTest-macOS:
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build and test ( macOS)
-        run: xcodebuild test -scheme "$SCHEME" -destination "platform=macOS,arch=x86_64"
+  # buildAndTest-macOS:
+  #   runs-on: macos-12
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Build and test ( macOS)
+  #       run: xcodebuild test -scheme "$SCHEME" -destination "platform=macOS,arch=x86_64"

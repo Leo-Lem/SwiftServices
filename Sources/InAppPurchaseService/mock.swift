@@ -3,7 +3,7 @@
 import Combine
 import Previews
 
-open class MockPurchaseService<PurchaseID: RawRepresentable<String> & CaseIterable >: InAppPurchaseService {
+open class MockInAppPurchaseService<PurchaseID: RawRepresentable<String> & CaseIterable >: InAppPurchaseService {
   public let didChange = PassthroughSubject<PurchaseChange, Never>()
 
   var purchases = [Purchase]()
@@ -28,8 +28,8 @@ open class MockPurchaseService<PurchaseID: RawRepresentable<String> & CaseIterab
   }
 }
 
-extension MockPurchaseService {
-  static func examplePurchase(with id: MockPurchaseService.PurchaseID) -> Purchase {
+extension MockInAppPurchaseService {
+  static func examplePurchase(with id: PurchaseID) -> Purchase {
     Purchase(
       id: id.rawValue,
       name: .random(in: 10 ..< 25, using: .letters),
