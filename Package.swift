@@ -5,7 +5,9 @@ import PackageDescription
 // MARK: - (TARGETS)
 
 let service = Target.target(
-  name: "AuthenticationService"
+  name: "AuthenticationService",
+  dependencies: ["LeosMisc"],
+  resources: [.process("res")]
 )
 
 let implementation = Target.target(
@@ -40,14 +42,15 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-//let dependency = Package.Dependency.package(url: <#String#>, branch: <#T##String#>)
+let misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc", branch: "main")
 
 // MARK: - (PACKAGE)
 
 let package = Package(
   name: library.name,
+  defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [/*dependency*/],
+  dependencies: [misc],
   targets: [service, implementation, serviceTests, implementationTests]
 )

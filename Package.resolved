@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "leosmisc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/LeosMisc",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5f32ffac7c4301b8d53f6f3b646f257d0fb79cba"
+      }
+    }
+  ],
+  "version" : 2
+}
