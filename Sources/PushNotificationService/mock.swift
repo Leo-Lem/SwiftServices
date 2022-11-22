@@ -7,6 +7,8 @@ open class MockPushNotificationService: PushNotificationService {
 
   public var permissionStatus: PermissionStatus = .authorized
 
+  public init() {}
+  
   public func schedule<T: PushNotification>(_ notification: T) {
     print(permissionStatus == .authorized ? "Notification (\(notification)) scheduled!" : "Not authorized!")
   }
