@@ -6,7 +6,8 @@ import PackageDescription
 
 let service = Target.target(
   name: "RemoteDatabaseService",
-  dependencies: ["Concurrency"]
+  dependencies: ["Concurrency"],
+  resources: [.process("res")]
 )
 
 let implementation = Target.target(
@@ -54,6 +55,7 @@ let queries = Package.Dependency.package(url: "https://github.com/Leo-Lem/Querie
 
 let package = Package(
   name: library.name,
+  defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
   dependencies: [queries, concurrency, errors],

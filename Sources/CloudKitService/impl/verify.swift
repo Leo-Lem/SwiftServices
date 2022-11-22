@@ -6,7 +6,7 @@ import RemoteDatabaseService
 extension CloudKitService {
   func verifyIsRemoteModel<T: RemoteModelConvertible, U>(_ object: U, _: T.Type = T.self) throws -> T.RemoteModel {
     guard let remoteModel = object as? T.RemoteModel else {
-      throw CloudKitError.mapping(invalidRemoteModel: T.RemoteModel.self)
+      throw RemoteDatabaseError.mapping(invalidRemoteModel: T.RemoteModel.self)
     }
 
     return remoteModel
@@ -14,7 +14,7 @@ extension CloudKitService {
   
   func verifyIsCKRecord<T>(remoteModel: T) throws -> CKRecord {
     guard let object = remoteModel as? CKRecord else {
-      throw CloudKitError.mapping(invalidRemoteModel: T.self)
+      throw RemoteDatabaseError.mapping(invalidRemoteModel: T.self)
     }
 
     return object
@@ -22,7 +22,7 @@ extension CloudKitService {
 
   func verifyRemoteModelIsCKRecord<T: RemoteModelConvertible>(_: T.Type = T.self) throws {
     guard T.RemoteModel.self is CKRecord.Type else {
-      throw CloudKitError.mapping(invalidRemoteModel: T.RemoteModel.self)
+      throw RemoteDatabaseError.mapping(invalidRemoteModel: T.RemoteModel.self)
     }
   }
 }

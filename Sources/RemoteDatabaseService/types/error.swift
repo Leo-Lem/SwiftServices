@@ -1,9 +1,8 @@
 //	Created by Leopold Lemmermann on 31.10.22.
 
 import CloudKit
-import RemoteDatabaseService
 
-public enum CloudKitError: Error {
+public enum RemoteDatabaseError: Error {
   case mapping(invalidRemoteModel: Any.Type),
        fetching(UserRelevantError, type: any RemoteModelConvertible),
        publishing(UserRelevantError, type: any RemoteModelConvertible),
@@ -15,7 +14,7 @@ public enum CloudKitError: Error {
          noNetwork,
          rateLimited
     
-    init?(ckError: CKError) {
+    public init?(ckError: CKError) {
       switch ckError.code {
       case .networkFailure, .networkUnavailable, .serverResponseLost, .serviceUnavailable:
         self = .noNetwork
