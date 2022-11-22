@@ -5,12 +5,12 @@ import Combine
 open class MockPushNotificationService: PushNotificationService {
   public let didChange = PassthroughSubject<PushNotificationChange, Never>()
 
-  public var permissionStatus: PermissionStatus = .authorized
+  public var isAuthorized: Bool?
 
   public init() {}
   
   public func schedule<T: PushNotification>(_ notification: T) {
-    print(permissionStatus == .authorized ? "Notification (\(notification)) scheduled!" : "Not authorized!")
+    print(isAuthorized ?? false ? "Notification (\(notification)) scheduled!" : "Not authorized!")
   }
 
   public func cancel<T: PushNotification>(with id: T.ID, _: T.Type) {

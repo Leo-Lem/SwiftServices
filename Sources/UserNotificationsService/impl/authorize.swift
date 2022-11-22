@@ -5,15 +5,15 @@ import UserNotifications
 
 extension UserNotificationsService {
   func authorize(_: Notification? = nil) async {
-    var status = PermissionStatus(unStatus: await center.notificationSettings().authorizationStatus)
-
-    if
-      case .notDetermined = status,
-      let success = try? await center.requestAuthorization(options: [.alert, .sound])
-    {
-      status = success ? .authorized : .notAuthorized
+    switch await center.notificationSettings().authorizationStatus {
+    case .authorized, .ephemeral, .provisional:
+      isAuthorized = true
+    case .notDetermined:
+      isAuthorized = (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
+    case .denied:
+      isAuthorized = false
+    @unknown default:
+      isAuthorized = nil
     }
-
-    permissionStatus = status
   }
 }

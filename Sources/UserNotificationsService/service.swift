@@ -7,7 +7,7 @@ import Combine
 open class UserNotificationsService: PushNotificationService {
   public let didChange = PassthroughSubject<PushNotificationChange, Never>()
   
-  public internal(set) var permissionStatus = PermissionStatus.notDetermined
+  public internal(set) var isAuthorized: Bool?
 
   let tasks = Tasks()
   let center = UNUserNotificationCenter.current()
