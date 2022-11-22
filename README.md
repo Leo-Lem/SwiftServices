@@ -1,7 +1,7 @@
 # AuthenticationService
 
-<#Description#>
+An abstraction of a service providing simple authentication.
 
-## LLAuthenticationService
+## MyAuthenticationService
 
-<#Description#>
+My implementation, hooked into an API and persisting credentials in Keychain Services etc.
