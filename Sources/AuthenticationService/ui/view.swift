@@ -67,7 +67,7 @@ public struct AuthenticationView: View {
 
   @State var credential = Credential(id: "", pin: "")
   
-  @State var error: AuthenticationError?
+  @State var error: AuthenticationError.Display?
   
   public init(service: AuthenticationService) { self.service = service }
 }
@@ -87,10 +87,9 @@ extension AuthenticationView {
         
         if case .authenticated = service.status { dismiss() }
       } catch let error as AuthenticationError {
-        switch error {
-        case .noConnection, .registrationIDTaken, .registrationInvalidID, .authenticationWrongPIN:
+        if let error = AuthenticationError.Display(error) {
           self.error = error
-        default:
+        } else {
           print(error.localizedDescription)
         }
       }

@@ -7,7 +7,7 @@ import PackageDescription
 let service = Target.target(
   name: "AuthenticationService",
   dependencies: ["LeosMisc"],
-  resources: [.process("res")]
+  resources: [.process("ui/res")]
 )
 
 let implementation = Target.target(
