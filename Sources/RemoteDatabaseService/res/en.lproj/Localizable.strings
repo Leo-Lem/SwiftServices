@@ -1,3 +1,0 @@
-"CLOUDKITERROR_CONNECTION" = "There was a problem communicating with the database; please check your network connection and try again.";
-"CLOUDKITERROR_AUTH" = "There was a problem with your iCloud account; please check that you're logged in to iCloud.";
-"CLOUDKITERROR_RATE" = "You've hit the rate limit; please wait a moment then try again.";

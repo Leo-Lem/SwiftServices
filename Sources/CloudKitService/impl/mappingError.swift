@@ -8,7 +8,7 @@ extension CloudKitService {
     do {
       return try action()
     } catch let error as CKError {
-      throw RemoteDatabaseError.UserRelevantError(ckError: error) ?? error
+      throw RemoteDatabaseError(ckError: error) ?? error
     } catch let error as RemoteDatabaseError {
       throw error
     } catch {
@@ -20,7 +20,7 @@ extension CloudKitService {
     do {
       return try await action()
     } catch let error as CKError {
-      throw RemoteDatabaseError.UserRelevantError(ckError: error) ?? error
+      throw RemoteDatabaseError(ckError: error) ?? error
     } catch let error as RemoteDatabaseError {
       throw error
     } catch {

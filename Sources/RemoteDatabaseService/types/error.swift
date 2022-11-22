@@ -4,26 +4,20 @@ import CloudKit
 
 public enum RemoteDatabaseError: Error {
   case mapping(invalidRemoteModel: Any.Type),
-       fetching(UserRelevantError, type: any RemoteModelConvertible),
-       publishing(UserRelevantError, type: any RemoteModelConvertible),
-       unpublishing(UserRelevantError, type: any RemoteModelConvertible),
+       notAuthenticated,
+       noNetwork,
+       rateLimited,
        other(Error)
-  
-  public enum UserRelevantError: Error {
-    case notAuthenticated,
-         noNetwork,
-         rateLimited
-    
-    public init?(ckError: CKError) {
-      switch ckError.code {
-      case .networkFailure, .networkUnavailable, .serverResponseLost, .serviceUnavailable:
-        self = .noNetwork
-      case .notAuthenticated:
-        self = .notAuthenticated
-      case .requestRateLimited:
-        self = .rateLimited
-      default: return nil
-      }
+
+  public init?(ckError: CKError) {
+    switch ckError.code {
+    case .networkFailure, .networkUnavailable, .serverResponseLost, .serviceUnavailable:
+      self = .noNetwork
+    case .notAuthenticated:
+      self = .notAuthenticated
+    case .requestRateLimited:
+      self = .rateLimited
+    default: return nil
     }
   }
 }
