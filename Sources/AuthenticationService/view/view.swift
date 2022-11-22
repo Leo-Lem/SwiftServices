@@ -41,7 +41,6 @@ public struct AuthenticationView: View {
       Divider()
 
       #if DEBUG
-      // TODO: implement both of these
       Button {} label: {
         Label("SIWA", systemImage: "apple.logo")
           .frame(maxWidth: .infinity)

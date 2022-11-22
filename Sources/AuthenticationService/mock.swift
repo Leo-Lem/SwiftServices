@@ -8,6 +8,8 @@ open class MockAuthenticationService: AuthenticationService {
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { didChange.send(status) }
   }
+  
+  public init() {}
 
   @discardableResult
   public func login(_ credential: Credential) async throws -> Credential.ID {
