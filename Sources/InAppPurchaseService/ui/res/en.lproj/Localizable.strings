@@ -1,2 +1,6 @@
+/* errors */
+"TRANSACTION_UNVERIFIED" = "The transaction couldn't be verified; please try again later.";
 
-"TRANSACTION_UNVERIFIED" = "The transaction couldn't be verified; please try again later."
+/* view */
+"PURCHASE_BUTTON %@" = "Buy for %@";
+"FOR %@" = "for %@";

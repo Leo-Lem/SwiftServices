@@ -19,7 +19,7 @@ public extension PurchaseError {
     }
     
     public var errorDescription: String? {
-      String(localized: .init(key))
+      String(localized: .init(key), bundle: .module)
     }
     
     public var key: String {
