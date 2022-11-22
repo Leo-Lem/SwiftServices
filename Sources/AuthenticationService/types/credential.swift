@@ -1,8 +1,11 @@
 //	Created by Leopold Lemmermann on 20.11.22.
 
-public struct Credential: Codable, Hashable {
-  public var id: String,
-             pin: String
+public struct Credential: Identifiable, Codable, Hashable {
+  public typealias ID = String
+  public typealias PIN = String
+  
+  public var id: ID,
+             pin: PIN
   
   public init(id: String, pin: String) {
     self.id = id

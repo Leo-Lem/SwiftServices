@@ -7,10 +7,10 @@ public protocol AuthenticationService {
   var status: AuthenticationStatus { get }
 
   @discardableResult
-  func login(_ credential: Credential) async throws -> Credential
+  func login(_ credential: Credential) async throws -> Credential.ID
   
   @discardableResult
-  func changePIN(_ newPIN: String) async throws -> Credential
+  func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID
   
   func deregister() async throws
   

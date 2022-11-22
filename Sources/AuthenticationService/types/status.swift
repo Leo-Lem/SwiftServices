@@ -2,5 +2,5 @@
 
 public enum AuthenticationStatus {
   case notAuthenticated,
-       authenticated(_ credential: Credential)
+       authenticated(_ id: Credential.ID)
 }

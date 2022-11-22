@@ -14,18 +14,22 @@ open class AuthenticationServiceTests: XCTestCase {
   func testLoggingIn() async throws {
     let credential = Credential.example
 
-    let newCredential = try await service.login(credential)
-    XCTAssertEqual(newCredential, credential, "The credentials don't match.")
-    XCTAssertEqual(service.status, .authenticated(credential), "User is not authenticated.")
+    let id = try await service.login(credential)
+    XCTAssertEqual(id, credential.id, "The IDs don't match.")
+    XCTAssertEqual(service.status, .authenticated(credential.id), "User is not authenticated.")
   }
 
   func testChangingPIN() async throws {
-    let credential = Credential.example
+    var credential = Credential.example
     let newPIN = "1234"
     
     try await service.login(credential)
-    let newCredential = try await service.changePIN(newPIN)
-    XCTAssertEqual(newCredential.pin, newPIN, "The new pin was not assigned.")
+    try await service.changePIN(newPIN)
+    try service.logout()
+    
+    credential.pin = newPIN
+    let id = try await service.login(credential)
+    XCTAssertEqual(id, credential.id, "The new pin is not accepted.")
   }
   
   func testDeregistering() async throws {

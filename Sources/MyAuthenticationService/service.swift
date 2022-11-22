@@ -1,13 +1,13 @@
 
 import AuthenticationService
+import Combine
 import Foundation
 import KeyValueStorageService
 import UserDefaultsService
-import Combine
 
 open class MyAuthenticationService: AuthenticationService {
   public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
-  
+
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { didChange.send(status) }
   }
@@ -23,24 +23,19 @@ open class MyAuthenticationService: AuthenticationService {
     baseURL = URL(string: apiURL)!
     self.keyValueStorageService = keyValueStorageService
 
-    if
-      let credential = loadCredential(),
-      let retrieved = try? await login(credential)
-    {
-      saveCredential(retrieved)
+    if let credential = loadCredential() {
+      _ = try? await login(credential)
     }
   }
 
   @discardableResult
-  public func login(_ credential: Credential) async throws -> Credential {
-    do {
+  public func login(_ credential: Credential) async throws -> Credential.ID {
+    try await mapError {
       var (data, response) = try await callAPI(.auth, method: .PUT, data: credential)
 
       switch response?.statusCode {
-      case 200:
-        break
-      case 401:
-        throw AuthenticationError.authenticationWrongPIN
+      case 200: break
+      case 401: throw AuthenticationError.authenticationWrongPIN
       case 404:
         (data, response) = try await callAPI(.reg, method: .POST, data: credential)
 
@@ -51,70 +46,62 @@ open class MyAuthenticationService: AuthenticationService {
         case .none: throw AuthenticationError.noConnection
         case let .some(code): throw AuthenticationError.unexpected(status: code)
         }
+      case .none: throw AuthenticationError.noConnection
+      case let .some(code): throw AuthenticationError.unexpected(status: code)
+      }
+
+      let credential = try JSONDecoder().decode(Credential.self, from: data)
+      saveCredential(credential)
+      status = .authenticated(credential.id)
+      return credential.id
+    }
+  }
+
+  @discardableResult
+  public func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID {
+    try await mapError {
+      var credential = try loadCurrentCredential()
+
+      let (data, response) = try await callAPI(
+        .pin,
+        method: .POST,
+        data: credential.attachNewPIN(newPIN)
+      )
+      switch response?.statusCode {
+      case 200: break
+      case 400: throw AuthenticationError.modificationInvalidNewPIN
+      case .none: throw AuthenticationError.noConnection
+      case let .some(code): throw AuthenticationError.unexpected(status: code)
+      }
+
+      credential = try JSONDecoder().decode(Credential.self, from: data)
+      saveCredential(credential)
+      status = .authenticated(credential.id)
+      return credential.id
+    }
+  }
+
+  public func deregister() async throws {
+    try await mapError {
+      let credential = try loadCurrentCredential()
+      let (_, response) = try await callAPI(.dereg, method: .POST, data: credential)
+
+      switch response?.statusCode {
+      case 200:
+        break
       case .none:
         throw AuthenticationError.noConnection
       case let .some(code):
         throw AuthenticationError.unexpected(status: code)
       }
 
-      let returnCredential = try JSONDecoder().decode(Credential.self, from: data)
-      saveCredential(returnCredential)
-      status = .authenticated(returnCredential)
-      return returnCredential
-    } catch {
-      throw AuthenticationError.other(error)
+      try logout()
     }
-  }
-
-  @discardableResult
-  public func changePIN(_ newPIN: String) async throws -> Credential {
-    guard case let .authenticated(credential) = status else {
-      throw AuthenticationError.notAuthenticated
-    }
-
-    let code: Int?
-    let returnCredential: Credential
-
-    do {
-      let (data, response) = try await callAPI(.pin, method: .POST, data: credential.attachNewPIN(newPIN))
-      code = response?.statusCode
-      returnCredential = try JSONDecoder().decode(Credential.self, from: data)
-    } catch {
-      throw AuthenticationError.other(error)
-    }
-
-    switch code {
-    case 200: break
-    case 400: throw AuthenticationError.modificationInvalidNewPIN
-    case .none: throw AuthenticationError.noConnection
-    case let .some(code): throw AuthenticationError.unexpected(status: code)
-    }
-    
-    saveCredential(returnCredential)
-    status = .authenticated(returnCredential)
-    return returnCredential
-  }
-
-  public func deregister() async throws {
-    guard case let .authenticated(credential) = status else {
-      throw AuthenticationError.notAuthenticated
-    }
-
-    switch try? await callAPI(.dereg, method: .POST, data: credential).1?.statusCode {
-    case 200:
-      break
-    case .none:
-      throw AuthenticationError.noConnection
-    case let .some(code):
-      throw AuthenticationError.unexpected(status: code)
-    }
-
-    try logout()
   }
 
   public func logout() throws {
-    guard case let .authenticated(credential) = status else { throw AuthenticationError.notAuthenticated }
-    deleteCredential(userID: credential.id)
+    guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
+    deleteCredential(userID: id)
     status = .notAuthenticated
   }
 
