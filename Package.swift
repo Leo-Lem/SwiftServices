@@ -6,9 +6,8 @@ import PackageDescription
 
 let service = Target.target(
   name: "InAppPurchaseService",
-  dependencies: [
-    "Previews"
-  ]
+  dependencies: ["Previews"],
+  resources: [.process("ui/res")]
 )
 
 let implementation = Target.target(
@@ -54,6 +53,7 @@ let previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previ
 
 let package = Package(
   name: library.name,
+  defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
   dependencies: [concurrency, errors, previews],
