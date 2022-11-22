@@ -1,6 +1,24 @@
 {
   "pins" : [
     {
+      "identity" : "concurrency",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Concurrency",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ab64082640cd3e67ac099e242f55717418749b1"
+      }
+    },
+    {
+      "identity" : "keyvaluestorageservice",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/KeyValueStorageService",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5488a4f18df7b059c57b03e5c5d6889a428d3204"
+      }
+    },
+    {
       "identity" : "leosmisc",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Leo-Lem/LeosMisc",

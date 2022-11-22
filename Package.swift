@@ -11,16 +11,18 @@ let service = Target.target(
 )
 
 let implementation = Target.target(
-  name: "LLAuthenticationService",
+  name: "MyAuthenticationService",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "KeyValueStorageService"
   ]
 )
 
 let serviceTests = Target.target(
   name: "\(service.name)Tests",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "KeyValueStorageService"
   ],
   path: "Tests/\(service.name)Tests"
 )
@@ -42,6 +44,7 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
+let kvss = Package.Dependency.package(url: "https://github.com/Leo-Lem/KeyValueStorageService", branch: "main")
 let misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc", branch: "main")
 
 // MARK: - (PACKAGE)
@@ -51,6 +54,6 @@ let package = Package(
   defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [misc],
+  dependencies: [kvss, misc],
   targets: [service, implementation, serviceTests, implementationTests]
 )

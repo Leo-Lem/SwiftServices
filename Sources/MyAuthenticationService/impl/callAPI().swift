@@ -2,7 +2,7 @@
 
 import Foundation
 
-extension LLAuthenticationService {
+extension MyAuthenticationService {
   func callAPI<T: Encodable>(
     _ route: Route,
     method: HTTPMethod,
