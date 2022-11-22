@@ -1,17 +1,23 @@
 //	Created by Leopold Lemmermann on 21.10.22.
 
-final class MockAuthenticationService: AuthenticationService {
-  var status: AuthenticationStatus = .notAuthenticated
+import Combine
+
+open class MockAuthenticationService: AuthenticationService {
+  public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
+  
+  public var status: AuthenticationStatus = .notAuthenticated {
+    didSet { didChange.send(status) }
+  }
 
   @discardableResult
-  func login(_ credential: Credential) async throws -> Credential {
+  public func login(_ credential: Credential) async throws -> Credential {
     status = .authenticated(credential)
     print("Logged user in with \(credential).")
     return credential
   }
   
   @discardableResult
-  func changePIN(_ newPIN: String) async throws -> Credential {
+  public func changePIN(_ newPIN: String) async throws -> Credential {
     guard case let .authenticated(credential) = status else {
       throw AuthenticationError.notAuthenticated
     }
@@ -21,7 +27,7 @@ final class MockAuthenticationService: AuthenticationService {
     return newCredential
   }
   
-  func deregister() async throws {
+  public func deregister() async throws {
     guard case let .authenticated(credential) = status else {
       throw AuthenticationError.notAuthenticated
     }
@@ -29,7 +35,7 @@ final class MockAuthenticationService: AuthenticationService {
     print("Deregistered user with \(credential).")
   }
   
-  func logout() {
+  public func logout() {
     status = .notAuthenticated
     print("Logged user out.")
   }

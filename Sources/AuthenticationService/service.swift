@@ -1,5 +1,9 @@
 
+import Combine
+
 public protocol AuthenticationService {
+  var didChange: PassthroughSubject<AuthenticationStatus, Never> { get }
+  
   var status: AuthenticationStatus { get }
 
   @discardableResult

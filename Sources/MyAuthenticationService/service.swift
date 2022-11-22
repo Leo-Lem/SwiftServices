@@ -3,9 +3,14 @@ import AuthenticationService
 import Foundation
 import KeyValueStorageService
 import UserDefaultsService
+import Combine
 
 open class MyAuthenticationService: AuthenticationService {
-  public var status: AuthenticationStatus = .notAuthenticated
+  public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
+  
+  public var status: AuthenticationStatus = .notAuthenticated {
+    didSet { didChange.send(status) }
+  }
 
   internal let baseURL: URL
 
