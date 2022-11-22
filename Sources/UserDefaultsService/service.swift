@@ -1,6 +1,5 @@
 //	Created by Leopold Lemmermann on 29.10.22.
 
-import Combine
 import Concurrency
 import Foundation
 import KeyValueStorageService
@@ -13,9 +12,9 @@ open class UserDefaultsService: KeyValueStorageService {
     local = defaults
     cloud = nil
   }
-  
+
   // cloud
-  
+
   static let cloudPrefix = "cloud-"
   var ignoreChanges = false
 
@@ -46,16 +45,38 @@ open class UserDefaultsService: KeyValueStorageService {
     }
   }
 
-  public func store<T, Key: CustomStringConvertible>(_ item: T, for key: Key) {
-    local.set(item, forKey: key.description)
+  public func store<T, Key: CustomStringConvertible>(
+    _ item: T,
+    for key: Key,
+    secure: Bool = false
+  ) {
+    if secure {
+      storeSecure(item, for: key)
+    } else {
+      local.set(item, forKey: key.description)
+    }
   }
 
-  public func load<T, Key: CustomStringConvertible>(for key: Key) -> T? {
-    local.object(forKey: key.description) as? T
+  public func load<T, Key: CustomStringConvertible>(
+    for key: Key,
+    secure: Bool = false
+  ) -> T? {
+    if secure {
+      return loadSecure(for: key)
+    } else {
+      return local.object(forKey: key.description) as? T
+    }
   }
 
-  public func delete<Key: CustomStringConvertible>(for key: Key) {
-    local.removeObject(forKey: key.description)
+  public func delete<Key: CustomStringConvertible>(
+    for key: Key,
+    secure: Bool = false
+  ) {
+    if secure {
+      return deleteSecure(for: key)
+    } else {
+      local.removeObject(forKey: key.description)
+    }
   }
 
   public func allKeys() -> [String] {
@@ -63,28 +84,5 @@ open class UserDefaultsService: KeyValueStorageService {
       .dictionaryRepresentation()
       .keys
       .compactMap { $0 as String }
-  }
-}
-
-private extension UserDefaultsService {
-  func updateLocal(_: Notification) {
-    guard let cloud = cloud, !ignoreChanges else { return }
-
-    for (key, value) in local.dictionaryRepresentation() {
-      guard key.hasPrefix(Self.cloudPrefix) else { continue }
-      cloud.set(value, forKey: key)
-    }
-  }
-
-  func updateRemote(_: Notification) {
-    guard let cloud = cloud else { return }
-
-    ignoreChanges = true
-    defer { ignoreChanges = false }
-
-    for (key, value) in cloud.dictionaryRepresentation {
-      guard key.hasPrefix(Self.cloudPrefix) else { continue }
-      local.set(value, forKey: key)
-    }
   }
 }

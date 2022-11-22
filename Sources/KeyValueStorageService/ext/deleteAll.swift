@@ -3,6 +3,6 @@
 public extension KeyValueStorageService {
   func deleteAll() {
     allKeys()
-      .forEach(delete)
+      .forEach { delete(for: $0) }
   }
 }
