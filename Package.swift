@@ -19,7 +19,8 @@ let implementation = Target.target(
 let serviceTests = Target.target(
   name: "\(service.name)Tests",
   dependencies: [
-    .target(name: service.name)
+    .target(name: service.name),
+    "Previews"
   ],
   path: "Tests/\(service.name)Tests"
 )
@@ -41,7 +42,8 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-let dependency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main")
+let errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main"),
+    previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -49,6 +51,6 @@ let package = Package(
   name: library.name,
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [dependency],
+  dependencies: [errors, previews],
   targets: [service, implementation, serviceTests, implementationTests]
 )
