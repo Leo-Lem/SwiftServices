@@ -1,5 +1,9 @@
 //	Created by Leopold Lemmermann on 15.11.22.
 
+public extension KeyValueStorageService where Self == MockKeyValueStorageService {
+  static var mock: MockKeyValueStorageService { MockKeyValueStorageService() }
+}
+
 public class MockKeyValueStorageService: KeyValueStorageService {
   public init() {}
 
@@ -14,14 +18,14 @@ public class MockKeyValueStorageService: KeyValueStorageService {
     secure ?
       (store[key.description] = item) :
       (secureStore[key.description] = item)
-    print("Stored \(item) for \(key)\(secure ? " securely." : ".").")
+    print("Stored \(item) for \(key)\(secure ? " securely" : "").")
   }
 
   public func load<T, Key: CustomStringConvertible>(
     for key: Key,
     secure: Bool = false
   ) -> T? {
-    print("Loaded item for \(key)\(secure ? " from secure storage." : ".").")
+    print("Loaded item for \(key)\(secure ? " from secure storage" : "").")
 
     return (
       secure ?
@@ -38,7 +42,7 @@ public class MockKeyValueStorageService: KeyValueStorageService {
       store.removeValue(forKey: key.description) :
       secureStore.removeValue(forKey: key.description)
 
-    print("Deleted item for \(key)\(secure ? " from secure storage." : ".")")
+    print("Deleted item for \(key)\(secure ? " from secure storage" : "").")
   }
 
   public func allKeys() -> [String] {
