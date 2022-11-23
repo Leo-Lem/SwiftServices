@@ -3,6 +3,12 @@
 import Combine
 import Previews
 
+public extension InAppPurchaseService {
+  static var mock: MockInAppPurchaseService<PurchaseID> {
+    MockInAppPurchaseService<PurchaseID>()
+  }
+}
+
 open class MockInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
   public let didChange = PassthroughSubject<PurchaseChange<PurchaseID>, Never>()
 

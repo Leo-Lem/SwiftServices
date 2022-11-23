@@ -7,18 +7,14 @@ import SwiftUI
 
 @available(iOS 16, macOS 13, *)
 public extension Purchase {
-  func view<S: InAppPurchaseService>(service: S)
-    -> some View where S.PurchaseID == ID
-  {
+  func view<S: InAppPurchaseService>(service: S) -> some View where S.PurchaseID == ID {
     InAppPurchaseView(purchase: self, service: service)
   }
 }
 
 @available(iOS 16, macOS 13, *)
 public extension PurchaseIdentifiable {
-  func view<S: InAppPurchaseService>(service: S)
-    -> some View where S.PurchaseID == Self
-  {
+  func view<S: InAppPurchaseService>(service: S) -> some View where S.PurchaseID == Self {
     InAppPurchaseView(id: self, service: service)
   }
 }
