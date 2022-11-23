@@ -1,23 +1,31 @@
 @testable import InAppPurchaseService
 import XCTest
 
-open class InAppPurchaseServiceTests: XCTestCase {
-  public var service: (any InAppPurchaseService)!
+// !!!:  Subclass these tests and insert an implementation to 'service' in the setUp method.
+// (see mock-tests for example)
+open class InAppPurchaseServiceTests<S: InAppPurchaseService>: XCTestCase where S.PurchaseID == ExamplePurchaseID {
+  public var service: S!
 
-  override open func setUpWithError() throws {
-    try XCTSkipIf(
-      service == nil,
-      "Subclass these InAppPurchaseServiceTests and assign an instance of StoreKitService to 'service' in the setUpWithError!"
-    )
+  func testGettingPurchases() throws {
+    let purchase = service.getPurchase(with: .fullVersion)
+    XCTAssertEqual(purchase?.id, .fullVersion, "The purchase id doesn't match.")
   }
 
-  func testGettingPurchases() throws {}
+  func testGettingPurchase() throws {
+    let purchases = service.getPurchases(isPurchased: false)
+    XCTAssertFalse(purchases.isEmpty, "No purchases could be found.")
+    
+    let purchased = service.getPurchases(isPurchased: true)
+    XCTAssertTrue(purchased.isEmpty, "Some items were purchased already...")
+  }
 
-  func testGettingIDs() throws {}
+  func testCheckingIfPurchased() throws {
+    let isPurchased = service.isPurchased(id: .fullVersion)
+    XCTAssertEqual(isPurchased, false, "The purchase is already purchased.")
+  }
 
-  func testGettingPurchase() throws {}
-
-  func testCheckingIfPurchased() throws {}
-
-  func testPurchasing() throws {}
+  func testPurchasing() async throws {
+    let result = try await service.purchase(with: .fullVersion)
+    XCTAssertEqual(result, .success, "The purchase failed.")
+  }
 }

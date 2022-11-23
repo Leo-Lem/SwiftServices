@@ -7,22 +7,22 @@ import SwiftUI
 
 @available(iOS 16, macOS 13, *)
 public extension Purchase {
-  func view<ID: PurchaseIdentifiable>(id: ID.Type, service: InAppPurchaseService) -> some View {
-    InAppPurchaseView(purchase: self, id: ID.self, service: service)
+  func view<S: InAppPurchaseService>(service: S) -> some View where Self.ID == S.PurchaseID {
+    InAppPurchaseView(purchase: self, service: service)
   }
 }
 
 @available(iOS 16, macOS 13, *)
 public extension PurchaseIdentifiable {
-  func view(service: InAppPurchaseService) -> some View {
+  func view<S: InAppPurchaseService>(service: S) -> some View where Self == S.PurchaseID {
     InAppPurchaseView(id: self, service: service)
   }
 }
 
 @available(iOS 16, macOS 13, *)
-public struct InAppPurchaseView<ID: PurchaseIdentifiable>: View {
-  let purchase: Purchase
-  let service: InAppPurchaseService
+public struct InAppPurchaseView<S: InAppPurchaseService>: View {
+  let purchase: Purchase<S.PurchaseID>
+  let service: S
 
   public var body: some View {
     VStack {
@@ -77,18 +77,18 @@ public struct InAppPurchaseView<ID: PurchaseIdentifiable>: View {
 
   @Environment(\.dismiss) var dismiss
 
-  @State private var result: Purchase.Result?
+  @State private var result: Purchase<S.PurchaseID>.Result?
   @State private var error: PurchaseError.Display?
 
   @State private var isPurchasing = false
 
-  public init?(id: ID, service: InAppPurchaseService) {
-    guard let purchase = service.getPurchase(id: id) else { return nil }
+  public init?(id: S.PurchaseID, service: S) {
+    guard let purchase = service.getPurchase(with: id) else { return nil }
     self.purchase = purchase
     self.service = service
   }
 
-  public init(purchase: Purchase, id: ID.Type, service: InAppPurchaseService) {
+  public init(purchase: Purchase<S.PurchaseID>, service: S) {
     self.purchase = purchase
     self.service = service
   }
@@ -106,8 +106,7 @@ private extension InAppPurchaseView {
       do {
         isPurchasing = true
 
-        self.result = try await (purchase.getPurchaseID() as ID?)
-          .flatMap(service.purchase)
+        self.result = try await service.purchase(with: purchase.id)
 
         isPurchasing = false
 
@@ -129,13 +128,12 @@ private extension InAppPurchaseView {
   struct ProductView_Previews: PreviewProvider {
     static var previews: some View {
       Purchase(
-        id: "SomePurchase",
+        id: ExamplePurchaseID.fullVersion,
         name: "Unlock Full Version",
         desc: "With this you can unlock the full version of the app.",
         price: 2.99
       ).view(
-        id: ExamplePurchaseID.self,
-        service: MockInAppPurchaseService(ExamplePurchaseID.self)
+        service: MockInAppPurchaseService<ExamplePurchaseID>()
       )
       .previewInSheet()
     }

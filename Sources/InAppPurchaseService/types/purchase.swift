@@ -2,14 +2,16 @@
 
 import Foundation
 
-public struct Purchase: Identifiable {
-  public let id: String,
+public protocol PurchaseIdentifiable: RawRepresentable<String> & CaseIterable & Hashable {}
+
+public struct Purchase<PurchaseID: PurchaseIdentifiable>: Identifiable {
+  public let id: PurchaseID,
              name: String,
              desc: String,
              price: Decimal
   
   public init(
-    id: String,
+    id: PurchaseID,
     name: String,
     desc: String,
     price: Decimal
@@ -22,5 +24,7 @@ public struct Purchase: Identifiable {
 }
 
 public extension Purchase {
-  func getPurchaseID<ID: PurchaseIdentifiable>() -> ID? { ID(rawValue: id) }
+  enum Result {
+    case success, pending, cancelled
+  }
 }

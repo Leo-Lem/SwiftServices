@@ -2,8 +2,10 @@
 import Combine
 
 public protocol InAppPurchaseService {
-  var didChange: PassthroughSubject<PurchaseChange, Never> { get }
+  associatedtype PurchaseID: PurchaseIdentifiable
   
-  func getPurchases(isPurchased: Bool) -> [Purchase]
-  func purchase<ID: PurchaseIdentifiable>(id: ID) async throws -> Purchase.Result
+  var didChange: PassthroughSubject<PurchaseChange<PurchaseID>, Never> { get }
+  
+  func getPurchases(isPurchased: Bool) -> [Purchase<PurchaseID>]
+  func purchase(with id: PurchaseID) async throws -> Purchase<PurchaseID>.Result
 }

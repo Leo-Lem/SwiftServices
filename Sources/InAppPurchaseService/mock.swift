@@ -3,23 +3,22 @@
 import Combine
 import Previews
 
-open class MockInAppPurchaseService: InAppPurchaseService {
-  public let didChange = PassthroughSubject<PurchaseChange, Never>()
+open class MockInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
+  public let didChange = PassthroughSubject<PurchaseChange<PurchaseID>, Never>()
 
-  var purchases = [Purchase]()
-  var purchased = [Purchase]()
+  var purchases = [Purchase<PurchaseID>]()
+  var purchased = [Purchase<PurchaseID>]()
 
-  public init<ID: PurchaseIdentifiable>(_: ID.Type) {
-    purchases = ID.allCases.map(Self.examplePurchase)
-    purchases.first.flatMap { purchased.append($0) }
+  public init() {
+    purchases = PurchaseID.allCases.map(Self.examplePurchase)
   }
 
-  public func getPurchases(isPurchased: Bool) -> [Purchase] {
+  public func getPurchases(isPurchased: Bool) -> [Purchase<PurchaseID>] {
     isPurchased ? self.purchased : self.purchases
   }
 
-  public func purchase<ID: PurchaseIdentifiable>(id: ID) async throws -> Purchase.Result {
-    guard let purchase = purchases.first(where: { $0.id == id.rawValue }) else {
+  public func purchase(with id: PurchaseID) async throws -> Purchase<PurchaseID>.Result {
+    guard let purchase = purchases.first(where: { $0.id == id }) else {
       throw PurchaseError.other(nil)
     }
 
@@ -29,9 +28,9 @@ open class MockInAppPurchaseService: InAppPurchaseService {
 }
 
 extension MockInAppPurchaseService {
-  static func examplePurchase<ID: PurchaseIdentifiable>(with id: ID) -> Purchase {
+  static func examplePurchase(with id: PurchaseID) -> Purchase<PurchaseID> {
     Purchase(
-      id: id.rawValue,
+      id: id,
       name: .random(in: 10 ..< 25, using: .letters),
       desc: .random(in: 15 ..< 50, using: .letters.union(.whitespaces)) + ".",
       price: .init((100 * Double.random(in: 1 ..< 20)) / 100)

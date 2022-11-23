@@ -33,7 +33,8 @@ let implementationTests = Target.testTarget(
   dependencies: [
     .target(name: implementation.name),
     .target(name: serviceTests.name)
-  ]
+  ],
+  resources: [.process("Products.storekit")]
 )
 
 // MARK: - (PRODUCTS)

@@ -3,13 +3,17 @@
 import Previews
 import InAppPurchaseService
 
-extension Purchase: HasExample {
-  public static var example: Purchase {
+extension Purchase: HasExample where PurchaseID == ExamplePurchaseID {
+   public static var example: Purchase {
     Purchase(
-      id: .random(in: 10 ..< 25, using: .letters),
+      id: ExamplePurchaseID.fullVersion,
       name: .random(in: 10 ..< 25, using: .letters),
       desc: .random(in: 15 ..< 50, using: .letters.union(.whitespaces)) + ".",
       price: .init((100 * Double.random(in: 1 ..< 20)) / 100)
     )
   }
+}
+
+public enum ExamplePurchaseID: String, PurchaseIdentifiable {
+  case fullVersion = "InAppPurchaseService.fullVersion"
 }
