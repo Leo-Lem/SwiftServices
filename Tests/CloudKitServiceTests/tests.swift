@@ -5,7 +5,7 @@ import CloudKit
 import RemoteDatabaseServiceTests
 import XCTest
 
-class CloudKitServiceTests: RemoteDatabaseServiceTests {
+class CloudKitServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
   override func setUp() async throws {
     service = await CloudKitService(MockCloudKitContainer())
 
@@ -13,7 +13,7 @@ class CloudKitServiceTests: RemoteDatabaseServiceTests {
     guard case .available = service.status else { throw XCTSkip("Missing write permissions.") }
 
     // cleans up any leftover data
-    try await service.unpublishAll(Example1.self)
-    try await service.unpublishAll(Example2.self)
+    try await service.unpublishAll(Example1Impl.self)
+    try await service.unpublishAll(Example2Impl.self)
   }
 }

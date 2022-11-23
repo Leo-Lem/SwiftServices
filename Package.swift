@@ -25,7 +25,8 @@ let serviceTests = Target.target(
   dependencies: [
     .target(name: service.name),
     "Queries",
-    "Concurrency"
+    "Concurrency",
+    "Previews"
   ],
   path: "Tests/\(service.name)Tests"
 )
@@ -49,7 +50,8 @@ let library = Product.library(
 
 let queries = Package.Dependency.package(url: "https://github.com/Leo-Lem/Queries", branch: "main"),
     concurrency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency", branch: "main"),
-    errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main")
+    errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main"),
+    previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -58,6 +60,6 @@ let package = Package(
   defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [queries, concurrency, errors],
+  dependencies: [queries, concurrency, errors, previews],
   targets: [service, implementation, serviceTests, implementationTests]
 )

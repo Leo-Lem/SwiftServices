@@ -4,7 +4,7 @@ import CloudKit
 import RemoteDatabaseService
 
 extension CloudKitService {
-  func mapToCloudKitError<T>(_ action: () throws -> T) rethrows -> T {
+  func mapToRemoteDatabaseError<T>(_ action: () throws -> T) rethrows -> T {
     do {
       return try action()
     } catch let error as CKError {
@@ -16,7 +16,7 @@ extension CloudKitService {
     }
   }
 
-  func mapToCloudKitError<T>(_ action: () async throws -> T) async rethrows -> T {
+  func mapToRemoteDatabaseError<T>(_ action: () async throws -> T) async rethrows -> T {
     do {
       return try await action()
     } catch let error as CKError {
@@ -28,10 +28,24 @@ extension CloudKitService {
     }
   }
   
-  func mapToCloudKitError(_ error: Error) -> Error {
+  func mapToRemoteDatabaseError(_ error: Error) -> Error {
     do {
-      try mapToCloudKitError { throw error }
+      try mapToRemoteDatabaseError { throw error }
       return error
     } catch { return error }
+  }
+}
+
+extension RemoteDatabaseError {
+  init?(ckError: CKError) {
+    switch ckError.code {
+    case .networkFailure, .networkUnavailable, .serverResponseLost, .serviceUnavailable:
+      self = .noNetwork
+    case .notAuthenticated:
+      self = .notAuthenticated
+    case .requestRateLimited:
+      self = .rateLimited
+    default: return nil
+    }
   }
 }

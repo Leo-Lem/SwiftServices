@@ -24,10 +24,7 @@ public extension RemoteDatabaseError {
       }
     }
 
-    public var errorDescription: String? {
-      String(localized: .init(key))
-    }
-
+    public var errorDescription: String? { String(localized: .init(key), bundle: .module) }
     public var key: String {
       switch self {
       case .noNetwork:

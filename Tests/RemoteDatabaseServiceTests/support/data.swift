@@ -1,15 +1,19 @@
 //	Created by Leopold Lemmermann on 08.11.22.
 
 import RemoteDatabaseService
+import Previews
 
 extension RemoteDatabaseServiceTests {
-  func createHeterogenousTestData(_ count: Int = 2) -> [any RemoteModelConvertible] {
+  func createHeterogenousTestData<T1: Example1, T2: Example2>(
+    _ count: Int = 2,
+    _: T1.Type,
+    _: T2.Type
+  ) -> [any RemoteModelConvertible] {
     var convertibles = [any RemoteModelConvertible]()
-    for _ in 0 ..< count / 2 {
-      (Example1.example as? any RemoteModelConvertible).flatMap { convertibles.append($0) }}
-    for _ in 0 ..< count / 2 {
-      (Example2.example as? any RemoteModelConvertible).flatMap { convertibles.append($0) }
-    }
+    
+    convertibles.append(contentsOf: createTestData(count / 2) as [T1])
+    convertibles.append(contentsOf: createTestData(count / 2) as [T2])
+    
     return convertibles
   }
 
