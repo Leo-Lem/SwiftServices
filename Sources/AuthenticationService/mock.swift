@@ -3,13 +3,17 @@
 import Combine
 import Concurrency
 
+public extension AuthenticationService where Self == MockAuthenticationService {
+  static var mock: MockAuthenticationService { MockAuthenticationService() }
+}
+
 open class MockAuthenticationService: AuthenticationService {
   public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
-  
+
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { didChange.send(status) }
   }
-  
+
   public init() {}
 
   @discardableResult
@@ -19,7 +23,7 @@ open class MockAuthenticationService: AuthenticationService {
     print("Logged user in with \(credential).")
     return credential.id
   }
-  
+
   @discardableResult
   public func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID {
     await sleep(for: .seconds(0.1))
@@ -29,14 +33,14 @@ open class MockAuthenticationService: AuthenticationService {
     print("Changed pin with \(id).")
     return credential.id
   }
-  
+
   public func deregister() async throws {
     await sleep(for: .seconds(0.1))
     guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
     status = .notAuthenticated
     print("Deregistered user with \(id).")
   }
-  
+
   public func logout() {
     status = .notAuthenticated
     print("Logged user out.")

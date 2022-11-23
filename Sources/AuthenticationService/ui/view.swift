@@ -29,8 +29,13 @@ public struct AuthenticationView: View {
 
         HStack {
           SecureField("\(Text("ENTER_PIN", bundle: .module))", text: $credential.pin)
+            .onSubmit {
+              if !confirmDisabled { startLogin() }
+            }
 
-          Button(action: startLogin) {
+          Button {
+            startLogin()
+          } label: {
             if isAuthenticating {
               ProgressView()
             } else if isAuthenticated {
@@ -79,9 +84,12 @@ public struct AuthenticationView: View {
   @State private var isAuthenticating = false
   @State private var isAuthenticated = false
   
-  private let hapticsService = try? CoreHapticsService()
+  private let hapticsService = CoreHapticsService()
 
-  public init(service: AuthenticationService) { self.service = service }
+  public init?(service: AuthenticationService) {
+    if case .authenticated = service.status { return nil }
+    self.service = service
+  }
 }
 
 @available(iOS 16, macOS 13, *)
@@ -94,6 +102,7 @@ extension AuthenticationView {
       isAuthenticated
   }
 
+  @MainActor
   func startLogin() {
     Task(priority: .userInitiated) {
       do {
