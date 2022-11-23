@@ -6,16 +6,18 @@ public extension KeyValueStorageService {
   func store<T: Encodable>(
     object: T,
     encoder: JSONEncoder = .init(),
-    for key: String
+    for key: String,
+    secure: Bool = false
   ) throws {
-    store(try encoder.encode(object), for: key)
+    store(try encoder.encode(object), for: key, secure: secure)
   }
 
-  func fetchObject<T: Decodable>(
+  func load<T: Decodable>(
     decoder: JSONDecoder = .init(),
-    for key: String
+    objectFor key: String,
+    secure: Bool = false
   ) throws -> T? {
-    try (load(for: key) as Data?)
+    try (load(for: key, secure: secure) as Data?)
       .flatMap { data in
         try decoder.decode(T.self, from: data)
       }
