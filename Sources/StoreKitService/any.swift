@@ -10,7 +10,7 @@ public extension AnyInAppPurchaseService {
   
   @available(iOS 15, macOS 12, *)
   static func storekit() async -> Self {
-    Self(await StoreKitService<PurchaseID>())
+    Self(await StoreKitService())
   }
 }
 
