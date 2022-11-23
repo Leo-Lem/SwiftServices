@@ -9,5 +9,3 @@ enum Route: String {
        pin = "new-pin",
        auth = "authenticate"
 }
-
-

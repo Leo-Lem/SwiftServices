@@ -1,6 +1,7 @@
 //	Created by Leopold Lemmermann on 21.10.22.
 
 import Combine
+import Concurrency
 
 open class MockAuthenticationService: AuthenticationService {
   public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
@@ -13,6 +14,7 @@ open class MockAuthenticationService: AuthenticationService {
 
   @discardableResult
   public func login(_ credential: Credential) async throws -> Credential.ID {
+    await sleep(for: .seconds(0.1))
     status = .authenticated(credential.id)
     print("Logged user in with \(credential).")
     return credential.id
@@ -20,6 +22,7 @@ open class MockAuthenticationService: AuthenticationService {
   
   @discardableResult
   public func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID {
+    await sleep(for: .seconds(0.1))
     guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
     let credential = Credential(id: id, pin: newPIN)
     status = .authenticated(credential.id)
@@ -28,6 +31,7 @@ open class MockAuthenticationService: AuthenticationService {
   }
   
   public func deregister() async throws {
+    await sleep(for: .seconds(0.1))
     guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
     status = .notAuthenticated
     print("Deregistered user with \(id).")

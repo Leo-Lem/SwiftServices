@@ -2,7 +2,7 @@
 
 import AuthenticationService
 
-extension Credential {
+public extension Credential {
   static var example: Credential {
     Credential(id: "LeoLem", pin: "0953")
   }

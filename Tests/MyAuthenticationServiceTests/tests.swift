@@ -1,15 +1,15 @@
 import AuthenticationService
 import AuthenticationServiceTests
-@testable import MyAuthenticationService
 import KeyValueStorageService
+@testable import MyAuthenticationService
 import XCTest
 
-class LLAuthenticationServiceTests: AuthenticationServiceTests {
+// !!!: These tests make calls to the production api and try to login with an example credential
+class MyAuthenticationServiceTests: AuthenticationServiceTests<Any> {
   override func setUp() async throws {
-    // TODO: mock the responses and remove the clear method
-//    service = await MyAuthenticationService(
-//      apiURL: "http://0.0.0.0:8080",
-//      keyValueStorageService: MockKeyValueStorageService()
-//    )
+    service = await MyAuthenticationService(
+      url: URL(string: "https://github-repo-j3opzjp32q-lz.a.run.app")!,
+      keyValueStorageService: MockKeyValueStorageService()
+    )
   }
 }

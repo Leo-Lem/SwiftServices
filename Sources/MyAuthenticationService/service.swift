@@ -1,6 +1,7 @@
 
 import AuthenticationService
 import Combine
+import Errors
 import Foundation
 import KeyValueStorageService
 import UserDefaultsService
@@ -12,19 +13,17 @@ open class MyAuthenticationService: AuthenticationService {
     didSet { didChange.send(status) }
   }
 
-  internal let baseURL: URL
-
+  internal let url: URL
   internal let keyValueStorageService: KeyValueStorageService
 
-  public init(
-    apiURL: String = "https://auth.leolem.dev",
-    keyValueStorageService: KeyValueStorageService = UserDefaultsService()
-  ) async {
-    baseURL = URL(string: apiURL)!
+  public init(url: URL, keyValueStorageService: KeyValueStorageService = UserDefaultsService()) async {
+    self.url = url
     self.keyValueStorageService = keyValueStorageService
 
     if let credential = loadCredential() {
-      _ = try? await login(credential)
+      await printError {
+        try await login(credential)
+      }
     }
   }
 
@@ -104,16 +103,4 @@ open class MyAuthenticationService: AuthenticationService {
     deleteCredential(userID: id)
     status = .notAuthenticated
   }
-
-  #if DEBUG
-    public func clear() async {
-      var request = URLRequest(url: baseURL)
-
-      request.httpMethod = HTTPMethod.DELETE.rawValue
-
-      do {
-        _ = try await URLSession.shared.data(for: request)
-      } catch { print(error.localizedDescription) }
-    }
-  #endif
 }

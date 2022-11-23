@@ -44,16 +44,16 @@ let library = Product.library(
 
 // MARK: - (DEPENDENCIES)
 
-let kvss = Package.Dependency.package(url: "https://github.com/Leo-Lem/KeyValueStorageService", branch: "main")
-let haptics = Package.Dependency.package(url: "https://github.com/Leo-Lem/HapticsService", branch: "main")
-let misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc", branch: "main")
+let kvss = Package.Dependency.package(url: "https://github.com/Leo-Lem/KeyValueStorageService", branch: "main"),
+    haptics = Package.Dependency.package(url: "https://github.com/Leo-Lem/HapticsService", branch: "main"),
+    misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc", branch: "main")
 
 // MARK: - (PACKAGE)
 
 let package = Package(
   name: library.name,
   defaultLocalization: "en",
-  platforms: [.iOS(.v13), .macOS(.v10_15)],
+  platforms: [.iOS(.v13), .macOS(.v12)],
   products: [library],
   dependencies: [kvss, haptics, misc],
   targets: [service, implementation, serviceTests, implementationTests]
