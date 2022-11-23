@@ -3,6 +3,7 @@
 import Concurrency
 import LeosMisc
 import SwiftUI
+import CoreHapticsService
 
 @available(iOS 16, macOS 13, *)
 public struct AuthenticationView: View {
@@ -77,6 +78,8 @@ public struct AuthenticationView: View {
 
   @State private var isAuthenticating = false
   @State private var isAuthenticated = false
+  
+  private let hapticsService = try? CoreHapticsService()
 
   public init(service: AuthenticationService) { self.service = service }
 }
@@ -96,16 +99,17 @@ extension AuthenticationView {
       do {
         isAuthenticating = true
         try await service.login(credential)
-
         isAuthenticating = false
-
+        
         if case .authenticated = service.status {
           isAuthenticated = true
+          hapticsService?.play(.taDa)
           await sleep(for: .seconds(3))
           dismiss()
         }
       } catch let error as AuthenticationError {
         self.error = error.display
+        isAuthenticating = false
       }
     }
   }

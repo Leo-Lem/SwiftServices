@@ -10,6 +10,24 @@
       }
     },
     {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Errors",
+      "state" : {
+        "branch" : "main",
+        "revision" : "82f5e6e983288ee88d95a89e44ec33b08509a6aa"
+      }
+    },
+    {
+      "identity" : "hapticsservice",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/HapticsService",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0a40d4a0d7c33c2d20d7d28db8b6aebf497ab8ad"
+      }
+    },
+    {
       "identity" : "keyvaluestorageservice",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Leo-Lem/KeyValueStorageService",
