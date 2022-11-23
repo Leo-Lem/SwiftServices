@@ -3,10 +3,9 @@
 @testable import UserDefaultsService
 import KeyValueStorageServiceTests
 
-class UserDefaultsServiceTests: KeyValueStorageServiceTests {
+class UserDefaultsServiceTests: KeyValueStorageServiceTests<Any> {
   override func setUpWithError() throws {
     service = UserDefaultsService()
     service.deleteAll()
   }
 }
-

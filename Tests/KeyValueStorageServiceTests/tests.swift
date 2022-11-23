@@ -3,15 +3,11 @@
 @testable import KeyValueStorageService
 import XCTest
 
-open class KeyValueStorageServiceTests: XCTestCase {
+// !!!:  Subclass these tests and insert an implementation in the setUp method.
+// (see mock-tests for example)
+// (Generic parameter can be set to Any, there for preventing base test execution)
+open class KeyValueStorageServiceTests<T>: XCTestCase {
   public var service: KeyValueStorageService!
-  
-  open override func setUpWithError() throws {
-    try XCTSkipIf(
-      service == nil,
-      "Subclass these tests and insert an implementation of the private database service in the initializer!"
-    )
-  }
   
   func testStoringAndLoading() throws {
     let item = "HELLO",
