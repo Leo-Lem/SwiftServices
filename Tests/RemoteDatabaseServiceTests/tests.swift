@@ -4,16 +4,10 @@ import Queries
 @testable import RemoteDatabaseService
 import XCTest
 
+// !!!:  Subclass these tests and insert an implementation to 'service' in the setUp method.
+// (see mock-tests for example)
 open class RemoteDatabaseServiceTests<T1: Example1, T2: Example2>: XCTestCase {
   public var service: RemoteDatabaseService!
-
-  override open func setUpWithError() throws {
-    try XCTSkipIf(
-      service == nil,
-      "Subclass these RemoteDatabaseServiceTests " +
-        "and assign an implementation to 'service' in the setUp method!"
-    )
-  }
 
   func testPublishing() async throws {
     let convertible = T1.example

@@ -5,20 +5,24 @@ import Foundation
 import Queries
 import Concurrency
 
+public extension RemoteDatabaseService where Self == MockRemoteDatabaseService {
+  static var mock: MockRemoteDatabaseService { MockRemoteDatabaseService() }
+}
+
 open class MockRemoteDatabaseService: RemoteDatabaseService {
   public var status: RemoteDatabaseStatus = .readOnly
-  
+
   public let didChange = PassthroughSubject<RemoteDatabaseChange, Never>()
 
   var store = [String: any RemoteModelConvertible]()
-  
+
   public init() {}
-  
+
   public func publish<T: RemoteModelConvertible>(_ convertible: T) async throws -> T {
     store[convertible.id.description] = convertible
     didChange.send(.published(convertible))
     await sleep(for: .seconds(0.1))
-    
+
     print("Published \(convertible)!")
     return convertible
   }
@@ -27,22 +31,22 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
     store.removeValue(forKey: id.description)
     didChange.send(.unpublished(id: id, type: T.self))
     await sleep(for: .seconds(0.1))
-    
+
     print("Deleted model with \(id)!")
   }
 
   public func fetch<T: RemoteModelConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error> {
     let values = store.values.compactMap { $0 as? T }
-    
+
     var result: [T]
     if let max = query.options.maxItems {
       result = Array(values.prefix(max))
     } else {
       result = values
     }
-    
+
     let batchSize = query.options.batchSize
-    
+
     switch query.predicateType {
     case let .bool(bool):
       print("Fetched \(query) from local database.")
@@ -54,7 +58,7 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
           result.removeFirst(batchSize)
           await sleep(for: .seconds(0.1))
         }
-        
+
         continuation.finish()
       }
     default:
@@ -65,12 +69,12 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
           result.removeFirst(batchSize)
           await sleep(for: .seconds(0.1))
         }
-        
+
         continuation.finish()
       }
     }
   }
-  
+
   public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
     await sleep(for: .seconds(0.1))
     print("Fetched convertible (id: \(id)) from remote database.")

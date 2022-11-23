@@ -8,7 +8,6 @@ class MockRemoteDatabaseServiceTests: RemoteDatabaseServiceTests<Example1Impl, E
   override func setUp() async throws {
     service = MockRemoteDatabaseService()
     
-    // delete all
     try await service.unpublishAll(Example1Impl.self)
     try await service.unpublishAll(Example2Impl.self)
   }
