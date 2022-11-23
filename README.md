@@ -1,7 +1,7 @@
 # HapticsService
 
-<#Description#>
+An abstraction of a service responsible for triggering haptics.
 
 ## CoreHapticsService
 
-<#Description#>
+An implementation for CoreHaptics is provided.

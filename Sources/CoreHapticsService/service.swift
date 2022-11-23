@@ -6,8 +6,14 @@ import HapticsService
 open class CoreHapticsService: HapticsService {
   private let engine: CHHapticEngine
 
-  public init() throws {
-    engine = try CHHapticEngine()
+  public init?() {
+    guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return nil }
+    do {
+      engine = try CHHapticEngine()
+    } catch {
+      print("Couldn't create haptic engine: \(error.localizedDescription)")
+      return nil
+    }
   }
 
   public func play(_ pattern: Pattern) {
