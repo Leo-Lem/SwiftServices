@@ -1,6 +1,7 @@
 import AuthenticationService
 import AuthenticationServiceTests
 import KeyValueStorageService
+import UserDefaultsService
 @testable import MyAuthenticationService
 import XCTest
 
@@ -9,7 +10,7 @@ class MyAuthenticationServiceTests: AuthenticationServiceTests<Any> {
   override func setUp() async throws {
     service = await MyAuthenticationService(
       url: URL(string: "https://github-repo-j3opzjp32q-lz.a.run.app")!,
-      keyValueStorageService: MockKeyValueStorageService()
+      keyValueStorageService: .mock
     )
   }
 }

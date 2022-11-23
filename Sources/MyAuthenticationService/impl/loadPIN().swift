@@ -6,7 +6,7 @@ extension MyAuthenticationService {
   func loadCurrentCredential() throws -> Credential {
     guard
       case let .authenticated(id) = status,
-      let pin: Credential.PIN = keyValueStorageService.load(for: id, secure: true)
+      let pin: Credential.PIN = try? keyValueStorageService.load(objectFor: id, secure: true)
     else {
       throw AuthenticationError.notAuthenticated
     }

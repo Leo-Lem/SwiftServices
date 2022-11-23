@@ -16,28 +16,38 @@ open class AuthenticationServiceTests<T>: XCTestCase {
   }
 
   func testChangingPIN() async throws {
-    var credential = Credential.example
-    let newPIN = "1234"
-
-    try await service.login(credential)
-    try await service.changePIN(newPIN)
-    try service.logout()
-
-    credential.pin = newPIN
-    let id = try await service.login(credential)
-    XCTAssertEqual(id, credential.id, "The new pin is not accepted.")
-    
-    // resetting the pin
-    try await service.changePIN(Credential.example.pin)
+    do {
+      var credential = Credential.example
+      let newPIN = "1234"
+      
+      try await service.login(credential)
+      try await service.changePIN(newPIN)
+      try service.logout()
+      
+      credential.pin = newPIN
+      let id = try await service.login(credential)
+      XCTAssertEqual(id, credential.id, "The new pin is not accepted.")
+      
+      // resetting the pin
+      try await service.changePIN(Credential.example.pin)
+    } catch {
+      print(error)
+      throw error
+    }
   }
 
   func testDeregistering() async throws {
+    do {
       let credential = Credential.example
-
+      
       try await service.login(credential)
       try await service.deregister()
-
+      
       XCTAssertEqual(service.status, .notAuthenticated, "User is still authenticated.")
+    } catch {
+      print(error)
+      throw error
+    }
   }
 
   func testLoggingOut() async throws {
