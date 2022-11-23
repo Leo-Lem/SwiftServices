@@ -1,23 +1,22 @@
 //	Created by Leopold Lemmermann on 27.10.22.
 
-import SwiftUI
+import Concurrency
 import LeosMisc
+import SwiftUI
 
 @available(iOS 16, macOS 13, *)
 public struct AuthenticationView: View {
   let service: AuthenticationService
-  
-  @Environment(\.dismiss) var dismiss
-  
+
   public var body: some View {
     Form {
       Section {
-        Text("TITLE")
+        Text("TITLE", bundle: .module)
           .bold()
           .font(.title)
           .frame(maxWidth: .infinity)
-        
-        Text("SUBTITLE")
+
+        Text("SUBTITLE", bundle: .module)
           .font(.subheadline)
           .frame(maxWidth: .infinity)
       }
@@ -25,13 +24,19 @@ public struct AuthenticationView: View {
       Divider()
 
       Section {
-        TextField("ENTER_USERID", text: $credential.id)
-        
+        TextField("\(Text("ENTER_USERID", bundle: .module))", text: $credential.id)
+
         HStack {
-          SecureField("ENTER_PIN", text: $credential.pin)
-          
+          SecureField("\(Text("ENTER_PIN", bundle: .module))", text: $credential.pin)
+
           Button(action: startLogin) {
-            Label("CONFIRM", systemImage: "paperplane")
+            if isAuthenticating {
+              ProgressView()
+            } else if isAuthenticated {
+              Image(systemName: "checkmark.circle")
+            } else {
+              Label("\(Text("CONFIRM", bundle: .module))", systemImage: "paperplane")
+            }
           }
           .labelStyle(.iconOnly)
           .disabled(confirmDisabled)
@@ -41,19 +46,19 @@ public struct AuthenticationView: View {
       Divider()
 
       #if DEBUG
-      Button {} label: {
-        Label("SIWA", systemImage: "apple.logo")
-          .frame(maxWidth: .infinity)
-          .aspectRatio(8/1, contentMode: .fit)
-      }
+        Button {} label: {
+          Label("\(Text("SIWA", bundle: .module))", systemImage: "apple.logo")
+            .frame(maxWidth: .infinity)
+            .aspectRatio(8 / 1, contentMode: .fit)
+        }
 
-      Divider()
-      
-      Button {} label: {
-        Label("SIWG", systemImage: "circles.hexagonpath.fill")
-          .frame(maxWidth: .infinity)
-          .aspectRatio(8/1, contentMode: .fit)
-      }
+        Divider()
+
+        Button {} label: {
+          Label("\(Text("SIWG", bundle: .module))", systemImage: "g.circle")
+            .frame(maxWidth: .infinity)
+            .aspectRatio(8 / 1, contentMode: .fit)
+        }
       #endif
     }
     .buttonStyle(.borderedProminent)
@@ -63,12 +68,16 @@ public struct AuthenticationView: View {
     .padding()
     .presentationDetents([.medium])
     .alert(isPresented: Binding(optional: $error), error: error) {}
+    .animation(.default, value: isAuthenticating)
   }
 
+  @Environment(\.dismiss) var dismiss
   @State var credential = Credential(id: "", pin: "")
-  
   @State var error: AuthenticationError.Display?
-  
+
+  @State private var isAuthenticating = false
+  @State private var isAuthenticated = false
+
   public init(service: AuthenticationService) { self.service = service }
 }
 
@@ -77,21 +86,26 @@ extension AuthenticationView {
   var confirmDisabled: Bool {
     credential.id.count < 4 ||
       credential.id.rangeOfCharacter(from: .alphanumerics.union(.punctuationCharacters).inverted) != nil ||
-      credential.pin.count < 4
+      credential.pin.count < 4 ||
+      isAuthenticating ||
+      isAuthenticated
   }
-  
+
   func startLogin() {
     Task(priority: .userInitiated) {
       do {
+        isAuthenticating = true
         try await service.login(credential)
-        
-        if case .authenticated = service.status { dismiss() }
-      } catch let error as AuthenticationError {
-        if let error = AuthenticationError.Display(error) {
-          self.error = error
-        } else {
-          print(error.localizedDescription)
+
+        isAuthenticating = false
+
+        if case .authenticated = service.status {
+          isAuthenticated = true
+          await sleep(for: .seconds(3))
+          dismiss()
         }
+      } catch let error as AuthenticationError {
+        self.error = error.display
       }
     }
   }
