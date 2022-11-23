@@ -6,7 +6,7 @@ import PackageDescription
 
 let service = Target.target(
   name: "InAppPurchaseService",
-  dependencies: ["Previews"],
+  dependencies: ["Previews", "LeosMisc"],
   resources: [.process("ui/res")]
 )
 
@@ -48,6 +48,7 @@ let library = Product.library(
 let concurrency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency.git", branch: "main")
 let errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors.git", branch: "main")
 let previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews.git", branch: "main")
+let misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc.git", branch: "main")
 
 // MARK: - (PACKAGE)
 
@@ -56,6 +57,6 @@ let package = Package(
   defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
-  dependencies: [concurrency, errors, previews],
+  dependencies: [concurrency, errors, previews, misc],
   targets: [service, implementation, serviceTests, implementationTests]
 )
