@@ -1,5 +1,7 @@
 //	Created by Leopold Lemmermann on 27.10.22.
 
+// this is to prevent Github pipeline from failing (running macOS 12)
+#if os(iOS)
 import Concurrency
 import LeosMisc
 import SwiftUI
@@ -113,7 +115,6 @@ extension AuthenticationView {
         if case .authenticated = service.status {
           isAuthenticated = true
           hapticsService?.play(.taDa)
-          await sleep(for: .seconds(3))
           dismiss()
         }
       } catch let error as AuthenticationError {
@@ -142,4 +143,5 @@ extension AuthenticationView {
       }
     }
   }
+#endif
 #endif
