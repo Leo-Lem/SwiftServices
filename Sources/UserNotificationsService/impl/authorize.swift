@@ -5,6 +5,7 @@ import UserNotifications
 
 extension UserNotificationsService {
   func authorize(_: Notification? = nil) async {
+    let center = UNUserNotificationCenter.current()
     switch await center.notificationSettings().authorizationStatus {
     case .authorized, .ephemeral, .provisional:
       isAuthorized = true

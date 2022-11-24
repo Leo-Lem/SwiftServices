@@ -6,6 +6,6 @@ public protocol PushNotificationService {
 
   var isAuthorized: Bool? { get }
 
-  func schedule<T: PushNotification>(_ notification: T)
+  func schedule<T: PushNotification>(_ notification: T) async
   func cancel<T: PushNotification>(with id: T.ID, _: T.Type)
 }
