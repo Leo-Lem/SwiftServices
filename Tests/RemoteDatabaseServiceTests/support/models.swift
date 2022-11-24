@@ -25,10 +25,10 @@ public protocol Example2: RemoteModelConvertible, HasExample, KeyPathQueryable
 
 public extension Example1 {
   static var example: Self { Self(id: ID(), value: .random(in: 0 ..< 100)) }
-  static var keyPathDictionary: [PartialKeyPath<Self>: String] { [\.id: "id", \.value: "value"] }
+  static var propertyNames: [PartialKeyPath<Self>: String] { [\.id: "id", \.value: "value"] }
 }
 
 public extension Example2 {
   static var example: Self { Self(id: ID(), value: .random()) }
-  static var keyPathDictionary: [PartialKeyPath<Self>: String] { [\.id: "id", \.value: "value"] }
+  static var propertyNames: [PartialKeyPath<Self>: String] { [\.id: "id", \.value: "value"] }
 }
