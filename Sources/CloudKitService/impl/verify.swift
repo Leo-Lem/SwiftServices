@@ -3,6 +3,7 @@
 import CloudKit
 import RemoteDatabaseService
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func verifyIsRemoteModel<T: RemoteModelConvertible, U>(_ object: U, _: T.Type = T.self) throws -> T.RemoteModel {
     guard let remoteModel = object as? T.RemoteModel else {

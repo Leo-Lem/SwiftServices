@@ -4,6 +4,7 @@ import CloudKit
 import Queries
 import RemoteDatabaseService
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func fetch<T: RemoteModelConvertible>(with id: T.ID, _: T.Type = T.self) async throws -> T.RemoteModel? {
     do {
@@ -27,6 +28,7 @@ extension CloudKitService {
   }
 }
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func fetch(ckQuery: CKQuery, maxItems: Int?, batchSize: Int) -> AsyncThrowingStream<[CKRecord], Error> {
     AsyncThrowingStream { [weak self] continuation in
@@ -37,12 +39,12 @@ extension CloudKitService {
             cursor: CKQueryOperation.Cursor?
 
         try handleResult(
-          try await database.records(matching: ckQuery, resultsLimit: batchSize)
+          try await database.records(matching: ckQuery, inZoneWith: nil, desiredKeys: nil, resultsLimit: batchSize)
         )
 
         while let c = cursor {
           try handleResult(
-            try await database.records(continuingMatchFrom: c, resultsLimit: batchSize)
+            try await database.records(continuingMatchFrom: c, desiredKeys: nil, resultsLimit: batchSize)
           )
         }
 

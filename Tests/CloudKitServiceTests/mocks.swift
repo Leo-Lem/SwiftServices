@@ -3,6 +3,7 @@
 import CloudKit
 import CloudKitService
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 class MockCloudKitContainer: CloudKitContainer {
   private let database = MockCloudKitDatabase(),
               status = CKAccountStatus.available

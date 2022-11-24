@@ -4,6 +4,7 @@ import CloudKit
 import RemoteDatabaseService
 import Errors
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   @available(iOS 15, macOS 12, *)
   func statusUpdateOnCloudKitChange() -> Task<Void, Never> {

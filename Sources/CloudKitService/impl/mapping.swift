@@ -5,6 +5,7 @@ import Queries
 import Queries_NSPredicate
 import RemoteDatabaseService
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func mapToRemoteModel<T: RemoteModelConvertible>(_ convertible: T) async throws -> T.RemoteModel {
     convertible.mapProperties(

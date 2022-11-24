@@ -6,6 +6,7 @@ import Concurrency
 import Queries
 import RemoteDatabaseService
 
+@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 open class CloudKitService: RemoteDatabaseService {
   public internal(set) var status: RemoteDatabaseStatus = .unavailable
 
@@ -20,10 +21,8 @@ open class CloudKitService: RemoteDatabaseService {
   public init(_ container: CloudKitContainer, scope: CloudKitDatabaseScope = .public) async {
     self.container = container
     self.scope = scope
-
-    if #available(iOS 15, macOS 12, *) {
-      tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
-    }
+    
+    tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
 
     await updateStatus()
   }
