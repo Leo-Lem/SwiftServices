@@ -21,7 +21,7 @@ open class CloudKitService: RemoteDatabaseService {
   public init(_ container: CloudKitContainer, scope: CloudKitDatabaseScope = .public) async {
     self.container = container
     self.scope = scope
-    
+
     tasks.add(statusUpdateOnCloudKitChange(), periodicRefresh(every: 60))
 
     await updateStatus()
@@ -29,7 +29,10 @@ open class CloudKitService: RemoteDatabaseService {
 
   @discardableResult
   public func publish<T: RemoteModelConvertible>(_ convertible: T) async throws -> T {
-    try await mapToRemoteDatabaseError {
+    guard status != .readOnly else { throw RemoteDatabaseError.notAuthenticated }
+    guard status != .unavailable else { throw RemoteDatabaseError.noNetwork }
+
+    return try await mapToRemoteDatabaseError {
       try await database.save(
         try verifyIsCKRecord(remoteModel: try await mapToRemoteModel(convertible))
       )
@@ -41,14 +44,19 @@ open class CloudKitService: RemoteDatabaseService {
   }
 
   public func unpublish<T: RemoteModelConvertible>(with id: T.ID, _: T.Type = T.self) async throws {
-    try await mapToRemoteDatabaseError {
+    guard status != .readOnly else { throw RemoteDatabaseError.notAuthenticated }
+    guard status != .unavailable else { throw RemoteDatabaseError.noNetwork }
+
+    return try await mapToRemoteDatabaseError {
       try await database.deleteRecord(withID: CKRecord.ID(recordName: id.description))
       didChange.send(.unpublished(id: id, type: T.self))
     }
   }
 
   public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
-    try await mapToRemoteDatabaseError {
+    guard status != .unavailable else { throw RemoteDatabaseError.noNetwork }
+    
+    return try await mapToRemoteDatabaseError {
       do {
         return try await fetch(with: id, T.self)
           .flatMap(T.init)

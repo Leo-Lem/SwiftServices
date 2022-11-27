@@ -55,7 +55,7 @@ open class MockRemoteDatabaseService: RemoteDatabaseService {
         .init { continuation in
         while !result.isEmpty {
           continuation.yield(Array(result.prefix(batchSize)))
-          result.removeFirst(batchSize)
+          result.removeFirst(min(result.count, batchSize))
           await sleep(for: .seconds(0.1))
         }
 
