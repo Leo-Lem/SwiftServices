@@ -12,6 +12,12 @@ open class MockPushNotificationService: PushNotificationService {
   public var isAuthorized: Bool?
 
   public init() {}
+  
+  @discardableResult
+  public func authorize() async -> Bool? {
+    self.isAuthorized = true
+    return true
+  }
 
   public func schedule<T: PushNotification>(_ notification: T) {
     print(isAuthorized ?? false ? "Notification (\(notification)) scheduled!" : "Not authorized!")
