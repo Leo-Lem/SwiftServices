@@ -1,11 +1,6 @@
 //  Created by Leopold Lemmermann on 08.10.22.
 
-import Queries
-@testable import RemoteDatabaseService
-import XCTest
-
-// !!!:  Subclass these tests and insert an implementation to 'service' in the setUp method.
-// (see mock-tests for example)
+// !!!:  Subclass these tests and insert an implementation to 'service' in the setUp method. (Like the mock tests)
 open class RemoteDatabaseServiceTests<T1: Example1, T2: Example2>: XCTestCase {
   public var service: RemoteDatabaseService!
 
@@ -21,10 +16,8 @@ open class RemoteDatabaseServiceTests<T1: Example1, T2: Example2>: XCTestCase {
   }
 
   func testUnpublishing() async throws {
-    let convertible = T1.example
-
-    try await service.publish(convertible)
-
+    let convertible: T1 = try await service.publish(T1.example, .example).collect()[0]
+    
     var result = try await service.exists(with: convertible.id, type(of: convertible))
     XCTAssertTrue(result, "Remote model does not exist after publishing.")
 
@@ -35,9 +28,7 @@ open class RemoteDatabaseServiceTests<T1: Example1, T2: Example2>: XCTestCase {
   }
 
   func testFetching() async throws {
-    let convertibles = createHeterogenousTestData(10, T1.self, T2.self)
-
-    try await service.publish(convertibles)
+    try await service.publish(createHeterogenousTestData(10, T1.self, T2.self)).collect()
 
     let result = try await service.fetchAndCollect(Query<T1>(true))
     XCTAssertFalse(result.isEmpty, "No projects were fetched.")

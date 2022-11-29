@@ -1,9 +1,6 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
-import Foundation
-import RemoteDatabaseService
 import Previews
-import Queries_KeyPath
 
 public protocol Example1: RemoteModelConvertible, HasExample, KeyPathQueryable
   where Self: Identifiable & Equatable, ID == UUID

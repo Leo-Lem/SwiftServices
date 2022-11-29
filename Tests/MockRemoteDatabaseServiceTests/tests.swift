@@ -1,10 +1,9 @@
 //	Created by Leopold Lemmermann on 23.11.22.
 
-import XCTest
-import RemoteDatabaseService
+import BaseTests
 
 @available(iOS 15, macOS 12, *)
-class MockRemoteDatabaseServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
+final class MockRemoteDatabaseServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
   override func setUp() async throws {
     service = MockRemoteDatabaseService()
     

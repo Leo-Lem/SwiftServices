@@ -1,16 +1,14 @@
 //	Created by Leopold Lemmermann on 23.10.22.
 
-import CloudKit
-import Combine
+@_exported import CloudKit
 import Concurrency
-import Queries
 import RemoteDatabaseService
 
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 open class CloudKitService: RemoteDatabaseService {
   public internal(set) var status: RemoteDatabaseStatus = .unavailable
 
-  public let didChange = PassthroughSubject<RemoteDatabaseChange, Never>()
+  public let didChange = DidChangePublisher()
 
   let container: CloudKitContainer
   private let scope: CloudKitDatabaseScope
@@ -55,7 +53,7 @@ open class CloudKitService: RemoteDatabaseService {
 
   public func fetch<T: RemoteModelConvertible>(with id: T.ID) async throws -> T? {
     guard status != .unavailable else { throw RemoteDatabaseError.noNetwork }
-    
+
     return try await mapToRemoteDatabaseError {
       do {
         return try await fetch(with: id, T.self)

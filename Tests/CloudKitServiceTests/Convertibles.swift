@@ -1,8 +1,7 @@
 //	Created by Leopold Lemmermann on 08.11.22.
 
-import CloudKit
-import RemoteDatabaseService
-import RemoteDatabaseServiceTests
+import CloudKitService
+import BaseTests
 
 struct Example1Impl: Example1 {
   static let typeID = "Example1"

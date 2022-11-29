@@ -1,12 +1,10 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
-import CloudKit
 @testable import CloudKitService
-import RemoteDatabaseServiceTests
-import XCTest
+import BaseTests
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
-class CloudKitServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+final class CloudKitServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
   override func setUp() async throws {
     service = await CloudKitService(MockCloudKitContainer())
 

@@ -1,12 +1,9 @@
 //	Created by Leopold Lemmermann on 21.10.22.
 
-import Combine
-import Queries
-
 public protocol RemoteDatabaseService {
   var status: RemoteDatabaseStatus { get }
 
-  var didChange: PassthroughSubject<RemoteDatabaseChange, Never> { get }
+  var didChange: DidChangePublisher { get }
 
   @discardableResult
   func publish<T: RemoteModelConvertible>(_ convertible: T) async throws -> T

@@ -6,29 +6,28 @@ import PackageDescription
 
 let service = Target.target(
   name: "RemoteDatabaseService",
-  dependencies: ["Concurrency"],
+  dependencies: ["Queries", "Concurrency"],
   resources: [.process("ui/res")]
 )
 
 let implementation = Target.target(
   name: "CloudKitService",
   dependencies: [
-    .target(name: service.name),
-    "Queries",
-    "Concurrency",
-    "Errors"
+    .target(name: service.name), "Concurrency", "Errors"
   ]
 )
 
 let serviceTests = Target.target(
-  name: "\(service.name)Tests",
+  name: "BaseTests",
   dependencies: [
-    .target(name: service.name),
-    "Queries",
-    "Concurrency",
-    "Previews"
+    .target(name: service.name), "Concurrency", "Previews"
   ],
-  path: "Tests/\(service.name)Tests"
+  path: "Tests/BaseTests"
+)
+
+let mockTests = Target.testTarget(
+  name: "Mock\(service.name)Tests",
+  dependencies: [.target(name: serviceTests.name)]
 )
 
 let implementationTests = Target.testTarget(
@@ -61,5 +60,5 @@ let package = Package(
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
   dependencies: [queries, concurrency, errors, previews],
-  targets: [service, implementation, serviceTests, implementationTests]
+  targets: [service, implementation, serviceTests, mockTests, implementationTests]
 )

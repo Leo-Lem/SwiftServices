@@ -1,7 +1,5 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
-import CloudKit
-import Queries
 import RemoteDatabaseService
 
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)

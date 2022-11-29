@@ -1,7 +1,6 @@
 //  Created by Leopold Lemmermann on 08.11.22.
 
-import Foundation
-import RemoteDatabaseService
+import BaseTests
 
 struct Example1Impl: Example1 {
   static let typeID = "Example1"

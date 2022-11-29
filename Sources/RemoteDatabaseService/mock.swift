@@ -1,8 +1,5 @@
 //	Created by Leopold Lemmermann on 23.10.22.
 
-import Combine
-import Foundation
-import Queries
 import Concurrency
 
 public extension RemoteDatabaseService where Self == MockRemoteDatabaseService {
@@ -12,7 +9,7 @@ public extension RemoteDatabaseService where Self == MockRemoteDatabaseService {
 open class MockRemoteDatabaseService: RemoteDatabaseService {
   public var status: RemoteDatabaseStatus = .readOnly
 
-  public let didChange = PassthroughSubject<RemoteDatabaseChange, Never>()
+  public let didChange = DidChangePublisher()
 
   var store = [String: any RemoteModelConvertible]()
 

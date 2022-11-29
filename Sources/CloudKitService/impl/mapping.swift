@@ -1,7 +1,5 @@
 //	Created by Leopold Lemmermann on 24.10.22.
 
-import CloudKit
-import Queries
 import Queries_NSPredicate
 import RemoteDatabaseService
 
