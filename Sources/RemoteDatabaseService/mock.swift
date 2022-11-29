@@ -2,10 +2,12 @@
 
 import Concurrency
 
+@available(iOS 16, macOS 13, *)
 public extension RemoteDatabaseService where Self == MockRemoteDatabaseService {
   static var mock: MockRemoteDatabaseService { MockRemoteDatabaseService() }
 }
 
+@available(iOS 16, macOS 13, *)
 open class MockRemoteDatabaseService: RemoteDatabaseService {
   public var status: RemoteDatabaseStatus = .readOnly
 

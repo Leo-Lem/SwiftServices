@@ -2,7 +2,7 @@
 
 import BaseTests
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 16, macOS 13, *)
 final class MockRemoteDatabaseServiceTests: RemoteDatabaseServiceTests<Example1Impl, Example2Impl> {
   override func setUp() async throws {
     service = MockRemoteDatabaseService()
@@ -11,4 +11,3 @@ final class MockRemoteDatabaseServiceTests: RemoteDatabaseServiceTests<Example1I
     try await service.unpublishAll(Example2Impl.self)
   }
 }
-

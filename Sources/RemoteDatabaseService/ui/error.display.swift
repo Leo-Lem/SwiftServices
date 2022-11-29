@@ -1,5 +1,7 @@
 //	Created by Leopold Lemmermann on 22.11.22.
 
+import Foundation
+
 @available(iOS 15, macOS 12, *)
 public extension RemoteDatabaseError {
   var display: Display? { Display(self) }
