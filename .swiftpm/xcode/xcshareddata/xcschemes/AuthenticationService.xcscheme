@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AuthenticationServiceTests"
-               BuildableName = "AuthenticationServiceTests"
-               BlueprintName = "AuthenticationServiceTests"
+               BlueprintIdentifier = "MyAuthenticationService"
+               BuildableName = "MyAuthenticationService"
+               BlueprintName = "MyAuthenticationService"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,9 +42,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MyAuthenticationService"
-               BuildableName = "MyAuthenticationService"
-               BlueprintName = "MyAuthenticationService"
+               BlueprintIdentifier = "BaseTests"
+               BuildableName = "BaseTests"
+               BlueprintName = "BaseTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -77,6 +77,16 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MockAuthenticationServiceTests"
+               BuildableName = "MockAuthenticationServiceTests"
+               BlueprintName = "MockAuthenticationServiceTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -88,6 +98,7 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
+      enableGPUValidationMode = "1"
       allowLocationSimulation = "YES">
    </LaunchAction>
    <ProfileAction

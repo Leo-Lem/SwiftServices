@@ -1,13 +1,11 @@
-
-import AuthenticationService
-import Combine
+@_exported import AuthenticationService
 import Errors
 import Foundation
 import KeyValueStorageService
 import UserDefaultsService
 
 open class MyAuthenticationService: AuthenticationService {
-  public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
+  public var didChange = StatusChangePublisher()
 
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { didChange.send(status) }

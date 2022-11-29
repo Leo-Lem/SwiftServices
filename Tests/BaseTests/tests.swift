@@ -1,10 +1,5 @@
-@testable import AuthenticationService
-import XCTest
-
 // !!!:  Subclass these tests and insert an implementation in the setUp method.
-// (see mock-tests for example)
-// (Generic parameter can be set to Any, there for preventing base test execution)
-open class AuthenticationServiceTests<T>: XCTestCase {
+open class BaseTests<T>: XCTestCase {
   public var service: AuthenticationService!
 
   func testLoggingIn() async throws {

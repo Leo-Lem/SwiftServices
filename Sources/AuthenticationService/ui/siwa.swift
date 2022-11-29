@@ -46,7 +46,7 @@ extension SiwAButton {
 // MARK: - (PREVIEWS)
 
 #if DEBUG
-@available(iOS 15, macOS 12, *)
+@available(iOS 16, macOS 13, *)
 struct SiwAButton_Previews: PreviewProvider {
   static var previews: some View {
     SiwAButton(service: .mock)

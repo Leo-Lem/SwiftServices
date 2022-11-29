@@ -1,7 +1,5 @@
 //	Created by Leopold Lemmermann on 21.11.22.
 
-import AuthenticationService
-
 extension AuthenticationStatus: Equatable {
   public static func == (lhs: AuthenticationStatus, rhs: AuthenticationStatus) -> Bool {
     switch (lhs, rhs) {

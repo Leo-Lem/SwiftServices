@@ -1,8 +1,6 @@
 
-import Combine
-
 public protocol AuthenticationService {
-  var didChange: PassthroughSubject<AuthenticationStatus, Never> { get }
+  var didChange: StatusChangePublisher { get }
   
   var status: AuthenticationStatus { get }
 

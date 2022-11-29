@@ -1,14 +1,15 @@
 //	Created by Leopold Lemmermann on 21.10.22.
 
-import Combine
 import Concurrency
 
+@available(iOS 16, macOS 13, *)
 public extension AuthenticationService where Self == MockAuthenticationService {
   static var mock: MockAuthenticationService { MockAuthenticationService() }
 }
 
+@available(iOS 16, macOS 13, *)
 open class MockAuthenticationService: AuthenticationService {
-  public var didChange = PassthroughSubject<AuthenticationStatus, Never>()
+  public var didChange = StatusChangePublisher()
 
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { didChange.send(status) }
