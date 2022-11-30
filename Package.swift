@@ -82,5 +82,5 @@ package.targets = [service, cloudkit, coredata, tests, mockTests, cloudkitTests,
 // MARK: - (PRODUCTS)
 
 package.products.append(
-  .library(name: package.name, targets: [service.name, tests.name, cloudkit.name, coredata.name])
+  .library(name: package.name, targets: [service.name, cloudkit.name, coredata.name])
 )
