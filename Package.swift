@@ -3,10 +3,11 @@
 import PackageDescription
 
 let package = Package(
-  name: "RemoteDatabaseService",
+  name: "DatabaseService",
   defaultLocalization: "en",
   platforms: [.iOS(.v13), .macOS(.v10_15)]
 )
+
 // MARK: - (DEPENDENCIES)
 
 let mine = (queries: "Queries", concurrency: "Concurrency", errors: "Errors", previews: "Previews")
@@ -18,16 +19,25 @@ for name in [mine.queries, mine.concurrency, mine.errors, mine.previews] {
 // MARK: - (TARGETS)
 
 let service = Target.target(
-  name: "RemoteDatabaseService",
+  name: "DatabaseService",
   dependencies: [
-    .product(name: mine.queries, package: mine.queries),
-    .product(name: mine.concurrency, package: mine.concurrency)
+    .byName(name: mine.queries),
+    .byName(name: mine.concurrency)
   ],
   resources: [.process("ui/res")]
 )
 
-let implementation = Target.target(
+let cloudkit = Target.target(
   name: "CloudKitService",
+  dependencies: [
+    .target(name: service.name),
+    .byName(name: mine.concurrency),
+    .byName(name: mine.errors)
+  ]
+)
+
+let coredata = Target.target(
+  name: "CoreDataService",
   dependencies: [
     .target(name: service.name),
     .product(name: mine.concurrency, package: mine.concurrency),
@@ -39,8 +49,8 @@ let tests = Target.target(
   name: "BaseTests",
   dependencies: [
     .target(name: service.name),
-    .product(name: mine.concurrency, package: mine.concurrency),
-    .product(name: mine.previews, package: mine.previews)
+    .byName(name: mine.concurrency),
+    .byName(name: mine.previews)
   ],
   path: "Tests/BaseTests"
 )
@@ -50,16 +60,27 @@ let mockTests = Target.testTarget(
   dependencies: [.target(name: tests.name)]
 )
 
-let implTests = Target.testTarget(
-  name: "\(implementation.name)Tests",
+let cloudkitTests = Target.testTarget(
+  name: "\(cloudkit.name)Tests",
   dependencies: [
-    .target(name: implementation.name),
+    .target(name: cloudkit.name),
     .target(name: tests.name)
   ]
 )
 
-package.targets = [service, implementation, tests, mockTests, implTests]
+let coredataTests = Target.testTarget(
+  name: "\(coredata.name)Tests",
+  dependencies: [
+    .target(name: coredata.name),
+    .target(name: tests.name)
+  ],
+  resources: [.process("integration/Main.xcdatamodeld")]
+)
+
+package.targets = [service, cloudkit, coredata, tests, mockTests, cloudkitTests, coredataTests]
 
 // MARK: - (PRODUCTS)
 
-package.products.append(.library(name: package.name, targets: [service.name, implementation.name]))
+package.products.append(
+  .library(name: package.name, targets: [service.name, tests.name, cloudkit.name, coredata.name])
+)

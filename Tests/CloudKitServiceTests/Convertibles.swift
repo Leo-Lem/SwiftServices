@@ -3,7 +3,7 @@
 import CloudKitService
 import BaseTests
 
-struct Example1Impl: Example1 {
+struct Example1: Example1Protocol {
   static let typeID = "Example1"
   
   let id: UUID
@@ -14,21 +14,19 @@ struct Example1Impl: Example1 {
     self.value = value
   }
 
-  func mapProperties(onto remoteModel: CKRecord) -> CKRecord {
-    remoteModel["value"] = value
-    
-    return remoteModel
+  func mapProperties(onto databaseObject: inout CKRecord) {
+    databaseObject["value"] = value
   }
 
-  init(from remoteModel: CKRecord) {
+  init(from databaseObject: CKRecord) {
     self.init(
-      id: UUID(uuidString: remoteModel.recordID.recordName) ?? UUID(),
-      value: remoteModel["value"] as? Int ?? 0
+      id: UUID(uuidString: databaseObject.recordID.recordName) ?? UUID(),
+      value: databaseObject["value"] as? Int ?? 0
     )
   }
 }
 
-struct Example2Impl: Example2 {
+struct Example2: Example2Protocol {
   static let typeID = "Example2"
 
   let id: UUID
@@ -39,16 +37,14 @@ struct Example2Impl: Example2 {
     self.value = value
   }
   
-  func mapProperties(onto remoteModel: CKRecord) -> CKRecord {
-    remoteModel["value"] = value
-    
-    return remoteModel
+  func mapProperties(onto databaseObject: inout CKRecord) {
+    databaseObject["value"] = value
   }
 
-  init(from remoteModel: CKRecord) {
+  init(from databaseObject: CKRecord) {
     self.init(
-      id: UUID(uuidString: remoteModel.recordID.recordName) ?? UUID(),
-      value: remoteModel["value"] as? Bool ?? false
+      id: UUID(uuidString: databaseObject.recordID.recordName) ?? UUID(),
+      value: databaseObject["value"] as? Bool ?? false
     )
   }
 }

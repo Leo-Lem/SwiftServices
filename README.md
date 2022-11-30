@@ -1,22 +1,23 @@
-# Remote Database Service
+# Database Service
 
-An abstraction for accessing a remote database (e.g., CloudKit).
+An abstraction for accessing a database (e.g., CoreData, CloudKit).
 
 ## Features
 
-- publishing convertibles.
-- unpublishing convertibles.
-- fetching convertibles using a custom Query type (see [Queries](https://github.com/Leo-Lem/Queries) package).
+- Linking your Swift native data models with their database representation via the DatabaseObjectConvertible protocol.
+- Inserting, modifying and deleting objects from the database (using only convertibles, no database object types).
+- Fetching convertibles using their id or just checking for their existence.
+- Querying the database using a custom Query type (see [Queries](https://github.com/Leo-Lem/Queries) package).
+- Where possible, everything is executed asynchronously, as to not block up the main thread.
 
-## How to use
+## Getting Started
 
-1. Create remote database model (e.g., CloudKit records), mirroring your own model.
-2. Conform your Swift Model types to RemoteDatabaseConvertible.
-3. Implement your Public Database Service, or use one available (only CloudKit right now).
-
-### Conforming to RemoteDatabaseConvertible
-
-1. Specify your remote database model type (e.g., CKRecord).
-2. Specify a String identifier for the remote database type (e.g., a recordType).
-3. Mapping to the remote database model: A method mapProperties, taking an instance of the remote database model and returning said instance after modification.
-4. Mapping from the remote database model: An initializer taking an instance of the remote database model.
+1. Create database model (e.g., NSManagedObjectModel, CloudKit records), mirroring your Swift model.
+2. Conform your Swift model types to DatabaseObjectConvertible
+  - Specify your database object type (e.g., CKRecord, some NSManagedObject).
+  - Specify a String identifier for the database object type (e.g., a recordType, an entity name).
+  - Mapping to the database object (`mapProperties(onto databaseObject:)`).
+  - Mapping from the database object(`init(from databaseObject:)`).
+3. Use an available service (CloudKit, CoreData) or create your own and provide the necessary prerequesites
+  - **CloudKit**: Provide your `CKContainer` and specify the scope.
+  - **CoreData**: Provide your `NSPersistentContainer`.
