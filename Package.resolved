@@ -15,7 +15,7 @@
       "location" : "https://github.com/Leo-Lem/Errors",
       "state" : {
         "branch" : "main",
-        "revision" : "82f5e6e983288ee88d95a89e44ec33b08509a6aa"
+        "revision" : "bb37c3da7ed47e6f360c7986513db4eb6aa197b7"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/Leo-Lem/KeyValueStorageService",
       "state" : {
         "branch" : "main",
-        "revision" : "3266f9ddd8af0a37f401516c5b4a160bdb9a10ba"
+        "revision" : "6c9381560c8501169e6b40f74bfb08b6158a96ff"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/Leo-Lem/LeosMisc",
       "state" : {
         "branch" : "main",
-        "revision" : "d8b30a637ca3684d1040c94481e87773aee4189a"
+        "revision" : "d46bfa3860946183eafb110ba1d359c06bb20a70"
       }
     },
     {
@@ -51,7 +51,7 @@
       "location" : "https://github.com/Leo-Lem/Previews",
       "state" : {
         "branch" : "main",
-        "revision" : "c4141d31e662ac40a6bdb78bb882f5d5da7acc0e"
+        "revision" : "83c34f8ffe5906a565d9f714519d4f1ac83725ad"
       }
     }
   ],

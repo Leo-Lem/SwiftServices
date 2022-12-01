@@ -1,29 +1,46 @@
 //	Created by Leopold Lemmermann on 22.11.22.
 
-import AuthenticationService
+import Errors
 import UserDefaultsService
 
 extension MyAuthenticationService {
-  static let userIDKey = "current-user-id"
-
-  func saveCredential(_ credential: Credential) {
+  func save(credential: Credential) {
     try? keyValueStorageService.store(object: credential.pin, for: credential.id, secure: true)
     try? keyValueStorageService.store(object: credential.id, for: Self.userIDKey)
   }
 
   func loadCredential() -> Credential? {
-    if
-      let id: String = try? keyValueStorageService.load(objectFor: Self.userIDKey),
-      let pin: String = try? keyValueStorageService.load(objectFor: id, secure: true)
-    {
-      return Credential(id: id, pin: pin)
-    } else {
-      return nil
+    guard let id = loadID(), let pin = loadPIN(for: id) else { return nil }
+
+    return Credential(id: id, pin: pin)
+  }
+
+  func loadCurrentCredential() throws -> Credential {
+    guard case let .authenticated(id) = status, let pin = loadPIN(for: id) else {
+      throw AuthenticationError.notAuthenticated
+    }
+
+    return Credential(id: id, pin: pin)
+  }
+
+  func deleteCredential(with id: Credential.ID) {
+    keyValueStorageService.delete(for: id, secure: true)
+    keyValueStorageService.delete(for: Self.userIDKey)
+  }
+}
+
+private extension MyAuthenticationService {
+  static let userIDKey = "current-user-id"
+
+  func loadID() -> Credential.ID? {
+    printError {
+      try keyValueStorageService.load(objectFor: Self.userIDKey)
     }
   }
 
-  func deleteCredential(userID: String) {
-    keyValueStorageService.delete(for: userID, secure: true)
-    keyValueStorageService.delete(for: Self.userIDKey)
+  func loadPIN(for id: Credential.ID) -> Credential.PIN? {
+    printError {
+      try keyValueStorageService.load(objectFor: id, secure: true)
+    }
   }
 }

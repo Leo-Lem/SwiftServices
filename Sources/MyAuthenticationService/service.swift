@@ -1,104 +1,106 @@
 @_exported import AuthenticationService
 import Errors
-import Foundation
-import KeyValueStorageService
+import struct Foundation.URL
 import UserDefaultsService
 
 open class MyAuthenticationService: AuthenticationService {
-  public var didChange = StatusChangePublisher()
+  public var statusChange = StatusChangePublisher()
 
   public var status: AuthenticationStatus = .notAuthenticated {
-    didSet { didChange.send(status) }
+    didSet { statusChange.send(status) }
   }
 
-  internal let url: URL
+  internal let server: URL
   internal let keyValueStorageService: KeyValueStorageService
 
-  public init(url: URL, keyValueStorageService: KeyValueStorageService = UserDefaultsService()) async {
-    self.url = url
+  public init(server: URL, keyValueStorageService: KeyValueStorageService = UserDefaultsService()) async {
+    self.server = server
     self.keyValueStorageService = keyValueStorageService
 
-    if let credential = loadCredential() {
-      await printError {
-        try await login(credential)
-      }
+    await printError {
+      if let credential = loadCredential() { try await login(credential) }
     }
   }
 
-  @discardableResult
-  public func login(_ credential: Credential) async throws -> Credential.ID {
-    try await mapError {
-      var (data, response) = try await callAPI(.auth, method: .PUT, data: credential)
+  public func exists(_ id: Credential.ID) async throws -> Bool {
+    let (response, _) = try await callAPI(.exists, data: id)
 
-      switch response?.statusCode {
-      case 200: break
-      case 401: throw AuthenticationError.authenticationWrongPIN
-      case 404:
-        (data, response) = try await callAPI(.reg, method: .POST, data: credential)
-
-        switch response?.statusCode {
-        case 200: break
-        case 400: throw AuthenticationError.registrationInvalidID
-        case 409: throw AuthenticationError.registrationIDTaken
-        case .none: throw AuthenticationError.noConnection
-        case let .some(code): throw AuthenticationError.unexpected(status: code)
-        }
-      case .none: throw AuthenticationError.noConnection
-      case let .some(code): throw AuthenticationError.unexpected(status: code)
-      }
-
-      let credential = try JSONDecoder().decode(Credential.self, from: data)
-      saveCredential(credential)
-      status = .authenticated(credential.id)
-      return credential.id
+    switch response?.statusCode {
+    case 200:
+      return true
+    case 404:
+      return false
+    case .none:
+      throw AuthenticationError.noConnection
+    case let .some(code):
+      throw AuthenticationError.unexpected(status: code)
     }
   }
 
-  @discardableResult
-  public func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID {
-    try await mapError {
-      var credential = try loadCurrentCredential()
+  @discardableResult public func register(_ credential: Credential) async throws -> Credential.ID {
+    let (response, data) = try await callAPI(.register, data: credential)
 
-      let (data, response) = try await callAPI(
-        .pin,
-        method: .POST,
-        data: credential.attachNewPIN(newPIN)
-      )
-      switch response?.statusCode {
-      case 200: break
-      case 400: throw AuthenticationError.modificationInvalidNewPIN
-      case .none: throw AuthenticationError.noConnection
-      case let .some(code): throw AuthenticationError.unexpected(status: code)
-      }
+    switch response?.statusCode {
+    case 200:
+      return performLogin(try Credential(from: data))
+    case 400:
+      throw AuthenticationError.registrationInvalidID(credential.id)
+    case 409:
+      throw AuthenticationError.registrationIDTaken(credential.id)
+    case .none:
+      throw AuthenticationError.noConnection
+    case let .some(code):
+      throw AuthenticationError.unexpected(status: code)
+    }
+  }
 
-      credential = try JSONDecoder().decode(Credential.self, from: data)
-      saveCredential(credential)
-      status = .authenticated(credential.id)
-      return credential.id
+  @discardableResult public func login(_ credential: Credential) async throws -> Credential.ID {
+    let (response, data) = try await callAPI(.login, data: credential)
+
+    switch response?.statusCode {
+    case 200:
+      return performLogin(try Credential(from: data))
+    case 401:
+      throw AuthenticationError.authenticationWrongPIN
+    case 404:
+      throw AuthenticationError.authenticationUnknownID(credential.id)
+    case .none:
+      throw AuthenticationError.noConnection
+    case let .some(code):
+      throw AuthenticationError.unexpected(status: code)
+    }
+  }
+
+  @discardableResult public func changePIN(_ newPIN: Credential.PIN) async throws -> Credential.ID {
+    let (response, data) = try await callAPI(.changePIN, data: try loadCurrentCredential().attachNewPIN(newPIN))
+
+    switch response?.statusCode {
+    case 200:
+      return performLogin(try Credential(from: data))
+    case .none:
+      throw AuthenticationError.noConnection
+    case let .some(code):
+      throw AuthenticationError.unexpected(status: code)
     }
   }
 
   public func deregister() async throws {
-    try await mapError {
-      let credential = try loadCurrentCredential()
-      let (_, response) = try await callAPI(.dereg, method: .POST, data: credential)
+    let credential = try loadCurrentCredential()
+    let (response, _) = try await callAPI(.deregister, data: credential)
 
-      switch response?.statusCode {
-      case 200:
-        break
-      case .none:
-        throw AuthenticationError.noConnection
-      case let .some(code):
-        throw AuthenticationError.unexpected(status: code)
-      }
-
-      try logout()
+    switch response?.statusCode {
+    case 200:
+      performLogout(credential.id)
+    case .none:
+      throw AuthenticationError.noConnection
+    case let .some(code):
+      throw AuthenticationError.unexpected(status: code)
     }
   }
 
   public func logout() throws {
     guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
-    deleteCredential(userID: id)
-    status = .notAuthenticated
+    
+    performLogout(id)
   }
 }

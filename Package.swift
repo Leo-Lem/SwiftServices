@@ -13,31 +13,35 @@ let package = Package(
 let mine = (
   keyValue: "KeyValueStorageService",
   haptics: "HapticsService",
-  concurrency: "Concurrency",
+  errors: "Errors",
   misc: "LeosMisc"
 )
 
-for name in [mine.keyValue, mine.haptics, mine.concurrency, mine.misc] {
+for name in [mine.keyValue, mine.haptics, mine.errors, mine.misc] {
   package.dependencies.append(.package(url: "https://github.com/Leo-Lem/\(name)", branch: "main"))
 }
 
 // MARK: - (TARGETS)
 
-let service = Target.target(
-  name: "AuthenticationService",
+let service = Target.target(name: "AuthenticationService")
+
+let ui = Target.target(
+  name: "AuthenticationUI",
   dependencies: [
-    .product(name: mine.haptics, package: mine.haptics),
-    .product(name: mine.concurrency, package: mine.concurrency),
-    .product(name: mine.misc, package: mine.misc)
+    .target(name: service.name),
+    .byName(name: mine.haptics),
+    .byName(name: mine.errors),
+    .byName(name: mine.misc)
   ],
-  resources: [.process("ui/res")]
+  resources: [.process("res")]
 )
 
 let implementation = Target.target(
   name: "MyAuthenticationService",
   dependencies: [
     .target(name: service.name),
-    .product(name: mine.keyValue, package: mine.keyValue)
+    .byName(name: mine.keyValue),
+    .byName(name: mine.errors)
   ]
 )
 
@@ -57,11 +61,14 @@ let implTests = Target.testTarget(
   dependencies: [
     .target(name: implementation.name),
     .target(name: tests.name)
-  ]
+  ],
+  resources: [.process("devServer")]
 )
 
-package.targets = [service, implementation, tests, mockTests, implTests]
+package.targets = [service, ui, implementation, tests, mockTests, implTests]
 
 // MARK: - (PRODUCTS)
 
-package.products.append(.library(name: package.name, targets: [service.name, implementation.name]))
+package.products.append(
+  .library(name: package.name, targets: [service.name, ui.name, implementation.name])
+)

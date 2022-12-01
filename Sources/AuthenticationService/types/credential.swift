@@ -1,27 +1,23 @@
 //	Created by Leopold Lemmermann on 20.11.22.
 
+/// The credential used for authentication..
 public struct Credential: Identifiable, Codable, Hashable {
+  /// The type of ID used in the ``Credential``.
   public typealias ID = String
+  /// The type of PIN used in the ``Credential``.
   public typealias PIN = String
+
+  /// The id of the credential.
+  public var id: ID
+  /// The pin of the credential
+  public var pin: PIN
   
-  public var id: ID,
-             pin: PIN
-  
-  public init(id: String, pin: String) {
+  /// Initialize a ``Credential`` with the given ``Credential/ID`` and ``Credential/PIN``.
+  /// - Parameters:
+  ///   - id: The id of the credential.
+  ///   - pin: The pin of the credential
+  public init(id: ID, pin: PIN) {
     self.id = id
     self.pin = pin
-  }
-}
-
-public extension Credential {
-  struct WithNewPIN: Codable, Hashable {
-    public let credential: Credential,
-               newPIN: String
-  }
-}
-
-public extension Credential {
-  func attachNewPIN(_ newPIN: String) -> Credential.WithNewPIN {
-    Credential.WithNewPIN(credential: self, newPIN: newPIN)
   }
 }

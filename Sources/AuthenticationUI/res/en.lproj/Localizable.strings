@@ -1,0 +1,20 @@
+
+"TITLE" = "Authenticate";
+"SUBTITLE" = "Choose one of the methods below";
+"ENTER_USERID" = "Username";
+"ENTER_PIN" = "Password";
+"CONFIRM" = "Confirm";
+"SIWA" = "Sign in with Apple";
+"SIWG" = "Sign in with Google";
+
+/* Register alert */
+"UNKNOWN_USER_ID" = "Unknown User ID.";
+"REGISTER_PROMPT" = "Do you want to create a new account?";
+"REGISTER" = "Register";
+"CANCEL" = "Cancel";
+
+/* Errors */
+"NO_CONNECTION" = "Can't connect to the server :(";
+"ID_TAKEN" = "The ID is already taken :(";
+"ID_INVALID" = "The ID can only contain alphanumeric and punctuation characters.";
+"PIN_WRONG" = "The password you entered is wrong.";

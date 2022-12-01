@@ -1,13 +1,25 @@
-// !!!:  Subclass these tests and insert an implementation in the setUp method.
-open class BaseTests<T>: XCTestCase {
-  public var service: AuthenticationService!
+@_exported @testable import AuthenticationService
+@_exported import XCTest
 
+// !!!:  Subclass these tests and insert an implementation in the setUp method.
+open class BaseTests<S: AuthenticationService>: XCTestCase {
+  public var service: S!
+
+  func testRegistering() async throws {
+    let credential = Credential.example
+
+    let id = try await service.register(credential)
+    XCTAssertEqual(id, credential.id, "The IDs don't match.")
+    XCTAssertEqual(service.status, .authenticated(credential.id), "User is not logged in.")
+  }
+  
   func testLoggingIn() async throws {
     let credential = Credential.example
 
+    try await service.register(credential)
     let id = try await service.login(credential)
     XCTAssertEqual(id, credential.id, "The IDs don't match.")
-    XCTAssertEqual(service.status, .authenticated(credential.id), "User is not authenticated.")
+    XCTAssertEqual(service.status, .authenticated(credential.id), "User is not logged in.")
   }
 
   func testChangingPIN() async throws {
@@ -15,7 +27,7 @@ open class BaseTests<T>: XCTestCase {
       var credential = Credential.example
       let newPIN = "1234"
       
-      try await service.login(credential)
+      try await service.register(credential)
       try await service.changePIN(newPIN)
       try service.logout()
       
@@ -35,10 +47,10 @@ open class BaseTests<T>: XCTestCase {
     do {
       let credential = Credential.example
       
-      try await service.login(credential)
+      try await service.register(credential)
       try await service.deregister()
       
-      XCTAssertEqual(service.status, .notAuthenticated, "User is still authenticated.")
+      XCTAssertEqual(service.status, .notAuthenticated, "User is still logged in.")
     } catch {
       print(error)
       throw error
@@ -48,7 +60,7 @@ open class BaseTests<T>: XCTestCase {
   func testLoggingOut() async throws {
     let credential = Credential.example
 
-    try await service.login(credential)
+    try await service.register(credential)
     try service.logout()
 
     XCTAssertEqual(service.status, .notAuthenticated, "Logout was unsuccessful.")
