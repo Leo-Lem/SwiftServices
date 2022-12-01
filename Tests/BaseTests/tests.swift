@@ -5,6 +5,16 @@
 open class BaseTests<S: AuthenticationService>: XCTestCase {
   public var service: S!
 
+  func testExists() async throws {
+    let credential = Credential.example
+    var exists = try await service.exists(credential.id)
+    XCTAssertFalse(exists, "Credential exists without registering.")
+    
+    try await service.register(credential)
+    exists = try await service.exists(credential.id)
+    XCTAssertTrue(exists, "Credential doesn't exist after registering.")
+  }
+  
   func testRegistering() async throws {
     let credential = Credential.example
 
