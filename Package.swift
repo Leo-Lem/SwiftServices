@@ -10,25 +10,25 @@ let service = Target.target(
 
 let implementation = Target.target(
   name: "UserDefaultsService",
-  dependencies: [
-    .target(name: service.name),
-    "Concurrency"
-  ]
+  dependencies: [.target(name: service.name), "Concurrency"]
 )
 
-let serviceTests = Target.target(
-  name: "\(service.name)Tests",
-  dependencies: [
-    .target(name: service.name)
-  ],
-  path: "Tests/\(service.name)Tests"
+let baseTests = Target.target(
+  name: "BaseTests",
+  dependencies: [.target(name: service.name)],
+  path: "Tests/BaseTests"
+)
+
+let mockTests = Target.testTarget(
+  name: "Mock\(service.name)Tests",
+  dependencies: [.target(name: baseTests.name)]
 )
 
 let implementationTests = Target.testTarget(
   name: "\(implementation.name)Tests",
   dependencies: [
     .target(name: implementation.name),
-    .target(name: serviceTests.name)
+    .target(name: baseTests.name)
   ]
 )
 
@@ -50,5 +50,5 @@ let package = Package(
   platforms: [.iOS(.v13), .macOS(.v10_15)],
   products: [library],
   dependencies: [dependency],
-  targets: [service, implementation, serviceTests, implementationTests]
+  targets: [service, implementation, baseTests, mockTests, implementationTests]
 )

@@ -1,11 +1,11 @@
 //	Created by Leopold Lemmermann on 15.11.22.
 
 @testable import UserDefaultsService
-import KeyValueStorageServiceTests
+import BaseTests
 
-class UserDefaultsServiceTests: KeyValueStorageServiceTests<Any> {
+final class UserDefaultsServiceTests: KeyValueStorageServiceTests<UserDefaultsService> {
   override func setUpWithError() throws {
-    service = UserDefaultsService()
+    service = .init()
     service.deleteAll()
   }
 }

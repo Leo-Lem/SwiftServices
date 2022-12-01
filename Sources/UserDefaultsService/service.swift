@@ -2,7 +2,7 @@
 
 import Concurrency
 import Foundation
-import KeyValueStorageService
+@_exported import KeyValueStorageService
 
 open class UserDefaultsService: KeyValueStorageService {
   let local: UserDefaults

@@ -1,14 +1,14 @@
 # Key-Value Storage Service
 
-An abstraction for key value storage (e.g., UserDefaults, NSUbiquitousKeyValueStore).
+An abstraction for workign with key value storage (e.g., UserDefaults, NSUbiquitousKeyValueStore).
 
 ## Features
 
-- storing item for key.
-- deleting item for key.
-- loading the item for a key.
+- storing, loading and deleting item for key.
+- storing items securely (e.g., in Keychain).
 - getting all keys.
+- storing codable items (with automatic encoding and decoding).
 
 ## How to use
 
-Subclass UserDefaultsStorageService and add your own functionality, or use it as is.
+Subclass UserDefaultsService and add your own functionality, or use it as is.

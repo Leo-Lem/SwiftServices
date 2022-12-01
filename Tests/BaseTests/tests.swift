@@ -1,13 +1,12 @@
 //	Created by Leopold Lemmermann on 10.11.22.
 
-@testable import KeyValueStorageService
-import XCTest
+@_exported @testable import KeyValueStorageService
+@_exported import XCTest
 
 // !!!:  Subclass these tests and insert an implementation in the setUp method.
 // (see mock-tests for example)
-// (Generic parameter can be set to Any, there for preventing base test execution)
-open class KeyValueStorageServiceTests<T>: XCTestCase {
-  public var service: KeyValueStorageService!
+open class KeyValueStorageServiceTests<S: KeyValueStorageService>: XCTestCase {
+  public var service: S!
   
   func testStoringAndLoading() throws {
     let item = "HELLO",
