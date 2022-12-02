@@ -7,7 +7,7 @@ public extension DatabaseService where Self == MockDatabaseService {
 
 @available(iOS 16, macOS 13, *)
 open class MockDatabaseService: DatabaseService {
-  public let didChange = DidChangePublisher()
+  public let eventPublisher = DatabaseEventPublisher()
   public var status: DatabaseStatus = .readOnly
 
   var store = [String: any DatabaseObjectConvertible]()
@@ -16,7 +16,7 @@ open class MockDatabaseService: DatabaseService {
 
   public func insert<T: DatabaseObjectConvertible>(_ convertible: T) async throws -> T {
     store[convertible.id.description] = convertible
-    didChange.send(.inserted(convertible))
+    eventPublisher.send(.inserted(convertible))
 
     print("Inserted \(convertible)!")
     return convertible
@@ -24,7 +24,7 @@ open class MockDatabaseService: DatabaseService {
 
   public func delete<T: DatabaseObjectConvertible>(_: T.Type, with id: T.ID) async throws {
     store.removeValue(forKey: id.description)
-    didChange.send(.deleted(T.self, id: id))
+    eventPublisher.send(.deleted(T.self, id: id))
 
     print("Deleted database object with \(id)!")
   }

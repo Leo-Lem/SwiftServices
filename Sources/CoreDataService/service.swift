@@ -10,7 +10,7 @@ open class CoreDataService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status = DatabaseStatus.available
-  public let didChange = DidChangePublisher()
+  public let eventPublisher = DatabaseEventPublisher()
   public let container: NSPersistentContainer
 
   private let tasks = Tasks()
@@ -20,7 +20,7 @@ open class CoreDataService: DatabaseService {
   public init(container: NSPersistentContainer) {
     self.container = container
 
-    tasks.add(updateOnRemoteChange(), saveOnResignActive())
+    tasks.add(updateOnRemoteChange, saveOnResignActive)
   }
 
   @discardableResult
@@ -28,7 +28,7 @@ open class CoreDataService: DatabaseService {
     container.viewContext.insert(NSManagedObject.castFrom(databaseObject: getDatabaseObject(from: convertible)))
 
     save()
-    didChange.send(.inserted(convertible))
+    eventPublisher.send(.inserted(convertible))
 
     return convertible
   }
@@ -41,7 +41,7 @@ open class CoreDataService: DatabaseService {
     container.viewContext.delete(NSManagedObject.castFrom(databaseObject: object))
 
     save()
-    didChange.send(.deleted(T.self, id: id))
+    eventPublisher.send(.deleted(T.self, id: id))
   }
 
   public func fetch<T: Convertible>(with id: T.ID) -> T? {

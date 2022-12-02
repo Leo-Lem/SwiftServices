@@ -3,8 +3,10 @@
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func updatePeriodically(every interval: TimeInterval) -> Task<Void, Never> {
-    Timer
-      .publish(every: interval, on: .main, in: .default)
-      .getTask { [weak self] _ in self?.didChange.send(.remote) }
+    Task(priority: .high) {
+      for await _ in Timer.publish(every: interval, on: .main, in: .default).stream {
+        self.eventPublisher.send(.remote)
+      }
+    }
   }
 }

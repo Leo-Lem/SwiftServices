@@ -77,22 +77,24 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
   @available(iOS 15, macOS 12, *)
   func testUpdates() async throws {
     for datum in createHeterogenousTestData(2, T1.self, T2.self) {
-      let task = service.didChange.getTask { change in
-        switch change {
-        case let .inserted(convertible):
-          XCTAssertEqual(
-            convertible.id.description, datum.id.description,
-            "The inserted model does not match the original."
-          )
+      let task = Task {
+        for await event in service.events {
+          switch event {
+          case let .inserted(convertible):
+            XCTAssertEqual(
+              convertible.id.description, datum.id.description,
+              "The inserted model does not match the original."
+            )
 
-        case let .deleted(_, id):
-          XCTAssertEqual(id.description, datum.id.description, "The deleted model does not match.")
+          case let .deleted(_, id):
+            XCTAssertEqual(id.description, datum.id.description, "The deleted model does not match.")
 
-        default:
-          break
+          default:
+            break
+          }
         }
       }
-
+      
       try await service.insert(datum)
       try await service.delete(datum)
 

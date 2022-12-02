@@ -7,7 +7,7 @@ extension DatabaseError: LocalizedError {
   public var errorDescription: String? {
     switch self {
     case .databaseIsReadOnly:
-      return String(localized: "DATABASE_READ_ONLY_ERROR", bundle: .module)
+      return String(localized: "DATABASE_READONLY_ERROR", bundle: .module)
     case .databaseIsUnavailable:
       return String(localized: "DATABASE_UNAVAILABLE_ERROR", bundle: .module)
     default:

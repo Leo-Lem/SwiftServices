@@ -9,7 +9,7 @@ open class CloudKitService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable
-  public let didChange = DidChangePublisher()
+  public let eventPublisher = DatabaseEventPublisher()
 
   let container: CloudKitContainer
   private let scope: CloudKitDatabaseScope
@@ -33,7 +33,7 @@ open class CloudKitService: DatabaseService {
 
     return try await mapToDatabaseError {
       try await database.save(CKRecord.castFrom(databaseObject: try await mapToDatabaseObject(convertible)))
-      didChange.send(.inserted(convertible))
+      eventPublisher.send(.inserted(convertible))
       return convertible
     }
   }
@@ -44,7 +44,7 @@ open class CloudKitService: DatabaseService {
 
     return try await mapToDatabaseError {
       try await database.deleteRecord(withID: CKRecord.ID(recordName: id.description))
-      didChange.send(.deleted(T.self, id: id))
+      eventPublisher.send(.deleted(T.self, id: id))
     }
   }
 

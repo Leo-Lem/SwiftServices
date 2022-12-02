@@ -5,7 +5,7 @@
 
 public protocol DatabaseService {
   /// The service's change publisher, providing informational messages about ``DatabaseChange``s.
-  var didChange: DidChangePublisher { get }
+  var eventPublisher: DatabaseEventPublisher { get }
   
   /// The database's current status.
   var status: DatabaseStatus { get }

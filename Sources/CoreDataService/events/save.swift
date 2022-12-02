@@ -15,10 +15,12 @@ extension CoreDataService {
 
   @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    func saveOnResignActive() -> Task<Void, Never> {
-      NotificationCenter.default
-        .publisher(for: UIApplication.willResignActiveNotification)
-        .getTask { [weak self] _ in printError { self?.save() } }
+    var saveOnResignActive: Task<Void, Never> {
+      Task {
+        for await _ in NotificationCenter.default.stream(for: await UIApplication.willResignActiveNotification) {
+          save()
+        }
+      }
     }
   }
 
@@ -27,18 +29,18 @@ extension CoreDataService {
 
   @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    func saveOnResignActive() -> Task<Void, Never> {
-      NotificationCenter.default
-        .publisher(for: NSApplication.willResignActiveNotification)
-        .getTask { [weak self] _ in printError { self?.save() } }
+    var saveOnResignActive: Task<Void, Never> {
+      Task {
+        for await _ in NotificationCenter.default.stream(for: NSApplication.willResignActiveNotification) {
+          save()
+        }
+      }
     }
   }
 
 #else
   @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    func saveOnResignActive() -> Task<Void, Never> {
-      Task {}
-    }
+    var saveOnResignActive = Task {}
   }
 #endif
