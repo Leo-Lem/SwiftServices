@@ -2,7 +2,6 @@
 
 public extension InAppPurchaseService {
   func getPurchase(with id: PurchaseID) -> Purchase<PurchaseID>? {
-    getPurchases(isPurchased: false)
-      .first { $0.id == id }
+    getPurchases().first { $0.id == id }
   }
 }

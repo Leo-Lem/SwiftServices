@@ -3,37 +3,37 @@
     {
       "identity" : "concurrency",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Leo-Lem/Concurrency.git",
+      "location" : "https://github.com/Leo-Lem/Concurrency",
       "state" : {
         "branch" : "main",
-        "revision" : "d6f6f6d5950b175e55e420bff717c6d5446b0665"
+        "revision" : "100534ff05b95b7265098e2178a00c3dfbc9ec9e"
       }
     },
     {
       "identity" : "errors",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Leo-Lem/Errors.git",
+      "location" : "https://github.com/Leo-Lem/Errors",
       "state" : {
         "branch" : "main",
-        "revision" : "82f5e6e983288ee88d95a89e44ec33b08509a6aa"
+        "revision" : "bb37c3da7ed47e6f360c7986513db4eb6aa197b7"
       }
     },
     {
       "identity" : "leosmisc",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Leo-Lem/LeosMisc.git",
+      "location" : "https://github.com/Leo-Lem/LeosMisc",
       "state" : {
         "branch" : "main",
-        "revision" : "e9f154b7619f708e710dc262789ac1e845b6e395"
+        "revision" : "1f5357f96fc282c2ee4cc2c585adf34927ac87ba"
       }
     },
     {
       "identity" : "previews",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Leo-Lem/Previews.git",
+      "location" : "https://github.com/Leo-Lem/Previews",
       "state" : {
         "branch" : "main",
-        "revision" : "c4141d31e662ac40a6bdb78bb882f5d5da7acc0e"
+        "revision" : "83c34f8ffe5906a565d9f714519d4f1ac83725ad"
       }
     }
   ],

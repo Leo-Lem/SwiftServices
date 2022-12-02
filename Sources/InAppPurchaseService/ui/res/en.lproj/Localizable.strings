@@ -1,8 +1,0 @@
-/* errors */
-"TRANSACTION_UNVERIFIED" = "The transaction couldn't be verified; please try again later.";
-
-/* view */
-"PURCHASE_BUTTON %@" = "Buy for %@";
-"FOR %@" = "for %@";
-"THANK_YOU_MESSAGE" = "Thank you so much for your purchase!";
-"PENDING_MESSAGE" = "Your purchase is pending approval.";

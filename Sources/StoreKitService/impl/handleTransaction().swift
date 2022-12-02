@@ -1,8 +1,5 @@
 //	Created by Leopold Lemmermann on 18.11.22.
 
-import InAppPurchaseService
-import StoreKit
-
 @available(iOS 15, macOS 12, *)
 extension StoreKitService {
   func handleTransaction(_ verification: VerificationResult<Transaction>) throws {
@@ -15,9 +12,7 @@ extension StoreKitService {
     } else if transaction.isUpgraded {
       return
     } else if let product = products.first(where: { $0.id == transaction.productID }) {
-      if let purchase = Purchase<PurchaseID>(product: product) {
-        didChange.send(.purchased(purchase))
-      }
+      if let purchase = Purchase<PurchaseID>(product: product) { didChange.send(.purchased(purchase)) }
       purchased.insert(product)
     }
   }

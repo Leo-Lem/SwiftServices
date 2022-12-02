@@ -2,62 +2,74 @@
 
 import PackageDescription
 
-// MARK: - (TARGETS)
-
-let service = Target.target(
+let package = Package(
   name: "InAppPurchaseService",
-  dependencies: ["Previews", "LeosMisc"],
-  resources: [.process("ui/res")]
-)
-
-let implementation = Target.target(
-  name: "StoreKitService",
-  dependencies: [
-    .target(name: service.name),
-    "Concurrency",
-    "Errors"
-  ]
-)
-
-let serviceTests = Target.target(
-  name: "\(service.name)Tests",
-  dependencies: [
-    .target(name: service.name),
-    "Previews"
-  ],
-  path: "Tests/\(service.name)Tests"
-)
-
-let implementationTests = Target.testTarget(
-  name: "\(implementation.name)Tests",
-  dependencies: [
-    .target(name: implementation.name),
-    .target(name: serviceTests.name)
-  ],
-  resources: [.process("Products.storekit")]
-)
-
-// MARK: - (PRODUCTS)
-
-let library = Product.library(
-  name: service.name,
-  targets: [service.name, implementation.name]
+  defaultLocalization: "en",
+  platforms: [.iOS(.v13), .macOS(.v10_15)]
 )
 
 // MARK: - (DEPENDENCIES)
 
-let concurrency = Package.Dependency.package(url: "https://github.com/Leo-Lem/Concurrency.git", branch: "main")
-let errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors.git", branch: "main")
-let previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews.git", branch: "main")
-let misc = Package.Dependency.package(url: "https://github.com/Leo-Lem/LeosMisc.git", branch: "main")
-
-// MARK: - (PACKAGE)
-
-let package = Package(
-  name: library.name,
-  defaultLocalization: "en",
-  platforms: [.iOS(.v13), .macOS(.v10_15)],
-  products: [library],
-  dependencies: [concurrency, errors, previews, misc],
-  targets: [service, implementation, serviceTests, implementationTests]
+let mine = (
+  concurrency: "Concurrency",
+  errors: "Errors",
+  previews: "Previews",
+  misc: "LeosMisc"
 )
+
+for name in [mine.concurrency, mine.errors, mine.previews, mine.misc] {
+  package.dependencies.append(.package(url: "https://github.com/Leo-Lem/\(name)", branch: "main"))
+}
+
+// MARK: - (TARGETS)
+
+let service = Target.target(
+  name: "InAppPurchaseService",
+  dependencies: [
+    .byName(name: mine.previews)
+  ]
+)
+
+let ui = Target.target(
+  name: "InAppPurchaseUI",
+  dependencies: [
+    .byName(name: mine.previews),
+    .byName(name: mine.misc),
+    .byName(name: mine.errors)
+  ],
+  resources: [.process("res")]
+)
+
+let impl = Target.target(
+  name: "StoreKitService",
+  dependencies: [
+    .target(name: service.name),
+    .byName(name: mine.concurrency),
+    .byName(name: mine.errors)
+  ]
+)
+
+let tests = Target.target(
+  name: "BaseTests",
+  dependencies: [.target(name: service.name)],
+  path: "Tests/BaseTests"
+)
+
+let mockAndAnyTests = Target.testTarget(
+  name: "MockAndAny\(service.name)Tests",
+  dependencies: [.target(name: tests.name)]
+)
+
+let implTests = Target.testTarget(
+  name: "\(impl.name)Tests",
+  dependencies: [
+    .target(name: tests.name),
+    .target(name: impl.name)
+  ]
+)
+
+package.targets = [service, ui, impl, tests, mockAndAnyTests, implTests]
+
+// MARK: - (PRODUCTS)
+
+package.products.append(.library(name: package.name, targets: [service.name, ui.name, impl.name]))

@@ -1,13 +1,17 @@
 
-import Combine
 import Concurrency
 import Errors
-import InAppPurchaseService
-import StoreKit
+@_exported import InAppPurchaseService
+@_exported import StoreKit
+
+public extension AnyInAppPurchaseService {
+  @available(iOS 15, macOS 12, *)
+  static func storekit() async -> Self { Self(await StoreKitService()) }
+}
 
 @available(iOS 15, macOS 12, *)
 open class StoreKitService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
-  public let didChange = PassthroughSubject<PurchaseChange<PurchaseID>, Never>()
+  public let didChange = DidChangePublisher<PurchaseID>()
 
   var products = Set<Product>()
   var purchased = Set<Product>()
@@ -16,24 +20,33 @@ open class StoreKitService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseServi
 
   public init() async {
     await fetchProducts(for: Array(PurchaseID.allCases))
-    tasks.add(updateOnRemoteChange())
-  }
 
-  public func getPurchases(isPurchased: Bool) -> [Purchase<PurchaseID>] {
-    (isPurchased ? purchased : products)
-      .compactMap(Purchase<PurchaseID>.init)
-  }
-
-  public func purchase(with id: PurchaseID) async throws -> Purchase<PurchaseID>.Result {
-    try await handleError {
-      let product = products.first { $0.id == id.rawValue }!
-      let result = try await product.purchase()
-
-      if case let .success(verification) = result {
-        try handleTransaction(verification)
+    tasks["updateOnRemoteChange"] = Task(priority: .background) {
+      await printError {
+        for await verification in Transaction.updates {
+          try handleTransaction(verification)
+        }
       }
+    }
+  }
 
-      return try Purchase.Result(result: result)
+  public func getPurchases(isPurchasedOnly: Bool = false) -> [Purchase<PurchaseID>] {
+    (isPurchasedOnly ? purchased : products).compactMap(Purchase<PurchaseID>.init)
+  }
+
+  public func purchase(with id: PurchaseID) async throws -> PurchaseResult {
+    guard let product = products.first(where: { $0.id == id.rawValue }) else { throw PurchaseError.unavailable }
+
+    switch try await product.purchase() {
+    case let .success(verification):
+      try handleTransaction(verification)
+      return .success
+    case .pending:
+      return .pending
+    case .userCancelled:
+      return .cancelled
+    @unknown default:
+      throw PurchaseError.other(nil)
     }
   }
 }

@@ -1,8 +1,7 @@
-@testable import InAppPurchaseService
-import XCTest
+@_exported @testable import InAppPurchaseService
+@_exported import XCTest
 
 // !!!:  Subclass these tests and insert an implementation to 'service' in the setUp method.
-// (see mock-tests for example)
 open class InAppPurchaseServiceTests<S: InAppPurchaseService>: XCTestCase where S.PurchaseID == ExamplePurchaseID {
   public var service: S!
 
@@ -12,15 +11,15 @@ open class InAppPurchaseServiceTests<S: InAppPurchaseService>: XCTestCase where 
   }
 
   func testGettingPurchase() throws {
-    let purchases = service.getPurchases(isPurchased: false)
+    let purchases = service.getPurchases()
     XCTAssertFalse(purchases.isEmpty, "No purchases could be found.")
     
-    let purchased = service.getPurchases(isPurchased: true)
+    let purchased = service.getPurchases(isPurchasedOnly: true)
     XCTAssertTrue(purchased.isEmpty, "Some items were purchased already...")
   }
 
   func testCheckingIfPurchased() throws {
-    let isPurchased = service.isPurchased(id: .fullVersion)
+    let isPurchased = service.isPurchased(with: .fullVersion)
     XCTAssertEqual(isPurchased, false, "The purchase is already purchased.")
   }
 
