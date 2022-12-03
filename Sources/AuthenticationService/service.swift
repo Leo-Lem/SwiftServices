@@ -1,6 +1,6 @@
 public protocol AuthenticationService {
   /// The publisher firing on changes of the ``AuthenticationStats``.
-  var statusChange: StatusChangePublisher { get }
+  var eventPublisher: AuthenticationEventPublisher { get }
   
   /// The current ``AutenticationStatus``.
   var status: AuthenticationStatus { get }

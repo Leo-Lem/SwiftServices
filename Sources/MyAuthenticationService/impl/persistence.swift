@@ -5,7 +5,7 @@ import UserDefaultsService
 
 extension MyAuthenticationService {
   func save(credential: Credential) {
-    try? keyValueStorageService.store(object: credential.pin, for: credential.id, secure: true)
+    try? keyValueStorageService.store(object: credential.pin, for: credential.id, securely: true)
     try? keyValueStorageService.store(object: credential.id, for: Self.userIDKey)
   }
 
@@ -24,7 +24,7 @@ extension MyAuthenticationService {
   }
 
   func deleteCredential(with id: Credential.ID) {
-    keyValueStorageService.delete(for: id, secure: true)
+    keyValueStorageService.delete(for: id, securely: true)
     keyValueStorageService.delete(for: Self.userIDKey)
   }
 }
@@ -40,7 +40,7 @@ private extension MyAuthenticationService {
 
   func loadPIN(for id: Credential.ID) -> Credential.PIN? {
     printError {
-      try keyValueStorageService.load(objectFor: id, secure: true)
+      try keyValueStorageService.load(objectFor: id, securely: true)
     }
   }
 }

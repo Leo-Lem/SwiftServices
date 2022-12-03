@@ -13,17 +13,21 @@ let package = Package(
 let mine = (
   keyValue: "KeyValueStorageService",
   haptics: "HapticsService",
+  concurrency: "Concurrency",
   errors: "Errors",
   misc: "LeosMisc"
 )
 
-for name in [mine.keyValue, mine.haptics, mine.errors, mine.misc] {
+for name in [mine.keyValue, mine.haptics, mine.concurrency, mine.errors, mine.misc] {
   package.dependencies.append(.package(url: "https://github.com/Leo-Lem/\(name)", branch: "main"))
 }
 
 // MARK: - (TARGETS)
 
-let service = Target.target(name: "AuthenticationService")
+let service = Target.target(
+  name: "AuthenticationService",
+  dependencies: [.byName(name: mine.concurrency)]
+)
 
 let ui = Target.target(
   name: "AuthenticationUI",

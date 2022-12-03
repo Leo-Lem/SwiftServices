@@ -4,16 +4,19 @@ import struct Foundation.URL
 import UserDefaultsService
 
 open class MyAuthenticationService: AuthenticationService {
-  public var statusChange = StatusChangePublisher()
+  public var eventPublisher = AuthenticationEventPublisher()
 
   public var status: AuthenticationStatus = .notAuthenticated {
-    didSet { statusChange.send(status) }
+    didSet { eventPublisher.send(status) }
   }
 
   internal let server: URL
-  internal let keyValueStorageService: KeyValueStorageService
+  internal let keyValueStorageService: AnyKeyValueStorageService<String>
 
-  public init(server: URL, keyValueStorageService: KeyValueStorageService = UserDefaultsService()) async {
+  public init(
+    server: URL,
+    keyValueStorageService: AnyKeyValueStorageService<String> = .userDefaults()
+  ) async {
     self.server = server
     self.keyValueStorageService = keyValueStorageService
 

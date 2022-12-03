@@ -6,7 +6,7 @@
       "location" : "https://github.com/Leo-Lem/Concurrency",
       "state" : {
         "branch" : "main",
-        "revision" : "100534ff05b95b7265098e2178a00c3dfbc9ec9e"
+        "revision" : "4f219b937e2d1cd40fb4acf86f4a706351bbc1d6"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/Leo-Lem/KeyValueStorageService",
       "state" : {
         "branch" : "main",
-        "revision" : "6c9381560c8501169e6b40f74bfb08b6158a96ff"
+        "revision" : "2f6066036c62803afbf0337659c1955fc0d595bc"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/Leo-Lem/LeosMisc",
       "state" : {
         "branch" : "main",
-        "revision" : "d46bfa3860946183eafb110ba1d359c06bb20a70"
+        "revision" : "af36f1d1157f8a4f350adda58f3d7569d47fb191"
       }
     },
     {
