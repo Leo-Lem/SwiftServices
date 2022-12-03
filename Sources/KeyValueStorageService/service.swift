@@ -1,45 +1,21 @@
 //	Created by Leopold Lemmermann on 29.10.22.
 
+import Foundation
+
 public protocol KeyValueStorageService {
-  func store<T, Key: CustomStringConvertible>(
-    _ item: T,
-    for key: Key,
-    secure: Bool
-  )
+  associatedtype Key: LosslessStringConvertible
+  
+  func store<T>(_ item: T, for key: Key, securely: Bool)
 
-  func load<T, Key: CustomStringConvertible>(
-    for key: Key,
-    secure: Bool
-  ) -> T?
+  func load<T>(for key: Key, securely: Bool) -> T?
 
-  func delete<Key: CustomStringConvertible>(
-    for key: Key,
-    secure: Bool
-  )
+  func delete(for key: Key, securely: Bool)
 
-  func allKeys() -> [String]
+  func allKeys() -> [Key]
 }
 
 public extension KeyValueStorageService {
-  func store<T, Key: CustomStringConvertible>(
-    _ item: T,
-    for key: Key,
-    secure: Bool = false
-  ) {
-    store(item, for: key, secure: secure)
-  }
-
-  func load<T, Key: CustomStringConvertible>(
-    for key: Key,
-    secure: Bool = false
-  ) -> T? {
-    load(for: key, secure: secure)
-  }
-
-  func delete<Key: CustomStringConvertible>(
-    for key: Key,
-    secure: Bool = false
-  ) {
-    delete(for: key, secure: secure)
-  }
+  func store<T>(_ item: T, for key: Key, securely: Bool = false) { store(item, for: key, securely: securely) }
+  func load<T>(for key: Key, securely: Bool = false) -> T? { load(for: key, securely: securely) }
+  func delete(for key: Key, securely: Bool = false) { delete(for: key, securely: securely) }
 }
