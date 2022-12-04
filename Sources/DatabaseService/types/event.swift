@@ -1,11 +1,6 @@
 //  Created by Leopold Lemmermann on 08.11.22.
 
-import class Combine.PassthroughSubject
-
-/// The publisher providing change messages for local database changes.
-public typealias DatabaseEventPublisher = PassthroughSubject<DatabaseEvent, Never>
-
-/// The possible change messages of the service.
+/// The possible service events.
 public enum DatabaseEvent {
   /// The ``DatabaseStatus`` changed.
   case status(DatabaseStatus)

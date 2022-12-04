@@ -2,11 +2,9 @@
 
 @_exported import Queries
 @_exported import Queries_KeyPath
+import Concurrency
 
-public protocol DatabaseService {
-  /// The service's change publisher, providing informational messages about ``DatabaseChange``s.
-  var eventPublisher: DatabaseEventPublisher { get }
-  
+public protocol DatabaseService: EventDriver where Event == DatabaseEvent {
   /// The database's current status.
   var status: DatabaseStatus { get }
 

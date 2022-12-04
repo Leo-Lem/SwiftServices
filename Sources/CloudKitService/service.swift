@@ -9,7 +9,7 @@ open class CloudKitService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable
-  public let eventPublisher = DatabaseEventPublisher()
+  public let eventPublisher = Publisher<DatabaseEvent>()
 
   let container: CloudKitContainer
   private let scope: CloudKitDatabaseScope

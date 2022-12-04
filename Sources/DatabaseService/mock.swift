@@ -7,7 +7,8 @@ public extension DatabaseService where Self == MockDatabaseService {
 
 @available(iOS 16, macOS 13, *)
 open class MockDatabaseService: DatabaseService {
-  public let eventPublisher = DatabaseEventPublisher()
+  public var eventPublisher = Publisher<DatabaseEvent>()
+  
   public var status: DatabaseStatus = .readOnly
 
   var store = [String: any DatabaseObjectConvertible]()

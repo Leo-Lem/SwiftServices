@@ -31,7 +31,7 @@ extension CoreDataService {
   extension CoreDataService {
     var saveOnResignActive: Task<Void, Never> {
       Task {
-        for await _ in NotificationCenter.default.stream(for: NSApplication.willResignActiveNotification) {
+        for await _ in NotificationCenter.default.stream(for: await NSApplication.willResignActiveNotification) {
           save()
         }
       }

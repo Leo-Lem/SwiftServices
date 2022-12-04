@@ -10,7 +10,7 @@ open class CoreDataService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status = DatabaseStatus.available
-  public let eventPublisher = DatabaseEventPublisher()
+  public let eventPublisher = Publisher<DatabaseEvent>()
   public let container: NSPersistentContainer
 
   private let tasks = Tasks()
