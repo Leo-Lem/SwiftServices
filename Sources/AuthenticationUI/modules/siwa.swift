@@ -7,7 +7,7 @@ import SwiftUI
 
 @available(iOS 15, macOS 12, *)
 public struct SiwAButton: View {
-  let service: AuthenticationService
+  let service: any AuthenticationService
   @Binding var isLoggedIn: Bool
   @Binding var error: AuthenticationError?
 

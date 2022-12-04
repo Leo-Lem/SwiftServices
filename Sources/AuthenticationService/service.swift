@@ -1,7 +1,6 @@
-public protocol AuthenticationService {
-  /// The publisher firing on changes of the ``AuthenticationStats``.
-  var eventPublisher: AuthenticationEventPublisher { get }
-  
+import Concurrency
+
+public protocol AuthenticationService: EventDriver where Event == AuthenticationStatus {
   /// The current ``AutenticationStatus``.
   var status: AuthenticationStatus { get }
   

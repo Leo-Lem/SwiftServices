@@ -4,7 +4,7 @@ import struct Foundation.URL
 import UserDefaultsService
 
 open class MyAuthenticationService: AuthenticationService {
-  public var eventPublisher = AuthenticationEventPublisher()
+  public var eventPublisher = Publisher<AuthenticationStatus>()
 
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { eventPublisher.send(status) }

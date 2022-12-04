@@ -6,7 +6,7 @@ import SwiftUI
 
 @available(iOS 16, macOS 13, *)
 public struct AuthenticationView: View {
-  let service: AuthenticationService
+  let service: any AuthenticationService
 
   public var body: some View {
     Form {
@@ -50,7 +50,7 @@ public struct AuthenticationView: View {
   @State private var error: AuthenticationError?
   @State private var isLoggedIn = false
 
-  public init?(service: AuthenticationService) {
+  public init?(service: any AuthenticationService) {
     if case .authenticated = service.status { return nil }
     self.service = service
   }

@@ -6,7 +6,7 @@ import SwiftUI
 
 @available(iOS 16, macOS 13, *)
 struct MyAuthenticationView: View {
-  let service: AuthenticationService
+  let service: any AuthenticationService
   @Binding var isLoggedIn: Bool
   @Binding var error: AuthenticationError?
 

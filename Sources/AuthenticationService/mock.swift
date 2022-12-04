@@ -5,7 +5,7 @@ public extension AuthenticationService where Self == MockAuthenticationService {
 }
 
 open class MockAuthenticationService: AuthenticationService {
-  public var eventPublisher = AuthenticationEventPublisher()
+  public var eventPublisher = Publisher<AuthenticationStatus>()
   public var status: AuthenticationStatus = .notAuthenticated {
     didSet { eventPublisher.send(status) }
   }
