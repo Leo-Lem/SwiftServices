@@ -1,16 +1,15 @@
 
-import Combine
 import Concurrency
-import PushNotificationService
-import UserNotifications
+@_exported import PushNotificationService
+@_exported import UserNotifications
 
 open class UserNotificationsService: PushNotificationService {
-  public let didChange = PassthroughSubject<PushNotificationChange, Never>()
+  public let eventPublisher = PushNotificationEventPublisher()
 
   public internal(set) var isAuthorized: Bool? {
     didSet {
       if let isAuthorized = isAuthorized {
-        didChange.send(.authorization(isAuthorized: isAuthorized))
+        eventPublisher.send(.authorization(isAuthorized: isAuthorized))
       }
     }
   }
@@ -21,7 +20,7 @@ open class UserNotificationsService: PushNotificationService {
   public init(_ automaticPermissionRequest: Bool = false) async {
     isAuthorized = automaticPermissionRequest ? await authorize() : await getAuthorizationStatus()
 
-    tasks.add(updateAuthorizedOnDidBecomeActive(automaticPermissionRequest))
+    tasks["updateOnDidBecomeActive"] = Task { await updateAuthorizedOnDidBecomeActive(automaticPermissionRequest) }
   }
 
   @discardableResult

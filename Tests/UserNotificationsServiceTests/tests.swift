@@ -1,6 +1,5 @@
 @testable import UserNotificationsService
-import PushNotificationServiceTests
-import XCTest
+import BaseTests
 
 @available(iOS 15, macOS 12, *)
 class UserNotificationsServiceTests: PushNotificationServiceTests<UserNotificationsService> {

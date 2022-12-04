@@ -1,13 +1,11 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
-import Combine
-
 public extension PushNotificationService where Self == MockPushNotificationService {
-  static var mock: MockPushNotificationService { MockPushNotificationService() }
+  static var mock: Self { Self() }
 }
 
 open class MockPushNotificationService: PushNotificationService {
-  public let didChange = PassthroughSubject<PushNotificationChange, Never>()
+  public let eventPublisher = PushNotificationEventPublisher()
 
   public var isAuthorized: Bool?
 

@@ -1,8 +1,5 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
-import UserNotifications
-import PushNotificationService
-
 extension UNNotificationRequest {
   convenience init<T: PushNotification>(pushNotification: T) {
     let content = UNMutableNotificationContent()

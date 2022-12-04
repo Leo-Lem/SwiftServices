@@ -62,6 +62,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BaseTests"
+               BuildableName = "BaseTests"
+               BlueprintName = "BaseTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -88,6 +102,16 @@
                BlueprintIdentifier = "UserNotificationsServiceTests"
                BuildableName = "UserNotificationsServiceTests"
                BlueprintName = "UserNotificationsServiceTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MockPushNotificationServiceTests"
+               BuildableName = "MockPushNotificationServiceTests"
+               BlueprintName = "MockPushNotificationServiceTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

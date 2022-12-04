@@ -1,6 +1,5 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
-import PushNotificationService
 import Foundation
 
 public struct Example: PushNotification {

@@ -1,7 +1,5 @@
 //	Created by Leopold Lemmermann on 28.11.22.
 
-import UserNotifications
-
 extension UserNotificationsService {
   @discardableResult
   func requestAuthorization() async -> Bool {

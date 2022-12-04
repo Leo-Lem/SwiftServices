@@ -1,8 +1,7 @@
-@testable import PushNotificationService
-import XCTest
+@_exported @testable import PushNotificationService
+@_exported import XCTest
 
 // !!!:  Subclass these tests and insert an implementation in the setUp method.
-// (see mock-tests for example)
 open class PushNotificationServiceTests<S: PushNotificationService>: XCTestCase {
   public var service: S!
   

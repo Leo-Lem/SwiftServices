@@ -1,8 +1,5 @@
-
-import Combine
-
 public protocol PushNotificationService {
-  var didChange: PassthroughSubject<PushNotificationChange, Never> { get }
+  var eventPublisher: PushNotificationEventPublisher { get }
 
   var isAuthorized: Bool? { get }
   
