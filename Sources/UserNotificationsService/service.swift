@@ -4,7 +4,7 @@ import Concurrency
 @_exported import UserNotifications
 
 open class UserNotificationsService: PushNotificationService {
-  public let eventPublisher = PushNotificationEventPublisher()
+  public let eventPublisher = Publisher<NotificationEvent>()
 
   public internal(set) var isAuthorized: Bool? {
     didSet {

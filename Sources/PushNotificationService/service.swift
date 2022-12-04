@@ -1,6 +1,6 @@
-public protocol PushNotificationService {
-  var eventPublisher: PushNotificationEventPublisher { get }
+import Concurrency
 
+public protocol PushNotificationService: EventDriver where Event == NotificationEvent {
   var isAuthorized: Bool? { get }
   
   @discardableResult func authorize() async -> Bool?

@@ -5,7 +5,7 @@ public extension PushNotificationService where Self == MockPushNotificationServi
 }
 
 open class MockPushNotificationService: PushNotificationService {
-  public let eventPublisher = PushNotificationEventPublisher()
+  public let eventPublisher = Publisher<NotificationEvent>()
 
   public var isAuthorized: Bool?
 
