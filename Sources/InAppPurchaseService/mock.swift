@@ -5,7 +5,7 @@ public extension AnyInAppPurchaseService {
 }
 
 open class MockInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
-  public let eventPublisher = PurchaseChangePublisher<PurchaseID>()
+  public let eventPublisher = Publisher<PurchaseEvent<PurchaseID>>()
 
   internal var purchases = [Purchase<PurchaseID>]()
   internal var purchased = [Purchase<PurchaseID>]()

@@ -1,7 +1,7 @@
 //	Created by Leopold Lemmermann on 02.12.22.
 
 open class AnyInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
-  public let eventPublisher: PurchaseChangePublisher<PurchaseID>
+  public let eventPublisher: Publisher<PurchaseEvent<PurchaseID>>
   
   public func getPurchases(isPurchasedOnly: Bool = false) -> [Purchase<PurchaseID>] { getPurchases(isPurchasedOnly) }
   public func purchase(with id: PurchaseID) async throws -> PurchaseResult { try await purchase(id) }

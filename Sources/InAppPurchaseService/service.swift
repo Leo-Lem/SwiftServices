@@ -1,10 +1,9 @@
+import Concurrency
+
 /// Conforming services can provide information about, and exeucte In-App Purchases
-public protocol InAppPurchaseService {
+public protocol InAppPurchaseService: EventDriver where Event == PurchaseEvent<PurchaseID> {
   /// The associated type of purchase id.
   associatedtype PurchaseID: PurchaseIdentifiable
-
-  /// The publisher of changes in the service.
-  var eventPublisher: PurchaseChangePublisher<PurchaseID> { get }
 
   /// Retrieves all purchases, or alternatively all purchased purchases
   /// - Parameter isPurchasedOnly: A `Bool` which represents the option to filter for purchased purchases only.

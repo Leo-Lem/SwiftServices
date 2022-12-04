@@ -7,7 +7,6 @@ public protocol PurchaseIdentifiable: RawRepresentable<String> & CaseIterable & 
 
 /// Representation of a possible purchase (product).
 public struct Purchase<PurchaseID: PurchaseIdentifiable>: Identifiable {
-  
   /// The purchase ID associated with the purchase.
   public let id: PurchaseID
   /// The display name of the purchase.
