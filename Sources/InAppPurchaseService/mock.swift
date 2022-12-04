@@ -1,13 +1,11 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
-import Previews
-
 public extension AnyInAppPurchaseService {
   static var mock: Self { Self(MockInAppPurchaseService()) }
 }
 
 open class MockInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
-  public let didChange = DidChangePublisher<PurchaseID>()
+  public let eventPublisher = PurchaseChangePublisher<PurchaseID>()
 
   internal var purchases = [Purchase<PurchaseID>]()
   internal var purchased = [Purchase<PurchaseID>]()
@@ -29,6 +27,8 @@ open class MockInAppPurchaseService<PurchaseID: PurchaseIdentifiable>: InAppPurc
     return .success
   }
 }
+
+import Previews
 
 internal extension MockInAppPurchaseService {
   static func examplePurchase(with id: PurchaseID) -> Purchase<PurchaseID> {

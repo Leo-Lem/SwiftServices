@@ -1,9 +1,15 @@
 //	Created by Leopold Lemmermann on 17.11.22.
 
+import Concurrency
 import class Combine.PassthroughSubject
 
+@available(iOS 15, macOS 12, *)
+public extension InAppPurchaseService {
+  var events: AsyncStream<PurchaseChange<PurchaseID>> { eventPublisher.stream }
+}
+
 /// The publisher for changes in the ``InAppPurchaseService``.
-public typealias DidChangePublisher<PurchaseID: PurchaseIdentifiable> =
+public typealias PurchaseChangePublisher<PurchaseID: PurchaseIdentifiable> =
   PassthroughSubject<PurchaseChange<PurchaseID>, Never>
 
 /// The possible change messages emitted by the ``InAppPurchaseService``.

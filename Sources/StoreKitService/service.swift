@@ -11,7 +11,7 @@ public extension AnyInAppPurchaseService {
 
 @available(iOS 15, macOS 12, *)
 open class StoreKitService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
-  public let didChange = DidChangePublisher<PurchaseID>()
+  public let eventPublisher = PurchaseChangePublisher<PurchaseID>()
 
   var products = Set<Product>()
   var purchased = Set<Product>()

@@ -64,13 +64,13 @@ struct InAppPurchaseButton<S: InAppPurchaseService>: View {
 
 @available(iOS 15, macOS 12, *)
 private extension InAppPurchaseButton {
-  private var finished: Bool { result == .success || result == .pending }
+  var finished: Bool { result == .success || result == .pending }
   
-  private var formattedPrice: String {
+  var formattedPrice: String {
     purchase.price.formatted(.currency(code: Locale.current.currencyCode ?? "EUR"))
   }
-
-  @MainActor private func buy() {
+  
+  @MainActor func buy() {
     Task(priority: .userInitiated) {
       do {
         isPurchasing = true

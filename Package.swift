@@ -26,6 +26,7 @@ for name in [mine.concurrency, mine.errors, mine.previews, mine.misc] {
 let service = Target.target(
   name: "InAppPurchaseService",
   dependencies: [
+    .byName(name: mine.concurrency),
     .byName(name: mine.previews)
   ]
 )

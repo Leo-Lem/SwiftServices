@@ -1,8 +1,8 @@
 //	Created by Leopold Lemmermann on 07.10.22.
 
 @_exported import InAppPurchaseService
-import Previews
 import LeosMisc
+import Previews
 import SwiftUI
 
 @available(iOS 16, macOS 13, *)
@@ -44,8 +44,8 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
       Divider()
 
       InAppPurchaseButton(purchase, service: service, dismiss: dismiss.callAsFunction)
-      .buttonStyle(.borderedProminent)
-      .padding()
+        .buttonStyle(.borderedProminent)
+        .padding()
     }
     .aspectRatio(1 / 1, contentMode: .fit)
     .presentationDetents([.medium])
@@ -58,12 +58,7 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
 
   public init?(id: S.PurchaseID, service: S) {
     guard let purchase = service.getPurchase(with: id) else { return nil }
-    
-    self.purchase = purchase
-    self.service = service
-  }
 
-  public init(purchase: Purchase<S.PurchaseID>, service: S) {
     self.purchase = purchase
     self.service = service
   }
@@ -79,8 +74,11 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
   @available(iOS 16, macOS 13, *)
   struct ProductView_Previews: PreviewProvider {
     static var previews: some View {
-      InAppPurchaseView(id: .fullVersion, service: MockInAppPurchaseService<ExamplePurchaseID>())
-        .previewInSheet()
+      InAppPurchaseView(
+        id: .fullVersion,
+        service: MockInAppPurchaseService<ExamplePurchaseID>()
+      )
+      .previewInSheet()
     }
   }
 
