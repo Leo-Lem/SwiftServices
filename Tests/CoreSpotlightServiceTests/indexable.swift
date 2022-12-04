@@ -1,7 +1,7 @@
 //	Created by Leopold Lemmermann on 23.11.22.
 
 import Foundation
-import IndexingServiceTests
+import BaseTests
 
 struct ExampleImpl: Example {
   let id: UUID

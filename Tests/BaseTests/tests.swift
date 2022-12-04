@@ -1,9 +1,9 @@
-@testable import IndexingService
-import XCTest
+@_exported @testable import IndexingService
+@_exported import XCTest
 
 // !!!:  Subclass these tests and insert an implementation in the setUp method.
-open class IndexingServiceTests<T: Example>: XCTestCase {
-  public var service: IndexingService!
+open class BaseTests<S: IndexingService, T: Example>: XCTestCase {
+  public var service: S!
   
   func testInserting() async throws {
     let example = T.example

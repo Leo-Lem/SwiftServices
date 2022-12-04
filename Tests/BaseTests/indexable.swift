@@ -1,7 +1,6 @@
 //	Created by Leopold Lemmermann on 17.11.22.
 
 import Foundation
-import IndexingService
 import Previews
 
 public protocol Example: Indexable, HasExample, Identifiable where ID == UUID {

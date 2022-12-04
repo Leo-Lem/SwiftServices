@@ -1,7 +1,7 @@
 
-import CoreSpotlight
+@_exported import CoreSpotlight
 import Errors
-import IndexingService
+@_exported import IndexingService
 
 open class CoreSpotlightService: IndexingService {
   let app: String?

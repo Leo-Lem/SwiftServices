@@ -2,55 +2,51 @@
 
 import PackageDescription
 
-// MARK: - (TARGETS)
-
-let service = Target.target(
-  name: "IndexingService"
-)
-
-let implementation = Target.target(
-  name: "CoreSpotlightService",
-  dependencies: [
-    .target(name: service.name),
-    "Errors"
-  ]
-)
-
-let serviceTests = Target.target(
-  name: "\(service.name)Tests",
-  dependencies: [
-    .target(name: service.name),
-    "Previews"
-  ],
-  path: "Tests/\(service.name)Tests"
-)
-
-let implementationTests = Target.testTarget(
-  name: "\(implementation.name)Tests",
-  dependencies: [
-    .target(name: implementation.name),
-    .target(name: serviceTests.name)
-  ]
-)
-
-// MARK: - (PRODUCTS)
-
-let library = Product.library(
-  name: service.name,
-  targets: [service.name, implementation.name]
+let package = Package(
+  name: "IndexingService",
+  platforms: [.iOS(.v13), .macOS(.v10_15)]
 )
 
 // MARK: - (DEPENDENCIES)
 
-let errors = Package.Dependency.package(url: "https://github.com/Leo-Lem/Errors", branch: "main"),
-    previews = Package.Dependency.package(url: "https://github.com/Leo-Lem/Previews", branch: "main")
+let errors = "Errors"
+let previews = "Previews"
 
-// MARK: - (PACKAGE)
+for name in [errors, previews] {
+  package.dependencies.append(.package(url: "https://github.com/Leo-Lem/\(name)", branch: "main"))
+}
 
-let package = Package(
-  name: library.name,
-  platforms: [.iOS(.v13), .macOS(.v10_15)],
-  products: [library],
-  dependencies: [errors, previews],
-  targets: [service, implementation, serviceTests, implementationTests]
+// MARK: - (TARGETS)
+
+let service = Target.target(name: "IndexingService")
+
+let impl = Target.target(
+  name: "CoreSpotlightService",
+  dependencies: [
+    .target(name: service.name),
+    .byName(name: errors)
+  ]
 )
+
+let tests = Target.target(
+  name: "BaseTests",
+  dependencies: [
+    .target(name: service.name),
+    .byName(name: previews)
+  ],
+  path: "Tests/BaseTests"
+)
+
+let implementationTests = Target.testTarget(
+  name: "\(impl.name)Tests",
+  dependencies: [
+    .target(name: impl.name),
+    .target(name: tests.name)
+  ]
+)
+
+package.targets = [service, impl, tests, implementationTests]
+
+// MARK: - (PRODUCTS)
+
+package.products.append(.library(name: package.name, targets: [service.name, impl.name]))

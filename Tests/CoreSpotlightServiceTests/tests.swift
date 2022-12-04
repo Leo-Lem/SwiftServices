@@ -1,7 +1,7 @@
 @testable import CoreSpotlightService
-import IndexingServiceTests
+import BaseTests
 
-class CoreSpotlightServiceTests: IndexingServiceTests<ExampleImpl> {
+class CoreSpotlightServiceTests: BaseTests<CoreSpotlightService, ExampleImpl> {
   override func setUpWithError() throws {
     service = CoreSpotlightService()
   }

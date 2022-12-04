@@ -1,8 +1,5 @@
 //	Created by Leopold Lemmermann on 20.10.22.
 
-import CoreSpotlight
-import IndexingService
-
 extension Indexable {
   public func getCSSearchableItem(_ app: String? = nil) -> CSSearchableItem {
     CSSearchableItem(
