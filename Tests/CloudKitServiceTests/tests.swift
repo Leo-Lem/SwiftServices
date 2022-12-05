@@ -9,7 +9,7 @@ final class CloudKitServiceTests: BaseTests<CloudKitService, Example1, Example2>
     service = await CloudKitService(container: MockCloudKitContainer())
 
     // verifies the service can be used before starting
-    guard case .available = service.status else { throw XCTSkip("Missing write permissions.") }
+    guard case .available = await service.status else { throw XCTSkip("Missing write permissions.") }
 
     // cleans up any leftover data
     try await service.deleteAll(Example1.self)

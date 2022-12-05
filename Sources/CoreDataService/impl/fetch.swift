@@ -2,7 +2,6 @@
 
 import Errors
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension CoreDataService {
   func fetchDatabaseObject<T: Convertible>(of: T.Type, with id: T.ID) -> T.DatabaseObject? {
     fetchDatabaseObjects(Query<T>("id", .equal, id.description)).first
@@ -16,7 +15,6 @@ extension CoreDataService {
   }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension Query where ResultType: CoreDataService.Convertible {
   func getNSFetchRequest() -> NSFetchRequest<NSFetchRequestResult> {
     let request = NSFetchRequest<NSFetchRequestResult>(entityName: ResultType.typeID)
@@ -26,7 +24,6 @@ extension Query where ResultType: CoreDataService.Convertible {
   }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension NSManagedObjectContext {
   func fetch(_ request: NSFetchRequest<NSFetchRequestResult>) async throws -> [NSFetchRequestResult] {
     try await withCheckedThrowingContinuation { continuation in

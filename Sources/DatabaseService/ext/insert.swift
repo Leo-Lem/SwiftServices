@@ -11,7 +11,7 @@ public extension DatabaseService {
     AsyncThrowingStream { continuation in
       do {
         for convertible in convertibles {
-          try await insert(convertible)
+          try await self.insert(convertible)
           continuation.yield(convertible)
         }
 
@@ -30,7 +30,7 @@ public extension DatabaseService {
     AsyncThrowingStream { continuation in
       do {
         for convertible in convertibles {
-          try await insert(convertible)
+          try await self.insert(convertible)
           continuation.yield(convertible)
         }
 

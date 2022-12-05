@@ -4,7 +4,7 @@
 @_exported import Queries_KeyPath
 import Concurrency
 
-public protocol DatabaseService: EventDriver where Event == DatabaseEvent {
+public protocol DatabaseService: Actor, EventDriver where Event == DatabaseEvent {
   /// The database's current status.
   var status: DatabaseStatus { get }
 

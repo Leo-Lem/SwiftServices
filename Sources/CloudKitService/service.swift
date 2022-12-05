@@ -5,7 +5,7 @@
 import Concurrency
 
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-open class CloudKitService: DatabaseService {
+public actor CloudKitService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable
@@ -21,7 +21,8 @@ open class CloudKitService: DatabaseService {
     self.container = container
     self.scope = scope
 
-    tasks.add(updateStatusOnChange(), updatePeriodically(every: 60))
+    tasks["updateStatusOnChange"] = Task(priority: .high) { await updateStatusOnChange() }
+    tasks["updatePeriodically"] = Task(priority: .background) { await updatePeriodically(every: 30) }
 
     status = await getStatus()
   }
@@ -33,7 +34,7 @@ open class CloudKitService: DatabaseService {
 
     return try await mapToDatabaseError {
       try await database.save(CKRecord.castFrom(databaseObject: try await mapToDatabaseObject(convertible)))
-      eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
+      eventPublisher.send(.inserted(T.self, id: convertible.id))
       return convertible
     }
   }

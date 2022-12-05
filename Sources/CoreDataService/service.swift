@@ -5,31 +5,34 @@ import Concurrency
 @_exported import DatabaseService
 import Errors
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-open class CoreDataService: DatabaseService {
+public actor CoreDataService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
-  public internal(set) var status = DatabaseStatus.available
+  public let status = DatabaseStatus.available
   public let eventPublisher = Publisher<DatabaseEvent>()
   public let container: NSPersistentContainer
 
-  private let tasks = Tasks()
+  internal let tasks = Tasks()
 
   /// Instantiates a CoreDataService with the given container.
   /// - Parameter container: The NSPersistentContainer to use.
-  public init(container: NSPersistentContainer) {
+  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+  public init(container: NSPersistentContainer) async {
     self.container = container
 
     tasks["updateOnRemoteChange"] = Task(priority: .background) { await updateOnRemoteChange() }
     tasks["saveOnResignActive"] = Task(priority: .high) { await saveOnResignActive() }
-    tasks["savePeriodically"] = Task(priority: .high) { await savePeriodically() }
+    tasks["savePeriodically"] = Task(priority: .high) { await save(every: 30) }
+    
+    // TODO: provide an alternative intializer for older versions
+//    tasks["updatePeriodically"] = Task(priority: .background) { await update(every: 30) }
   }
 
   @discardableResult
   public func insert<T: Convertible>(_ convertible: T) -> T {
     container.viewContext.insert(NSManagedObject.castFrom(databaseObject: getDatabaseObject(from: convertible)))
 
-    eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
+    eventPublisher.send(.inserted(T.self, id: convertible.id))
 
     return convertible
   }

@@ -3,34 +3,32 @@
 import Concurrency
 import Errors
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension CoreDataService {
-  func savePeriodically() async {
-    for await _ in Timer.publish(every: 30, on: .main, in: .common).stream { save() }
+  func save(every interval: TimeInterval) async {
+    for await _ in Timer.publish(every: interval, on: .main, in: .common).stream {
+      if container.viewContext.hasChanges { printError(container.viewContext.save) }
+    }
   }
   
+  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   func saveOnResignActive() async {
-    for await _ in NotificationCenter.default.stream(for: willResignActiveNotification) { save() }
-  }
-  
-  private func save() {
-    if container.viewContext.hasChanges { printError(container.viewContext.save) }
+    for await _ in await NotificationCenter.default.notifications(named: willResignActiveNotification) {
+      if container.viewContext.hasChanges { printError(container.viewContext.save) }
+    }
   }
 }
 
 #if canImport(UIKit)
   import UIKit
 
-  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    var willResignActiveNotification: Notification.Name { UIApplication.willResignActiveNotification }
+    @MainActor var willResignActiveNotification: Notification.Name { UIApplication.willResignActiveNotification }
   }
 
 #elseif canImport(AppKit)
   import AppKit
 
-  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    var willResignActiveNotification: Notification.Name { NSApplication.willResignActiveNotification }
+    @MainActor var willResignActiveNotification: Notification.Name { NSApplication.willResignActiveNotification }
   }
 #endif

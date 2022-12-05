@@ -2,7 +2,6 @@
 
 import BaseTests
 
-@available(iOS 16, macOS 13, *)
 final class MockDatabaseServiceTests: BaseTests<MockDatabaseService, Example1, Example2> {
   override func setUp() async throws {
     service = .mock

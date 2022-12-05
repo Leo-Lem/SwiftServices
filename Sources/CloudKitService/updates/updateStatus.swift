@@ -4,14 +4,12 @@ import Errors
 
 @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
-  func updateStatusOnChange() -> Task<Void, Never> {
-    Task(priority: .high) {
-      for await _ in NotificationCenter.default.publisher(for: .CKAccountChanged).stream {
-        let status = await self.getStatus()
-        if status != self.status {
-          self.status = status
-          self.eventPublisher.send(.status(status))
-        }
+  func updateStatusOnChange() async {
+    for await _ in NotificationCenter.default.notifications(named: .CKAccountChanged) {
+      let status = await getStatus()
+      if status != self.status {
+        self.status = status
+        eventPublisher.send(.status(status))
       }
     }
   }

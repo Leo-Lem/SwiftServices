@@ -64,21 +64,11 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
     XCTAssertEqual(fetched?.value, newValue, "The modifified database object doesn't match.")
   }
 
-  func testCounting() async throws {
-    for count in 1 ..< 10 {
-      try await service.insert(createTestData(count) as [T1]).collect()
-      let fetchedCount = try await service.fetchAndCollect(Query<T1>(true, options: .init(batchSize: count))).count
-      XCTAssertEqual(fetchedCount, count, "Count does not match.")
-
-      try await service.deleteAll(T1.self)
-    }
-  }
-
-  @available(iOS 16, macOS 13, *)
+  @available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
   func testUpdates() async throws {
     let example = T1.example
     let valuesAreReceived = XCTestExpectation(description: "Values are received.")
-    
+
     let task = Task {
       try await Task.sleep(for: .zero)
 
@@ -94,11 +84,11 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
       case let .inserted(_, id):
         XCTAssertEqual(id.description, example.id.description, "The inserted model does not match the original.")
         valuesAreReceived.fulfill()
-        
+
       case let .deleted(_, id):
         XCTAssertEqual(id.description, example.id.description, "The deleted model does not match.")
         valuesAreReceived.fulfill()
-        
+
       default:
         break
       }

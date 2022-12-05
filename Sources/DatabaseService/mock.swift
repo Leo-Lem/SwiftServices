@@ -1,13 +1,11 @@
 //	Created by Leopold Lemmermann on 23.10.22.
 
-@available(iOS 16, macOS 13, *)
 public extension DatabaseService where Self == MockDatabaseService {
   static var mock: MockDatabaseService { MockDatabaseService() }
 }
 
-@available(iOS 16, macOS 13, *)
-open class MockDatabaseService: DatabaseService {
-  public var eventPublisher = Publisher<DatabaseEvent>()
+public actor MockDatabaseService: DatabaseService {
+  public let eventPublisher = Publisher<DatabaseEvent>()
   
   public var status: DatabaseStatus = .readOnly
 
@@ -17,7 +15,7 @@ open class MockDatabaseService: DatabaseService {
 
   public func insert<T: DatabaseObjectConvertible>(_ convertible: T) async throws -> T {
     store[convertible.id.description] = convertible
-    eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
+    eventPublisher.send(.inserted(T.self, id: convertible.id))
 
     print("Inserted \(convertible)!")
     return convertible

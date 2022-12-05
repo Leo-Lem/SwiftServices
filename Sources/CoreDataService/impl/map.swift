@@ -2,7 +2,6 @@
 
 import Queries_NSPredicate
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension CoreDataService {
   func getDatabaseObject<T: Convertible>(from convertible: T) -> T.DatabaseObject {
     var object = fetchDatabaseObject(of: T.self, with: convertible.id) ?? create(T.self, with: convertible.id)
@@ -17,7 +16,6 @@ extension CoreDataService {
   }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension NSFetchRequestResult {
   static func castFrom(databaseObject: Any) -> Self {
     guard let object = databaseObject as? Self else {

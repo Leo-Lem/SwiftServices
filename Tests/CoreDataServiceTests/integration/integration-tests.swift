@@ -4,7 +4,7 @@ import BaseTests
 @available(iOS 15, macOS 12, *)
 class CoreDataServiceIntegrationTests: BaseTests<CoreDataService, Example1, Example2> {
   override func setUp() async throws {
-    service = IntegratedCoreDataService()
+    service = await CoreDataService()
 
     try await service.deleteAll(Example1.self)
     try await service.deleteAll(Example2.self)
@@ -12,14 +12,14 @@ class CoreDataServiceIntegrationTests: BaseTests<CoreDataService, Example1, Exam
 }
 
 @available(iOS 15, macOS 12, *)
-class IntegratedCoreDataService: CoreDataService {
+extension CoreDataService {
   static let containerID = "Main"
 
   static let managedObjectModel: NSManagedObjectModel = {
     guard
       let url = Bundle.module.url(forResource: containerID, withExtension: "momd") ??
       Bundle.main.url(forResource: containerID, withExtension: "momd") ??
-      Bundle(for: IntegratedCoreDataService.self).url(forResource: containerID, withExtension: "momd")
+      Bundle(for: CoreDataServiceIntegrationTests.self).url(forResource: containerID, withExtension: "momd")
     else {
       fatalError("Failed to locate model file.")
     }
@@ -31,7 +31,7 @@ class IntegratedCoreDataService: CoreDataService {
     return managedObjectModel
   }()
 
-  init() {
+  init() async {
     let container = NSPersistentContainer(
       name: Self.containerID,
       managedObjectModel: Self.managedObjectModel
@@ -44,7 +44,7 @@ class IntegratedCoreDataService: CoreDataService {
         fatalError("Failed to load persistent store: \(error.localizedDescription)")
       }
     }
-
-    super.init(container: container)
+    
+    await self.init(container: container)
   }
 }
