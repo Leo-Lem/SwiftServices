@@ -9,7 +9,7 @@ import Foundation
   @available(iOS 15, *)
   extension UserNotificationsService {
     func updateAuthorizedOnDidBecomeActive(_ automaticRequest: Bool) async {
-      for await _ in NotificationCenter.default.stream(for: await UIApplication.didBecomeActiveNotification) {
+      for await _ in NotificationCenter.default.notifications(named: await UIApplication.didBecomeActiveNotification) {
         isAuthorized = automaticRequest ? await requestAuthorization() : await getAuthorizationStatus()
       }
     }
@@ -21,7 +21,7 @@ import Foundation
   @available(macOS 12, *)
   extension UserNotificationsService {
     func updateAuthorizedOnDidBecomeActive(_ automaticRequest: Bool) async {
-      for await _ in NotificationCenter.default.stream(for: await NSApplication.didBecomeActiveNotification) {
+      for await _ in NotificationCenter.default.notifications(named: await NSApplication.didBecomeActiveNotification) {
         isAuthorized = automaticRequest ? await requestAuthorization() : await getAuthorizationStatus()
       }
     }
