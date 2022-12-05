@@ -17,7 +17,7 @@ open class MockDatabaseService: DatabaseService {
 
   public func insert<T: DatabaseObjectConvertible>(_ convertible: T) async throws -> T {
     store[convertible.id.description] = convertible
-    eventPublisher.send(.inserted(convertible))
+    eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
 
     print("Inserted \(convertible)!")
     return convertible

@@ -20,15 +20,16 @@ open class CoreDataService: DatabaseService {
   public init(container: NSPersistentContainer) {
     self.container = container
 
-    tasks.add(updateOnRemoteChange, saveOnResignActive)
+    tasks["updateOnRemoteChange"] = Task(priority: .background) { await updateOnRemoteChange() }
+    tasks["saveOnResignActive"] = Task(priority: .high) { await saveOnResignActive() }
+    tasks["savePeriodically"] = Task(priority: .high) { await savePeriodically() }
   }
 
   @discardableResult
   public func insert<T: Convertible>(_ convertible: T) -> T {
     container.viewContext.insert(NSManagedObject.castFrom(databaseObject: getDatabaseObject(from: convertible)))
 
-    save()
-    eventPublisher.send(.inserted(convertible))
+    eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
 
     return convertible
   }
@@ -40,7 +41,6 @@ open class CoreDataService: DatabaseService {
 
     container.viewContext.delete(NSManagedObject.castFrom(databaseObject: object))
 
-    save()
     eventPublisher.send(.deleted(T.self, id: id))
   }
 

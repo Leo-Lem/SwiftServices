@@ -5,7 +5,15 @@ import Errors
 
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension CoreDataService {
-  func save() {
+  func savePeriodically() async {
+    for await _ in Timer.publish(every: 30, on: .main, in: .common).stream { save() }
+  }
+  
+  func saveOnResignActive() async {
+    for await _ in NotificationCenter.default.stream(for: willResignActiveNotification) { save() }
+  }
+  
+  private func save() {
     if container.viewContext.hasChanges { printError(container.viewContext.save) }
   }
 }
@@ -15,13 +23,7 @@ extension CoreDataService {
 
   @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    var saveOnResignActive: Task<Void, Never> {
-      Task {
-        for await _ in NotificationCenter.default.stream(for: await UIApplication.willResignActiveNotification) {
-          save()
-        }
-      }
-    }
+    var willResignActiveNotification: Notification.Name { UIApplication.willResignActiveNotification }
   }
 
 #elseif canImport(AppKit)
@@ -29,18 +31,6 @@ extension CoreDataService {
 
   @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
   extension CoreDataService {
-    var saveOnResignActive: Task<Void, Never> {
-      Task {
-        for await _ in NotificationCenter.default.stream(for: await NSApplication.willResignActiveNotification) {
-          save()
-        }
-      }
-    }
-  }
-
-#else
-  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-  extension CoreDataService {
-    var saveOnResignActive = Task {}
+    var willResignActiveNotification: Notification.Name { NSApplication.willResignActiveNotification }
   }
 #endif

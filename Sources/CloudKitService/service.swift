@@ -33,7 +33,7 @@ open class CloudKitService: DatabaseService {
 
     return try await mapToDatabaseError {
       try await database.save(CKRecord.castFrom(databaseObject: try await mapToDatabaseObject(convertible)))
-      eventPublisher.send(.inserted(convertible))
+      eventPublisher.send(.inserted(type(of: convertible), id: convertible.id))
       return convertible
     }
   }

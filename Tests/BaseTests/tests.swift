@@ -69,36 +69,43 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
       try await service.insert(createTestData(count) as [T1]).collect()
       let fetchedCount = try await service.fetchAndCollect(Query<T1>(true, options: .init(batchSize: count))).count
       XCTAssertEqual(fetchedCount, count, "Count does not match.")
-      
+
       try await service.deleteAll(T1.self)
     }
   }
 
-  @available(iOS 15, macOS 12, *)
+  @available(iOS 16, macOS 13, *)
   func testUpdates() async throws {
-    for datum in createHeterogenousTestData(2, T1.self, T2.self) {
-      let task = Task {
-        for await event in service.events {
-          switch event {
-          case let .inserted(convertible):
-            XCTAssertEqual(
-              convertible.id.description, datum.id.description,
-              "The inserted model does not match the original."
-            )
+    let example = T1.example
+    let valuesAreReceived = XCTestExpectation(description: "Values are received.")
+    
+    let task = Task {
+      try await Task.sleep(for: .zero)
 
-          case let .deleted(_, id):
-            XCTAssertEqual(id.description, datum.id.description, "The deleted model does not match.")
+      valuesAreReceived.expectedFulfillmentCount = 2
+      try await service.insert(example)
+      try await service.delete(example)
 
-          default:
-            break
-          }
-        }
-      }
-      
-      try await service.insert(datum)
-      try await service.delete(datum)
-
-      task.cancel()
+      service.eventPublisher.send(completion: .finished)
     }
+
+    for await event in service.events {
+      switch event {
+      case let .inserted(_, id):
+        XCTAssertEqual(id.description, example.id.description, "The inserted model does not match the original.")
+        valuesAreReceived.fulfill()
+        
+      case let .deleted(_, id):
+        XCTAssertEqual(id.description, example.id.description, "The deleted model does not match.")
+        valuesAreReceived.fulfill()
+        
+      default:
+        break
+      }
+    }
+
+    wait(for: [valuesAreReceived], timeout: 0.1)
+
+    task.cancel()
   }
 }
