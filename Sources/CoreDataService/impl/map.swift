@@ -3,8 +3,8 @@
 import Queries_NSPredicate
 
 extension CoreDataService {
-  func getDatabaseObject<T: Convertible>(from convertible: T) -> T.DatabaseObject {
-    var object = fetchDatabaseObject(of: T.self, with: convertible.id) ?? create(T.self, with: convertible.id)
+  func getDatabaseObject<T: Convertible>(from convertible: T) async -> T.DatabaseObject {
+    var object = await fetchDatabaseObject(of: T.self, with: convertible.id) ?? create(T.self, with: convertible.id)
     convertible.mapProperties(onto: &object)
     return object
   }

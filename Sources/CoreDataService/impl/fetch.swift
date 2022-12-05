@@ -3,13 +3,13 @@
 import Errors
 
 extension CoreDataService {
-  func fetchDatabaseObject<T: Convertible>(of: T.Type, with id: T.ID) -> T.DatabaseObject? {
-    fetchDatabaseObjects(Query<T>("id", .equal, id.description)).first
+  func fetchDatabaseObject<T: Convertible>(of: T.Type, with id: T.ID) async -> T.DatabaseObject? {
+    await fetchDatabaseObjects(Query<T>("id", .equal, id.description)).first
   }
 
-  func fetchDatabaseObjects<T: Convertible>(_ query: Query<T>) -> [T.DatabaseObject] {
-    printError {
-      try container.viewContext.fetch(query.getNSFetchRequest())
+  func fetchDatabaseObjects<T: Convertible>(_ query: Query<T>) async -> [T.DatabaseObject] {
+    await printError {
+      try await container.viewContext.fetch(query.getNSFetchRequest())
         .map { $0.castToDatabaseObject(of: T.self) }
     } ?? []
   }
