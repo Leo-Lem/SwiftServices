@@ -28,7 +28,7 @@ public actor MockDatabaseService: DatabaseService {
     print("Deleted database object with \(id)!")
   }
 
-  public func fetch<T: DatabaseObjectConvertible>(with id: T.ID) async throws -> T? {
+  public func fetch<T: DatabaseObjectConvertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
     print("Fetched convertible (id: \(id)).")
     return store[id.description] as? T
   }

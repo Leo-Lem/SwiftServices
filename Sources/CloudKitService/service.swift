@@ -49,7 +49,7 @@ public actor CloudKitService: DatabaseService {
     }
   }
 
-  public func fetch<T: Convertible>(with id: T.ID) async throws -> T? {
+  public func fetch<T: Convertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
     guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
 
     return try await mapToDatabaseError {

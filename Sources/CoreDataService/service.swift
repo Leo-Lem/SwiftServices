@@ -47,7 +47,7 @@ public actor CoreDataService: DatabaseService {
     eventPublisher.send(.deleted(T.self, id: id))
   }
 
-  public func fetch<T: Convertible>(with id: T.ID) -> T? {
+  public func fetch<T: Convertible>(_: T.Type = T.self, with id: T.ID) -> T? {
     fetchDatabaseObject(of: T.self, with: id)
       .flatMap(T.init)
   }

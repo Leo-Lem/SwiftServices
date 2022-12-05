@@ -23,14 +23,22 @@ public protocol DatabaseService: Actor, EventDriver where Event == DatabaseEvent
   func delete<T: DatabaseObjectConvertible>(_ type: T.Type, with id: T.ID) async throws
   
   /// Fetches a convertible from the database.
-  /// - Parameter id: The ID of the ``DatabaseObjectConvertible`` to be fetched.
+  /// - Parameters:
+  ///   - type:  The type of the ``DatabaseObjectConvertible`` to be fetched.
+  ///   - id: The ID of the ``DatabaseObjectConvertible`` to be fetched.
   /// - Returns: An instance of the ``DatabaseObjectConvertible`` and, if it cannot be found, nil.
   /// - Throws: A ``DatabaseError``.
-  func fetch<T: DatabaseObjectConvertible>(with id: T.ID) async throws -> T?
+  func fetch<T: DatabaseObjectConvertible>(_ type: T.Type, with id: T.ID) async throws -> T?
   
   /// Fetches all convertibles matching the query from the database.
   /// - Parameter query: A `Queries/Query` for a ``DatabaseObjectConvertible`` type.
   /// - Returns: The results of the query provided as an `AsyncThrowingStream`.
   /// - Throws: A ``DatabaseError``.
   func fetch<T: DatabaseObjectConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error>
+}
+
+public extension DatabaseService {
+  func fetch<T: DatabaseObjectConvertible>(_ type: T.Type = T.self, with id: T.ID) async throws -> T? {
+    try await fetch(type, with: id)
+  }
 }

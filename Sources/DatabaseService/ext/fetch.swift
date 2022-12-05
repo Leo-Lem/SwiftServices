@@ -24,6 +24,6 @@ public extension DatabaseService {
   /// - Returns: The results provided as an `AsyncThrowingStream`.
   /// - Throws: A ``DatabaseError``.
   func fetch<T: DatabaseObjectConvertible>(with ids: [T.ID]) -> AsyncThrowingStream<T, Error> {
-    ids.compactMap(fetch)
+    ids.compactMap { try await self.fetch(with: $0)}
   }
 }
