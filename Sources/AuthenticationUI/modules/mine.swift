@@ -2,6 +2,7 @@
 
 import CoreHapticsService
 import Errors
+import LeosMisc
 import SwiftUI
 
 @available(iOS 16, macOS 13, *)
@@ -14,82 +15,83 @@ struct MyAuthenticationView: View {
     Section {
       HStack {
         TextField(String(localized: "ENTER_USERID", bundle: .module), text: $credential.id)
+          .focused($focusedField, equals: .userID)
           .autocorrectionDisabled()
-          .onSubmit { if !confirmIsDisabledForID { checkUserIDExistence() } }
+          .onSubmit {
+            if !confirmIsDisabledForID {
+              Task(priority: .userInitiated) { await checkUserIDExistence() }
+            }
+          }
           .disabled(isShowingPINField)
 
         if isShowingPINField {
           if !isLoggedIn {
             Button { reset() } label: {
               Label(String(localized: "CANCEL", bundle: .module), systemImage: "xmark.circle")
+                .labelStyle(.iconOnly)
             }
-            .labelStyle(.iconOnly)
           }
         } else {
-          sendButton(
-            isLoading: isCheckingUserIDExistence,
-            wasSuccessful: isShowingPINField,
-            isDisabled: confirmIsDisabledForID
-          ) { checkUserIDExistence() }
+          sendButton(wasSuccessful: isShowingPINField, isDisabled: confirmIsDisabledForID) {
+            await checkUserIDExistence()
+          }
         }
       }
 
       if isShowingPINField {
         HStack {
           SecureField(String(localized: "ENTER_PIN", bundle: .module), text: $credential.pin)
+            .focused($focusedField, equals: .pin)
             .autocorrectionDisabled()
-            .onSubmit { if !confirmIsDisabledForPIN { loginOrRegister() } }
-            .disabled(isLoggingInOrRegistering || isLoggedIn)
+            .onSubmit {
+              if !confirmIsDisabledForPIN {
+                Task(priority: .userInitiated) { await loginOrRegister() }
+              }
+            }
+            .disabled(isLoggedIn)
 
-          sendButton(
-            isLoading: isLoggingInOrRegistering,
-            wasSuccessful: isLoggedIn,
-            isDisabled: confirmIsDisabledForPIN
-          ) { loginOrRegister() }
+          sendButton(wasSuccessful: isLoggedIn, isDisabled: confirmIsDisabledForPIN) {
+            await loginOrRegister()
+          }
         }
       }
     }
-    .animation(.default, value: isCheckingUserIDExistence)
     .animation(.default, value: isShowingPINField)
-    .animation(.default, value: isLoggingInOrRegistering)
     .animation(.default, value: isLoggedIn)
-    .alert(isPresented: Binding(optional: $error), error: error) {}
+    .alert(isPresented: Binding(item: $error), error: error) {}
     .alert(String(localized: "UNKNOWN_USER_ID", bundle: .module), isPresented: $isShowingRegisterAlert) {
-      Button { isShowingPINField = true } label: {
+      Button {
+        isShowingPINField = true
+        focusedField = .pin
+      } label: {
         Label(String(localized: "REGISTER", bundle: .module), systemImage: "person.badge.plus")
       }
       Button(String(localized: "CANCEL", bundle: .module)) {}
     } message: { Text("REGISTER_PROMPT", bundle: .module) }
   }
 
-  @Environment(\.dismiss) private var dismiss
-
   @State private var credential = Credential(id: "", pin: "")
-
   @State private var userIDExists = false
-
   @State private var isShowingRegisterAlert = false
   @State private var isShowingPINField = false
 
-  @State private var isCheckingUserIDExistence = false
-  @State private var isLoggingInOrRegistering = false
+  @FocusState private var focusedField: Field?
+  enum Field: Hashable { case userID, pin }
 
-  private let hapticsService = CoreHapticsService()
+  @Environment(\.dismiss) private var dismiss
 }
 
 @available(iOS 16, macOS 13, *)
 private extension MyAuthenticationView {
-  func sendButton(isLoading: Bool, wasSuccessful: Bool, isDisabled: Bool, action: @escaping () -> Void) -> some View {
-    Button(action: action) {
-      if isLoading {
-        ProgressView()
-      } else if wasSuccessful {
+  func sendButton(wasSuccessful: Bool, isDisabled: Bool, action: @escaping () async -> Void) -> some View {
+    AsyncButton(indicatorStyle: .replace, taskPriority: .userInitiated, action: action) {
+      if wasSuccessful {
         Image(systemName: "checkmark.circle")
       } else {
         Label("\(Text("CONFIRM", bundle: .module))", systemImage: "paperplane")
+          .labelStyle(.iconOnly)
       }
     }
-    .labelStyle(.iconOnly)
     .disabled(isDisabled || wasSuccessful)
   }
 }
@@ -109,43 +111,37 @@ private extension MyAuthenticationView {
     isShowingPINField = false
   }
 
-  @MainActor func checkUserIDExistence() {
-    Task(priority: .userInitiated) {
+  @MainActor func checkUserIDExistence() async {
+    await printError {
       do {
-        isCheckingUserIDExistence = true
-
         userIDExists = try await service.exists(credential.id)
-        
+
         if userIDExists {
           isShowingPINField = true
+          focusedField = .pin
         } else {
           isShowingRegisterAlert = true
         }
-
       } catch let error as AuthenticationError where error.hasDescription { self.error = error }
-      isCheckingUserIDExistence = false
     }
   }
 
-  @MainActor func loginOrRegister() {
-    Task(priority: .userInitiated) {
+  @MainActor func loginOrRegister() async {
+    await printError {
       do {
-        isLoggingInOrRegistering = true
-
         _ = userIDExists ?
           try await service.login(credential) :
           try await service.register(credential)
 
         performLogin()
       } catch let error as AuthenticationError where error.hasDescription { self.error = error }
-      isLoggingInOrRegistering = false
     }
   }
 
   func performLogin() {
     if case .authenticated = service.status {
       isLoggedIn = true
-      hapticsService?.play(.taDa)
+      CoreHapticsService()?.play(.taDa)
       dismiss()
     }
   }

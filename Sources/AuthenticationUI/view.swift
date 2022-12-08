@@ -15,6 +15,7 @@ public struct AuthenticationView: View {
           .bold()
           .font(.title)
           .frame(maxWidth: .infinity)
+          .accessibilityAddTraits(.isHeader)
 
         Text("SUBTITLE", bundle: .module)
           .font(.subheadline)
@@ -34,13 +35,12 @@ public struct AuthenticationView: View {
         .frame(maxWidth: 400)
         .frame(maxWidth: .infinity)
     }
-    .aspectRatio(1 / 1, contentMode: .fit)
     .buttonStyle(.borderedProminent)
     .textFieldStyle(.roundedBorder)
     .formStyle(.columns)
     .scrollContentBackground(.hidden)
     .padding()
-    .alert(isPresented: Binding(optional: $error), error: error) {}
+    .alert(isPresented: Binding(item: $error), error: error) {}
     .presentationDetents([.medium])
     #if os(iOS)
       .compactDismissButton()
