@@ -6,7 +6,7 @@
       "location" : "https://github.com/Leo-Lem/Concurrency",
       "state" : {
         "branch" : "main",
-        "revision" : "6bcba4a52ea9863d2b7b56b8de8f0f86ca9ac712"
+        "revision" : "9aae0684a5e4152f466764858dcde7595729c7f6"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/Leo-Lem/Errors",
       "state" : {
         "branch" : "main",
-        "revision" : "bb37c3da7ed47e6f360c7986513db4eb6aa197b7"
+        "revision" : "c658fb83dfffc0132cb5f9a0e10dbe65f86908d0"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/Leo-Lem/LeosMisc",
       "state" : {
         "branch" : "main",
-        "revision" : "af36f1d1157f8a4f350adda58f3d7569d47fb191"
+        "revision" : "a0559da30a255612df43725cabac4f82d6477d1c"
       }
     },
     {

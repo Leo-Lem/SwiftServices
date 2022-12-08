@@ -1,38 +1,38 @@
 //	Created by Leopold Lemmermann on 02.12.22.
 
-import AVKit
 import Errors
 import SwiftUI
+import LeosMisc
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 struct InAppPurchaseButton<S: InAppPurchaseService>: View {
   let purchase: Purchase<S.PurchaseID>
   let service: S
   let dismiss: () -> Void
 
   var body: some View {
-    Button { buy() } label: {
-      Spacer()
-      Label(
-        finished ?
-          String(localized: "PURCHASE_BUTTON_SUCCESS \(formattedPrice)", bundle: .module) :
-          String(localized: "PURCHASE_BUTTON \(formattedPrice)", bundle: .module),
-        systemImage: "cart"
-      )
-      .font(.title2)
-      .padding(10)
-      Spacer()
-
-      if isPurchasing || finished {
-        Image(systemName: "checkmark.circle").imageScale(.large)
-          .if(isPurchasing) { $0
-            .hidden()
-            .overlay(content: ProgressView.init)
-          }
+    AsyncButton(indicatorStyle: .edge(.trailing), taskPriority: .userInitiated) { await buy() } label: {
+      HStack {
+        Spacer()
+        
+        Label(
+          finished ?
+            String(localized: "PURCHASE_BUTTON_SUCCESS \(formattedPrice)", bundle: .module) :
+            String(localized: "PURCHASE_BUTTON \(formattedPrice)", bundle: .module),
+          systemImage: "cart"
+        )
+        .font(.title2)
+        .padding()
+        
+        Spacer()
+        
+        if finished {
+          Image(systemName: "checkmark.circle").imageScale(.large)
+        }
       }
     }
     .disabled(finished)
-    .alert(isPresented: Binding(optional: $error), error: error) {}
+    .alert(isPresented: Binding(item: $error), error: error) {}
     .alert(String(localized: "SUCCESS_TITLE", bundle: .module), isPresented: $isShowingSuccessAlert) {
       Button("OK") { dismiss() }
     } message: {
@@ -62,7 +62,7 @@ struct InAppPurchaseButton<S: InAppPurchaseService>: View {
   }
 }
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 private extension InAppPurchaseButton {
   var finished: Bool { result == .success || result == .pending }
   
@@ -70,12 +70,10 @@ private extension InAppPurchaseButton {
     purchase.price.formatted(.currency(code: Locale.current.currencyCode ?? "EUR"))
   }
   
-  @MainActor func buy() {
-    Task(priority: .userInitiated) {
+  @MainActor func buy() async {
+    await printError {
       do {
-        isPurchasing = true
-        self.result = try await service.purchase(with: purchase.id)
-        isPurchasing = false
+        result = try await service.purchase(with: purchase.id)
         
         if result == .success { isShowingSuccessAlert = true }
         if result == .pending { isShowingPendingAlert = true }

@@ -5,14 +5,14 @@ import LeosMisc
 import Previews
 import SwiftUI
 
-@available(iOS 16, macOS 13, *)
+@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 public extension PurchaseIdentifiable {
   func view<S: InAppPurchaseService>(service: S) -> some View where S.PurchaseID == Self {
     InAppPurchaseView(id: self, service: service)
   }
 }
 
-@available(iOS 16, macOS 13, *)
+@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 public struct InAppPurchaseView<S: InAppPurchaseService>: View {
   let purchase: Purchase<S.PurchaseID>
   let service: S
@@ -44,10 +44,13 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
       Divider()
 
       InAppPurchaseButton(purchase, service: service, dismiss: dismiss.callAsFunction)
+      #if os(iOS)
         .buttonStyle(.borderedProminent)
+      #elseif os(macOS)
+        .buttonStyle(.borderless)
+      #endif
         .padding()
     }
-    .aspectRatio(1 / 1, contentMode: .fit)
     .presentationDetents([.medium])
     #if os(iOS)
       .compactDismissButton()
@@ -71,14 +74,13 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
 // MARK: - (PREVIEWS)
 
 #if DEBUG
-  @available(iOS 16, macOS 13, *)
+  @available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
   struct ProductView_Previews: PreviewProvider {
     static var previews: some View {
       InAppPurchaseView(
         id: .fullVersion,
         service: MockInAppPurchaseService<ExamplePurchaseID>()
       )
-      .previewInSheet()
     }
   }
 
