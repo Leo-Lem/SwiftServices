@@ -34,6 +34,7 @@ let service = Target.target(
 let ui = Target.target(
   name: "InAppPurchaseUI",
   dependencies: [
+    .target(name: service.name),
     .byName(name: mine.previews),
     .byName(name: mine.misc),
     .byName(name: mine.errors)
