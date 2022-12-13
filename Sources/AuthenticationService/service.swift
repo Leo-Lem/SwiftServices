@@ -1,6 +1,6 @@
 import Concurrency
 
-public protocol AuthenticationService: EventDriver where Event == AuthenticationStatus {
+public protocol AuthenticationService: EventDriver where Event == AuthenticationEvent {
   /// The current ``AutenticationStatus``.
   var status: AuthenticationStatus { get }
   

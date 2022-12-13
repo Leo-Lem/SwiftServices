@@ -30,6 +30,7 @@ struct MyAuthenticationView: View {
               Label(String(localized: "CANCEL", bundle: .module), systemImage: "xmark.circle")
                 .labelStyle(.iconOnly)
             }
+            .buttonStyle(.bordered)
           }
         } else {
           sendButton(wasSuccessful: isShowingPINField, isDisabled: confirmIsDisabledForID) {

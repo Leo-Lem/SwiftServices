@@ -4,11 +4,9 @@ import struct Foundation.URL
 import UserDefaultsService
 
 open class MyAuthenticationService: AuthenticationService {
-  public var eventPublisher = Publisher<AuthenticationStatus>()
+  public var eventPublisher = Publisher<AuthenticationEvent>()
 
-  public var status: AuthenticationStatus = .notAuthenticated {
-    didSet { eventPublisher.send(status) }
-  }
+  public var status: AuthenticationStatus = .notAuthenticated
 
   internal let server: URL
   internal let keyValueStorageService: AnyKeyValueStorageService<String>
@@ -45,7 +43,9 @@ open class MyAuthenticationService: AuthenticationService {
 
     switch response?.statusCode {
     case 200:
-      return performLogin(try Credential(from: data))
+      let id = performLogin(try Credential(from: data))
+      eventPublisher.send(.registered)
+      return id
     case 400:
       throw AuthenticationError.registrationInvalidID(credential.id)
     case 409:
@@ -62,7 +62,9 @@ open class MyAuthenticationService: AuthenticationService {
 
     switch response?.statusCode {
     case 200:
-      return performLogin(try Credential(from: data))
+      let id = performLogin(try Credential(from: data))
+      eventPublisher.send(.loggedIn)
+      return id
     case 401:
       throw AuthenticationError.authenticationWrongPIN
     case 404:
@@ -79,7 +81,9 @@ open class MyAuthenticationService: AuthenticationService {
 
     switch response?.statusCode {
     case 200:
-      return performLogin(try Credential(from: data))
+      let id = performLogin(try Credential(from: data))
+      eventPublisher.send(.changedPin)
+      return id
     case .none:
       throw AuthenticationError.noConnection
     case let .some(code):
@@ -93,6 +97,7 @@ open class MyAuthenticationService: AuthenticationService {
 
     switch response?.statusCode {
     case 200:
+      eventPublisher.send(.deregistered)
       performLogout(credential.id)
     case .none:
       throw AuthenticationError.noConnection
@@ -105,5 +110,6 @@ open class MyAuthenticationService: AuthenticationService {
     guard case let .authenticated(id) = status else { throw AuthenticationError.notAuthenticated }
     
     performLogout(id)
+    eventPublisher.send(.loggedOut)
   }
 }

@@ -5,10 +5,8 @@ public extension AuthenticationService where Self == MockAuthenticationService {
 }
 
 open class MockAuthenticationService: AuthenticationService {
-  public var eventPublisher = Publisher<AuthenticationStatus>()
-  public var status: AuthenticationStatus = .notAuthenticated {
-    didSet { eventPublisher.send(status) }
-  }
+  public var eventPublisher = Publisher<AuthenticationEvent>()
+  public var status: AuthenticationStatus = .notAuthenticated
 
   var store = Set<Credential>()
   
@@ -26,6 +24,7 @@ open class MockAuthenticationService: AuthenticationService {
     
     store.insert(credential)
     status = .authenticated(credential.id)
+    eventPublisher.send(.registered)
     print("Registered user with \(credential).")
     
     return credential.id
@@ -41,6 +40,7 @@ open class MockAuthenticationService: AuthenticationService {
     }
     
     status = .authenticated(credential.id)
+    eventPublisher.send(.loggedIn)
     print("Logged user in with \(credential).")
     
     return credential.id
@@ -55,6 +55,7 @@ open class MockAuthenticationService: AuthenticationService {
       .flatMap { store.remove(at: $0) }
     store.insert(credential)
     status = .authenticated(credential.id)
+    eventPublisher.send(.changedPin)
     print("Changed pin with \(id).")
     
     return credential.id
@@ -66,6 +67,7 @@ open class MockAuthenticationService: AuthenticationService {
     _ = store
       .firstIndex(where: { $0.id == id })
       .flatMap { store.remove(at: $0) }
+    eventPublisher.send(.deregistered)
     print("Deregistered user with \(id).")
     
     logout()
@@ -73,6 +75,7 @@ open class MockAuthenticationService: AuthenticationService {
 
   public func logout() {
     status = .notAuthenticated
+    eventPublisher.send(.loggedOut)
     print("Logged user out.")
   }
 }
