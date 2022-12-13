@@ -5,67 +5,71 @@ import Concurrency
 @_exported import DatabaseService
 import Errors
 
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 public actor CoreDataService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public let status = DatabaseStatus.available
   public let eventPublisher = Publisher<DatabaseEvent>()
-  public let container: NSPersistentContainer
+  public let context: NSManagedObjectContext
 
   internal let tasks = Tasks()
 
   /// Instantiates a CoreDataService with the given container.
   /// - Parameter container: The NSPersistentContainer to use.
-  @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-  public init(container: NSPersistentContainer) async {
-    self.container = container
+  public init(context: NSManagedObjectContext, saveEvery saveInterval: TimeInterval = 30) async {
+    self.context = context
 
     tasks["updateOnRemoteChange"] = Task(priority: .background) { await updateOnRemoteChange() }
     tasks["saveOnResignActive"] = Task(priority: .high) { await saveOnResignActive() }
-    tasks["savePeriodically"] = Task(priority: .high) { await save(every: 30) }
-
-    // TODO: provide an alternative intializer for older versions
-//    tasks["updatePeriodically"] = Task(priority: .background) { await update(every: 30) }
+    tasks["savePeriodically"] = Task(priority: .high) { await save(every: saveInterval) }
   }
 
   @discardableResult
   public func insert<T: Convertible>(_ convertible: T) async -> T {
-    container.viewContext.insert(NSManagedObject.castFrom(databaseObject: await getDatabaseObject(from: convertible)))
-    
+    await context.perform { [weak self] in
+      if let self {
+        self.context.insert(
+          NSManagedObject.castFrom(databaseObject: self.getDatabaseObject(from: convertible))
+        )
+      }
+    }
+
     eventPublisher.send(.inserted(T.self, id: convertible.id))
-    
+
     return convertible
   }
 
   public func delete<T: Convertible>(_: T.Type, with id: T.ID) async throws {
-    guard let object = await fetchDatabaseObject(of: T.self, with: id) else {
-      throw DatabaseError.doesNotExist(T.self, id: id)
-    }
+    try await context.perform { [weak self] in
+      if let self {
+        guard let object = self.fetchDatabaseObject(of: T.self, with: id) else {
+          throw DatabaseError.doesNotExist(T.self, id: id)
+        }
 
-    container.viewContext.delete(NSManagedObject.castFrom(databaseObject: object))
+        self.context.delete(NSManagedObject.castFrom(databaseObject: object))
+      }
+    }
 
     eventPublisher.send(.deleted(T.self, id: id))
   }
 
   public func fetch<T: Convertible>(_: T.Type = T.self, with id: T.ID) async -> T? {
-    printError(container.viewContext.save)
+    await save()
     
-    var databaseObject: T.DatabaseObject?
-    let timeout = Date()
-    
-    repeat {
-      databaseObject = await fetchDatabaseObject(of: T.self, with: id)
-    } while databaseObject == nil && timeout.distance(to: Date()) < 1
-    
-    return databaseObject.flatMap(T.init)
+    return await context.perform { [weak self] in
+      return self?.fetchDatabaseObject(of: T.self, with: id).flatMap(T.init)
+    }
   }
 
-  public func fetch<T: Convertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error> {
-    printError(container.viewContext.save)
+  public func fetch<T: Convertible>(_ query: Query<T>) async throws -> AsyncThrowingStream<[T], Error> {
+    await save()
     
-    return AsyncThrowingStream<[T], Error> { continuation in
-      continuation.yield(await self.fetchDatabaseObjects(query).map(T.init))
-      continuation.finish()
+    return await context.perform { [weak self] in
+        return AsyncThrowingStream<[T], Error> { continuation in
+          continuation.yield(self?.fetchDatabaseObjects(query).map(T.init) ?? [])
+          continuation.finish()
+        }
     }
   }
 }

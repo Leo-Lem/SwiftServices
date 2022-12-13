@@ -34,7 +34,7 @@ public protocol DatabaseService: Actor, EventDriver where Event == DatabaseEvent
   /// - Parameter query: A `Queries/Query` for a ``DatabaseObjectConvertible`` type.
   /// - Returns: The results of the query provided as an `AsyncThrowingStream`.
   /// - Throws: A ``DatabaseError``.
-  func fetch<T: DatabaseObjectConvertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error>
+  func fetch<T: DatabaseObjectConvertible>(_ query: Query<T>) async throws -> AsyncThrowingStream<[T], Error>
 }
 
 public extension DatabaseService {

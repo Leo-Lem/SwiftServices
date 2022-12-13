@@ -7,7 +7,7 @@ public protocol DatabaseObjectConvertible: Identifiable where ID: CustomStringCo
   /// The associated database object's type.
   associatedtype DatabaseObject
 
-  /// A String identifier of the databae object's type
+  /// A String identifier of the database object's type
   static var typeID: String { get }
 
   /// Initializes the convertible from a ``DatabaseObject``

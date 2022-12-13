@@ -57,8 +57,10 @@ public actor CloudKitService: DatabaseService {
     }
   }
 
-  public func fetch<T: Convertible>(_ query: Query<T>) -> AsyncThrowingStream<[T], Error> {
-    fetchDatabaseObjects(query)
+  public func fetch<T: Convertible>(_ query: Query<T>) throws -> AsyncThrowingStream<[T], Error> {
+    guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
+    
+    return fetchDatabaseObjects(query)
       .map { $0.map(T.init) }
       .mapError(mapToDatabaseError)
   }

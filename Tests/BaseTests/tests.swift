@@ -84,7 +84,7 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
       case let .inserted(_, id):
         XCTAssertEqual(id.description, example.id.description, "The inserted model does not match the original.")
         valuesAreReceived.fulfill()
-        
+
       case let .deleted(_, id):
         XCTAssertEqual(id.description, example.id.description, "The deleted model does not match.")
         valuesAreReceived.fulfill()

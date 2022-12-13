@@ -9,6 +9,15 @@ class CoreDataServiceIntegrationTests: BaseTests<CoreDataService, Example1, Exam
     try await service.deleteAll(Example1.self)
     try await service.deleteAll(Example2.self)
   }
+  
+  func testIssue() async throws {
+    for _ in 0..<1000 {
+      let example = Example1.example
+      await service.insert(example)
+      _ = await service.fetch(Example1.self, with: example.id)
+      try await service.delete(Example1.self, with: example.id)
+    }
+  }
 }
 
 @available(iOS 15, macOS 12, *)
@@ -45,6 +54,6 @@ extension CoreDataService {
       }
     }
     
-    await self.init(container: container)
+    await self.init(context: container.viewContext)
   }
 }
