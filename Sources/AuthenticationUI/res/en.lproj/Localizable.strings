@@ -1,20 +1,27 @@
+/* Authentication */
+"AUTHENTICATION_TITLE" = "Authenticate";
+"AUTHENTICATION_SUBTITLE" = "Choose one of the methods below";
 
-"TITLE" = "Authenticate";
-"SUBTITLE" = "Choose one of the methods below";
+/* Entering Credentials */
 "ENTER_USERID" = "Username";
 "ENTER_PIN" = "Password";
-"CONFIRM" = "Confirm";
-"SIWA" = "Sign in with Apple";
-"SIWG" = "Sign in with Google";
+
+/* Changing pin */
+"CHANGE_PIN_TITLE" = "Change Password";
+"CHANGE_PIN_SUBTITLE" = "Choose a new password below";
+"NEW_PIN" = "New Password";
+"SIWA_WARNING_PIN_CHANGE" = "If you used Sign in with Apple, DON'T change your password here or you might not be able to sign in again.";
 
 /* Register alert */
 "UNKNOWN_USER_ID" = "Unknown User ID.";
 "REGISTER_PROMPT" = "Do you want to create a new account?";
 "REGISTER" = "Register";
-"CANCEL" = "Cancel";
 
 /* Errors */
 "NO_CONNECTION" = "Can't connect to the server :(";
 "ID_TAKEN" = "The ID is already taken :(";
 "ID_INVALID" = "The ID can only contain alphanumeric and punctuation characters.";
 "PIN_WRONG" = "The password you entered is wrong.";
+
+"CONFIRM" = "Confirm";
+"CANCEL" = "Cancel";

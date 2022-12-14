@@ -6,7 +6,7 @@ import LeosMisc
 import SwiftUI
 
 @available(iOS 16, macOS 13, *)
-struct MyAuthenticationView: View {
+struct EnterCredentialsView: View {
   let service: any AuthenticationService
   @Binding var isLoggedIn: Bool
   @Binding var error: AuthenticationError?
@@ -18,42 +18,39 @@ struct MyAuthenticationView: View {
           .focused($focusedField, equals: .userID)
           .autocorrectionDisabled()
           .onSubmit {
-            if !confirmIsDisabledForID {
-              Task(priority: .userInitiated) { await checkUserIDExistence() }
-            }
+            Task(priority: .userInitiated) { await checkUserIDExistence() }
           }
           .disabled(isShowingPINField)
 
-        if isShowingPINField {
-          if !isLoggedIn {
-            Button { reset() } label: {
-              Label(String(localized: "CANCEL", bundle: .module), systemImage: "xmark.circle")
-                .labelStyle(.iconOnly)
-            }
-            .buttonStyle(.bordered)
-          }
-        } else {
-          sendButton(wasSuccessful: isShowingPINField, isDisabled: confirmIsDisabledForID) {
+        if !isShowingPINField {
+          SendButton {
             await checkUserIDExistence()
+            return isShowingPINField
           }
+          .disabled(confirmIsDisabledForID)
+        } else if !isLoggedIn {
+          Button { reset() } label: {
+            Label(String(localized: "CANCEL", bundle: .module), systemImage: "xmark.circle")
+              .labelStyle(.iconOnly)
+          }
+          .buttonStyle(.bordered)
         }
       }
 
       if isShowingPINField {
         HStack {
-          SecureField(String(localized: "ENTER_PIN", bundle: .module), text: $credential.pin)
+          PINField(pin: $credential.pin, prompt: String(localized: "ENTER_PIN", bundle: .module))
             .focused($focusedField, equals: .pin)
-            .autocorrectionDisabled()
             .onSubmit {
-              if !confirmIsDisabledForPIN {
-                Task(priority: .userInitiated) { await loginOrRegister() }
-              }
+              Task(priority: .userInitiated) { await loginOrRegister() }
             }
             .disabled(isLoggedIn)
 
-          sendButton(wasSuccessful: isLoggedIn, isDisabled: confirmIsDisabledForPIN) {
+          SendButton {
             await loginOrRegister()
+            return isLoggedIn
           }
+          .disabled(confirmIsDisabledForPIN)
         }
       }
     }
@@ -83,22 +80,7 @@ struct MyAuthenticationView: View {
 }
 
 @available(iOS 16, macOS 13, *)
-private extension MyAuthenticationView {
-  func sendButton(wasSuccessful: Bool, isDisabled: Bool, action: @escaping () async -> Void) -> some View {
-    AsyncButton(indicatorStyle: .replace, taskPriority: .userInitiated, action: action) {
-      if wasSuccessful {
-        Image(systemName: "checkmark.circle")
-      } else {
-        Label("\(Text("CONFIRM", bundle: .module))", systemImage: "paperplane")
-          .labelStyle(.iconOnly)
-      }
-    }
-    .disabled(isDisabled || wasSuccessful)
-  }
-}
-
-@available(iOS 16, macOS 13, *)
-private extension MyAuthenticationView {
+private extension EnterCredentialsView {
   var confirmIsDisabledForID: Bool {
     credential.id.count < 4 ||
       credential.id.rangeOfCharacter(from: .alphanumerics.union(.punctuationCharacters).inverted) != nil
@@ -115,6 +97,8 @@ private extension MyAuthenticationView {
   @MainActor func checkUserIDExistence() async {
     await printError {
       do {
+        guard !confirmIsDisabledForID else { return }
+        
         userIDExists = try await service.exists(credential.id)
 
         if userIDExists {
@@ -130,20 +114,18 @@ private extension MyAuthenticationView {
   @MainActor func loginOrRegister() async {
     await printError {
       do {
+        guard !confirmIsDisabledForPIN else { return }
+        
         _ = userIDExists ?
           try await service.login(credential) :
           try await service.register(credential)
 
-        performLogin()
+        if case .authenticated = service.status {
+          isLoggedIn = true
+          CoreHapticsService()?.play(.taDa)
+          dismiss()
+        }
       } catch let error as AuthenticationError where error.hasDescription { self.error = error }
-    }
-  }
-
-  func performLogin() {
-    if case .authenticated = service.status {
-      isLoggedIn = true
-      CoreHapticsService()?.play(.taDa)
-      dismiss()
     }
   }
 }
@@ -154,7 +136,7 @@ private extension MyAuthenticationView {
 struct MyAuthenticationView_Previews: PreviewProvider {
   static var previews: some View {
     Form {
-      MyAuthenticationView(
+      EnterCredentialsView(
         service: .mock,
         isLoggedIn: .constant(false),
         error: .constant(nil)

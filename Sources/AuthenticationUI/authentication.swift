@@ -4,28 +4,18 @@
 import LeosMisc
 import SwiftUI
 
-@available(iOS 16, macOS 13, *)
+@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 public struct AuthenticationView: View {
   let service: any AuthenticationService
 
   public var body: some View {
     Form {
-      Section {
-        Text("TITLE", bundle: .module)
-          .bold()
-          .font(.title)
-          .frame(maxWidth: .infinity)
-          .accessibilityAddTraits(.isHeader)
-
-        Text("SUBTITLE", bundle: .module)
-          .font(.subheadline)
-          .frame(maxWidth: .infinity)
-      }
+      Header(title: "AUTHENTICATION_TITLE", subtitle: "AUTHENTICATION_SUBTITLE")
 
       Divider()
 
       Section {
-        MyAuthenticationView(service: service, isLoggedIn: $isLoggedIn, error: $error)
+        EnterCredentialsView(service: service, isLoggedIn: $isLoggedIn, error: $error)
       }
 
       Divider()
@@ -59,19 +49,16 @@ public struct AuthenticationView: View {
 // MARK: - (PREVIEWS)
 
 #if DEBUG
-  @available(iOS 16, macOS 13, *)
+  @available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
   struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
-      Group {
-        AuthenticationView(service: .mock)
-          .previewDisplayName("Bare")
+      AuthenticationView(service: .mock)
 
-        Text("")
-          .sheet(isPresented: .constant(true)) {
-            AuthenticationView(service: .mock)
-          }
-          .previewDisplayName("Sheet")
-      }
+      Text("")
+        .sheet(isPresented: .constant(true)) {
+          AuthenticationView(service: .mock)
+        }
+        .previewDisplayName("Sheet")
     }
   }
 #endif
