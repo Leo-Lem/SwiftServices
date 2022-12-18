@@ -4,8 +4,11 @@
 @_exported import DatabaseService
 import Concurrency
 
+public protocol CloudKitServicing: DatabaseService {}
+extension MockDatabaseService: CloudKitServicing {}
+
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-public actor CloudKitService: DatabaseService {
+public actor CloudKitService: CloudKitServicing {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable

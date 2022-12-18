@@ -10,9 +10,9 @@ let package = Package(
 
 // MARK: - (DEPENDENCIES)
 
-let mine = (queries: "Queries", concurrency: "Concurrency", errors: "Errors", previews: "Previews")
+let mine = (queries: "Queries", concurrency: "Concurrency", errors: "Errors", previews: "Previews", misc: "LeosMisc")
 
-for name in [mine.queries, mine.concurrency, mine.errors, mine.previews] {
+for name in [mine.queries, mine.concurrency, mine.errors, mine.previews, mine.misc] {
   package.dependencies.append(.package(url: "https://github.com/Leo-Lem/\(name)", branch: "main"))
 }
 
@@ -22,7 +22,8 @@ let service = Target.target(
   name: "DatabaseService",
   dependencies: [
     .byName(name: mine.queries),
-    .byName(name: mine.concurrency)
+    .byName(name: mine.concurrency),
+    .byName(name: mine.misc)
   ],
   resources: [.process("ui/res")]
 )
@@ -57,7 +58,10 @@ let tests = Target.target(
 
 let mockTests = Target.testTarget(
   name: "Mock\(service.name)Tests",
-  dependencies: [.target(name: tests.name)]
+  dependencies: [
+    .target(name: tests.name),
+    .byName(name: mine.errors)
+  ]
 )
 
 let cloudkitTests = Target.testTarget(

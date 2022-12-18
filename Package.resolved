@@ -6,7 +6,7 @@
       "location" : "https://github.com/Leo-Lem/Concurrency",
       "state" : {
         "branch" : "main",
-        "revision" : "5cdf46f4a4e8c0fb0b9afb78c4eeb7bb63b97fe5"
+        "revision" : "25d2bf0a6fdbe4c6ae2ae5461399ec8965105467"
       }
     },
     {
@@ -15,7 +15,16 @@
       "location" : "https://github.com/Leo-Lem/Errors",
       "state" : {
         "branch" : "main",
-        "revision" : "bb37c3da7ed47e6f360c7986513db4eb6aa197b7"
+        "revision" : "c658fb83dfffc0132cb5f9a0e10dbe65f86908d0"
+      }
+    },
+    {
+      "identity" : "leosmisc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/LeosMisc",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6e24d6e15eeb5841463a316943c899e5b0bd0baa"
       }
     },
     {
@@ -33,7 +42,7 @@
       "location" : "https://github.com/Leo-Lem/Queries",
       "state" : {
         "branch" : "main",
-        "revision" : "3e6281efcf3f8f855a394aee781c03bd72a872b6"
+        "revision" : "39a53ddfd5fef27a0bc4508076f9701aad33ca99"
       }
     }
   ],

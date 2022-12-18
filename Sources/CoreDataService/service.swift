@@ -5,8 +5,11 @@ import Concurrency
 @_exported import DatabaseService
 import Errors
 
+public protocol CoreDataServicing: DatabaseService {}
+extension MockDatabaseService: CoreDataServicing {}
+
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-public actor CoreDataService: DatabaseService {
+public actor CoreDataService: CoreDataServicing {
   public typealias Convertible = DatabaseObjectConvertible
 
   public let status = DatabaseStatus.available
