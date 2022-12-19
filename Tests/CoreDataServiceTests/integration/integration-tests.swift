@@ -4,7 +4,7 @@ import BaseTests
 @available(iOS 15, macOS 12, *)
 class CoreDataServiceIntegrationTests: BaseTests<CoreDataService, Example1, Example2> {
   override func setUp() async throws {
-    service = await CoreDataService()
+    service = CoreDataService()
 
     try await service.deleteAll(Example1.self)
     try await service.deleteAll(Example2.self)
@@ -40,7 +40,7 @@ extension CoreDataService {
     return managedObjectModel
   }()
 
-  init() async {
+  convenience init() {
     let container = NSPersistentContainer(
       name: Self.containerID,
       managedObjectModel: Self.managedObjectModel
@@ -54,6 +54,6 @@ extension CoreDataService {
       }
     }
     
-    await self.init(context: container.viewContext)
+    self.init(context: container.viewContext)
   }
 }

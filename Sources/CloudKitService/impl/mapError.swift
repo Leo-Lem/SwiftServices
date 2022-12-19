@@ -17,9 +17,9 @@ extension CloudKitService {
     case let error as CKError:
       switch error.code {
       case .networkFailure, .networkUnavailable, .serverResponseLost, .serviceUnavailable:
-        return DatabaseError.databaseIsUnavailable
+        return DatabaseError.status(.unavailable)
       case .notAuthenticated:
-        return DatabaseError.databaseIsReadOnly
+        return DatabaseError.status(.readOnly)
       default:
         return DatabaseError.other(error)
       }

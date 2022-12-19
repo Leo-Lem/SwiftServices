@@ -6,9 +6,9 @@ import Foundation
 extension DatabaseError: LocalizedError {
   public var errorDescription: String? {
     switch self {
-    case .databaseIsReadOnly:
+    case let .status(status) where status == .readOnly:
       return String(localized: "DATABASE_READONLY_ERROR", bundle: .module)
-    case .databaseIsUnavailable:
+    case let .status(status) where status == .unavailable:
       return String(localized: "DATABASE_UNAVAILABLE_ERROR", bundle: .module)
     default:
       return nil

@@ -6,10 +6,15 @@ import BaseTests
 @available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
 final class CloudKitServiceTests: BaseTests<CloudKitService, Example1, Example2> {
   override func setUp() async throws {
-    service = await CloudKitService(container: MockCloudKitContainer())
+    service = CloudKitService(container: MockCloudKitContainer())
 
     // verifies the service can be used before starting
-    guard case .available = await service.status else { throw XCTSkip("Missing write permissions.") }
+    let timeout = Date.now + 3
+    repeat {
+      try? await Task.sleep(nanoseconds: 1000)
+    } while service.status != .available && .now < timeout
+    
+    guard service.status == .available else { throw XCTSkip("Service is unavailable.") }
 
     // cleans up any leftover data
     try await service.deleteAll(Example1.self)

@@ -30,7 +30,7 @@ extension CloudKitService {
   func fetch(ckQuery: CKQuery, maxItems: Int?, batchSize: Int) -> AsyncThrowingStream<[CKRecord], Error> {
     AsyncThrowingStream { [weak self] continuation in
       do {
-        guard let database = await self?.database else { return continuation.finish() }
+        guard let database = self?.database else { return continuation.finish() }
 
         var count = 0,
             cursor: CKQueryOperation.Cursor?

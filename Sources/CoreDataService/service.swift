@@ -5,11 +5,8 @@ import Concurrency
 @_exported import DatabaseService
 import Errors
 
-public protocol CoreDataServicing: DatabaseService {}
-extension MockDatabaseService: CoreDataServicing {}
-
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-public actor CoreDataService: CoreDataServicing {
+open class CoreDataService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public let status = DatabaseStatus.available
@@ -20,7 +17,7 @@ public actor CoreDataService: CoreDataServicing {
 
   /// Instantiates a CoreDataService with the given container.
   /// - Parameter container: The NSPersistentContainer to use.
-  public init(context: NSManagedObjectContext, saveEvery saveInterval: TimeInterval = 30) async {
+  public init(context: NSManagedObjectContext, saveEvery saveInterval: TimeInterval = 30) {
     self.context = context
 
     tasks["updateOnRemoteChange"] = Task(priority: .background) { await updateOnRemoteChange() }
@@ -43,7 +40,8 @@ public actor CoreDataService: CoreDataServicing {
     return convertible
   }
 
-  public func delete<T: Convertible>(_: T.Type, with id: T.ID) async throws {
+  @discardableResult
+  public func delete<T: Convertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
     try await context.perform { [weak self] in
       if let self {
         guard let object = self.fetchDatabaseObject(of: T.self, with: id) else {
@@ -55,6 +53,8 @@ public actor CoreDataService: CoreDataServicing {
     }
 
     eventPublisher.send(.deleted(T.self, id: id))
+    
+    return nil
   }
 
   public func fetch<T: Convertible>(_: T.Type = T.self, with id: T.ID) async -> T? {

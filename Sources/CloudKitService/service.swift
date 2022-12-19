@@ -4,11 +4,8 @@
 @_exported import DatabaseService
 import Concurrency
 
-public protocol CloudKitServicing: DatabaseService {}
-extension MockDatabaseService: CloudKitServicing {}
-
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
-public actor CloudKitService: CloudKitServicing {
+open class CloudKitService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable
@@ -20,20 +17,21 @@ public actor CloudKitService: CloudKitServicing {
 
   private let tasks = Tasks()
 
-  public init(container: CloudKitContainer, scope: CloudKitDatabaseScope = .public) async {
+  public init(container: CloudKitContainer, scope: CloudKitDatabaseScope = .public) {
     self.container = container
     self.scope = scope
 
     tasks["updateStatusOnChange"] = Task(priority: .high) { await updateStatusOnChange() }
     tasks["updatePeriodically"] = Task(priority: .background) { await updatePeriodically(every: 30) }
 
-    status = await getStatus()
+    Task {
+      status = await getStatus()
+    }
   }
 
   @discardableResult
   public func insert<T: Convertible>(_ convertible: T) async throws -> T {
-    guard status != .readOnly else { throw DatabaseError.databaseIsReadOnly }
-    guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
+    guard status == .available else { throw DatabaseError.status(status) }
 
     return try await mapToDatabaseError {
       try await database.save(CKRecord.castFrom(databaseObject: try await mapToDatabaseObject(convertible)))
@@ -42,18 +40,20 @@ public actor CloudKitService: CloudKitServicing {
     }
   }
 
-  public func delete<T: Convertible>(_: T.Type, with id: T.ID) async throws {
-    guard status != .readOnly else { throw DatabaseError.databaseIsReadOnly }
-    guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
+  @discardableResult
+  public func delete<T: Convertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
+    guard status == .available else { throw DatabaseError.status(status) }
 
-    return try await mapToDatabaseError {
+    try await mapToDatabaseError {
       try await database.deleteRecord(withID: CKRecord.ID(recordName: id.description))
       eventPublisher.send(.deleted(T.self, id: id))
     }
+    
+    return nil
   }
 
   public func fetch<T: Convertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
-    guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
+    guard status != .unavailable else { throw DatabaseError.status(.unavailable) }
 
     return try await mapToDatabaseError {
       try await fetchDatabaseObject(T.self, with: id).flatMap(T.init)
@@ -61,7 +61,7 @@ public actor CloudKitService: CloudKitServicing {
   }
 
   public func fetch<T: Convertible>(_ query: Query<T>) throws -> AsyncThrowingStream<[T], Error> {
-    guard status != .unavailable else { throw DatabaseError.databaseIsUnavailable }
+    guard status != .unavailable else { throw DatabaseError.status(.unavailable) }
     
     return fetchDatabaseObjects(query)
       .map { $0.map(T.init) }

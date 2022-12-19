@@ -4,7 +4,7 @@ public extension DatabaseService where Self == MockDatabaseService {
   static var mock: MockDatabaseService { MockDatabaseService() }
 }
 
-public actor MockDatabaseService: DatabaseService {
+open class MockDatabaseService: DatabaseService {
   public let eventPublisher = Publisher<DatabaseEvent>()
   
   public var status: DatabaseStatus = .readOnly
@@ -21,11 +21,14 @@ public actor MockDatabaseService: DatabaseService {
     return convertible
   }
 
-  public func delete<T: DatabaseObjectConvertible>(_: T.Type, with id: T.ID) async throws {
+  @discardableResult
+  public func delete<T: DatabaseObjectConvertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
     store.removeValue(forKey: id.description)
     eventPublisher.send(.deleted(T.self, id: id))
 
     print("Deleted database object with \(id)!")
+    
+    return nil
   }
 
   public func fetch<T: DatabaseObjectConvertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
