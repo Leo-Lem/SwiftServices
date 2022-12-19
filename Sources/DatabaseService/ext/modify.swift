@@ -9,10 +9,10 @@ public extension DatabaseService {
   /// - Returns: A modified ``DatabaseObjectConvertible``.
   @discardableResult
   func modify<T: DatabaseObjectConvertible>(
-    _ type: T.Type = T.self, with id: T.ID, modification: (inout T) -> Void
+    _ type: T.Type = T.self, with id: T.ID, modification: (inout T) async throws -> Void
   ) async throws -> T {
     if var convertible: T = try await fetch(with: id) {
-      modification(&convertible)
+      try await modification(&convertible)
       try await insert(convertible)
       return convertible
     } else { throw DatabaseError.doesNotExist(T.self, id: id) }

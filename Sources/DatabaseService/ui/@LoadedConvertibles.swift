@@ -41,8 +41,12 @@ public struct LoadedConvertibles<T: Loadable & Hashable, S: DatabaseService>: Dy
     await printError {
       switch event {
       case let .inserted(type, id) where type == T.self:
-        if let id = id as? T.ID, let element: T = try await service.fetch(with: id), query.evaluate(element) {
-          insert(element)
+        if let id = id as? T.ID, let convertible: T = try await service.fetch(with: id) {
+          if query.evaluate(convertible) {
+            insert(convertible)
+          } else if convertibles.contains(with: convertible.id) {
+            remove(with: id)
+          }
         }
       case let .deleted(type, id) where type == T.self:
         if let id = id as? T.ID { remove(with: id) }
