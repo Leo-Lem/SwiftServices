@@ -5,7 +5,7 @@ import BaseTests
 @available(iOS 15, macOS 12, *)
 class StoreKitServiceTests: InAppPurchaseServiceTests<StoreKitService<ExamplePurchaseID>> {
   override func setUp() async throws {
-    service = await .init()
+    service = .init()
     
     if service.getPurchases().isEmpty { throw XCTSkip("There are no purchases available.") }
   }

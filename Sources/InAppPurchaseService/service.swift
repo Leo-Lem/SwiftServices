@@ -1,7 +1,8 @@
 import Concurrency
+import Foundation
 
 /// Conforming services can provide information about, and exeucte In-App Purchases
-public protocol InAppPurchaseService: EventDriver where Event == PurchaseEvent<PurchaseID> {
+public protocol InAppPurchaseService: EventDriver, ObservableObject where Event == PurchaseEvent<PurchaseID> {
   /// The associated type of purchase id.
   associatedtype PurchaseID: PurchaseIdentifiable
 

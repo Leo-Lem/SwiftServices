@@ -1,6 +1,6 @@
 //	Created by Leopold Lemmermann on 18.11.22.
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension StoreKitService {
   func handleTransaction(_ verification: VerificationResult<Transaction>) throws {
     guard case let .verified(transaction) = verification else { throw PurchaseError.unverified }

@@ -4,12 +4,12 @@ import Errors
 @_exported import InAppPurchaseService
 @_exported import StoreKit
 
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 public extension AnyInAppPurchaseService {
-  @available(iOS 15, macOS 12, *)
-  static func storekit() async -> Self { Self(await StoreKitService()) }
+  static var storekit: Self { Self(StoreKitService()) }
 }
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 open class StoreKitService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseService {
   public let eventPublisher = Publisher<PurchaseEvent<PurchaseID>>()
 
@@ -18,8 +18,8 @@ open class StoreKitService<PurchaseID: PurchaseIdentifiable>: InAppPurchaseServi
 
   let tasks = Tasks()
 
-  public init() async {
-    await fetchProducts(for: Array(PurchaseID.allCases))
+  public init() {
+    Task(priority: .userInitiated) { await fetchProducts(for: Array(PurchaseID.allCases)) }
 
     tasks["updateOnRemoteChange"] = Task(priority: .background) {
       await printError {

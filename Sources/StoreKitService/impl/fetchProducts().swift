@@ -2,7 +2,7 @@
 
 import Errors
 
-@available(iOS 15, macOS 12, *)
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension StoreKitService {
   func fetchProducts<ID: PurchaseIdentifiable>(for purchaseIDs: [ID]) async {
     await printError {

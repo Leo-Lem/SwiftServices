@@ -6,13 +6,6 @@ import Previews
 import SwiftUI
 
 @available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
-public extension PurchaseIdentifiable {
-  func view<S: InAppPurchaseService>(service: S) -> some View where S.PurchaseID == Self {
-    InAppPurchaseView(id: self, service: service)
-  }
-}
-
-@available(iOS 16, macOS 13, tvOS 16, watchOS 9, *)
 public struct InAppPurchaseView<S: InAppPurchaseService>: View {
   let purchase: Purchase<S.PurchaseID>
   let service: S
