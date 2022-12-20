@@ -6,6 +6,6 @@ class UserNotificationsServiceTests: PushNotificationServiceTests<UserNotificati
   override func setUp() async throws {
     throw XCTSkip("The service can't be used outside of an app it seems.")
     
-    service = await .init()
+//    service = .init()
   }
 }

@@ -17,8 +17,10 @@ open class UserNotificationsService: PushNotificationService {
   let tasks = Tasks()
 
   @available(iOS 15, macOS 12, *)
-  public init(_ automaticPermissionRequest: Bool = false) async {
-    isAuthorized = automaticPermissionRequest ? await authorize() : await getAuthorizationStatus()
+  public init(_ automaticPermissionRequest: Bool = false) {
+    Task {
+      isAuthorized = automaticPermissionRequest ? await authorize() : await getAuthorizationStatus()
+    }
 
     tasks["updateOnDidBecomeActive"] = Task { await updateAuthorizedOnDidBecomeActive(automaticPermissionRequest) }
   }
