@@ -27,6 +27,8 @@ open class CoreDataService: DatabaseService {
 
   @discardableResult
   public func insert<T: Convertible>(_ convertible: T) async -> T {
+    await save()
+    
     await context.perform { [weak self] in
       if let self {
         self.context.insert(
@@ -42,6 +44,8 @@ open class CoreDataService: DatabaseService {
 
   @discardableResult
   public func delete<T: Convertible>(_: T.Type = T.self, with id: T.ID) async throws -> T? {
+    await save()
+    
     try await context.perform { [weak self] in
       if let self {
         guard let object = self.fetchDatabaseObject(of: T.self, with: id) else {
