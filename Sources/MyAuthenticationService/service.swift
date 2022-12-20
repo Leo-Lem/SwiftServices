@@ -14,12 +14,14 @@ open class MyAuthenticationService: AuthenticationService {
   public init(
     server: URL,
     keyValueStorageService: AnyKeyValueStorageService<String> = .userDefaults()
-  ) async {
+  ) {
     self.server = server
     self.keyValueStorageService = keyValueStorageService
 
-    await printError {
-      if let credential = loadCredential() { try await login(credential) }
+    Task {
+      await printError {
+        if let credential = loadCredential() { try await login(credential) }
+      }
     }
   }
 

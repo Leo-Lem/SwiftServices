@@ -4,7 +4,7 @@ import BaseTests
 
 class MyAuthenticationServiceTests: BaseTests<MyAuthenticationService> {
   override func setUp() async throws {
-    service = await .init(
+    service = .init(
       server: URL(string: "http://127.0.0.1:8080")!,
       keyValueStorageService: .mock
     )

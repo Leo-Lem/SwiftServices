@@ -1,6 +1,7 @@
 import Concurrency
+import Foundation
 
-public protocol AuthenticationService: EventDriver where Event == AuthenticationEvent {
+public protocol AuthenticationService: EventDriver, ObservableObject where Event == AuthenticationEvent {
   /// The current ``AutenticationStatus``.
   var status: AuthenticationStatus { get }
   
