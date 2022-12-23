@@ -6,7 +6,7 @@ public extension AuthenticationService where Self == MockAuthenticationService {
 
 open class MockAuthenticationService: AuthenticationService {
   public var eventPublisher = Publisher<AuthenticationEvent>()
-  public var status: AuthenticationStatus = .notAuthenticated
+  public var status: AuthenticationStatus? = .notAuthenticated
 
   var store = Set<Credential>()
   

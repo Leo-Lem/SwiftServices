@@ -6,7 +6,7 @@ import UserDefaultsService
 open class MyAuthenticationService: AuthenticationService {
   public var eventPublisher = Publisher<AuthenticationEvent>()
 
-  public var status: AuthenticationStatus = .notAuthenticated
+  public var status: AuthenticationStatus?
 
   internal let server: URL
   internal let keyValueStorageService: AnyKeyValueStorageService<String>
@@ -19,9 +19,9 @@ open class MyAuthenticationService: AuthenticationService {
     self.keyValueStorageService = keyValueStorageService
 
     Task {
-      await printError {
-        if let credential = loadCredential() { try await login(credential) }
-      }
+      await printError { if let credential = loadCredential() { try await login(credential) } }
+      
+      if status == nil { status = .notAuthenticated }
     }
   }
 

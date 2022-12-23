@@ -3,7 +3,7 @@ import Foundation
 
 public protocol AuthenticationService: EventDriver, ObservableObject where Event == AuthenticationEvent {
   /// The current ``AutenticationStatus``.
-  var status: AuthenticationStatus { get }
+  var status: AuthenticationStatus? { get }
   
   /// Check, whether the given ``Credential/ID`` is found in the server.
   /// - Parameter id: The ``Credential/ID`` to check.
