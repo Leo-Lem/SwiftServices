@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "errors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Errors",
+      "state" : {
+        "branch" : "main",
+        "revision" : "82f5e6e983288ee88d95a89e44ec33b08509a6aa"
+      }
+    },
+    {
+      "identity" : "previews",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Leo-Lem/Previews",
+      "state" : {
+        "branch" : "main",
+        "revision" : "c4141d31e662ac40a6bdb78bb882f5d5da7acc0e"
+      }
+    }
+  ],
+  "version" : 2
+}
