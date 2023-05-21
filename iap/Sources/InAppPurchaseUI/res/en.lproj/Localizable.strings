@@ -1,0 +1,16 @@
+/* errors */
+"TRANSACTION_UNVERIFIED" = "The transaction couldn't be verified; please try again later.";
+"PURCHASE_UNAVAILABLE" = "Unfortunately, the product is currently unavailabel.";
+
+/* view */
+"FOR %@" = "for %@";
+"PURCHASE_BUTTON %@" = "Buy for %@";
+"PURCHASE_BUTTON_SUCCESS %@" = "Bought for %@";
+"SUCCESS_TITLE" = "Thank you!";
+"SUCCESS_MESSAGE" = "Your purchase was successful, have fun!";
+"PENDING_TITLE" = "Thank you!";
+"PENDING_MESSAGE" = "Your purchase was successful, but is pending approval.";
+
+/* misc */
+"OK" = "OK";
+"CANCEL" = "Cancel";
