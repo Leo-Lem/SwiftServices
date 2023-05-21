@@ -7,4 +7,25 @@
    <FileRef
       location = "group:README.md">
    </FileRef>
+   <FileRef
+      location = "group:auth">
+   </FileRef>
+   <FileRef
+      location = "group:database">
+   </FileRef>
+   <FileRef
+      location = "group:haptics">
+   </FileRef>
+   <FileRef
+      location = "group:iap">
+   </FileRef>
+   <FileRef
+      location = "group:indexing">
+   </FileRef>
+   <FileRef
+      location = "group:keyValue">
+   </FileRef>
+   <FileRef
+      location = "group:notifications">
+   </FileRef>
 </Workspace>
