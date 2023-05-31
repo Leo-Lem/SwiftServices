@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "FB21F39D-FEE0-4402-8097-FF1F4A6BC55C",
+      "name" : "Config",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "DatabaseService",
+          "name" : "DatabaseService"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CoreDataServiceTests",
+        "name" : "CoreDataServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CloudKitServiceTests",
+        "name" : "CloudKitServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

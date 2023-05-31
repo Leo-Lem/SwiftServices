@@ -1,3 +1,5 @@
 # SwiftServices
 
-Contains different Swift services.
+Swift services for abstracting different functionality:
+
+* [DatabaseService](src/database/README.md)
