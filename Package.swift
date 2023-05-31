@@ -144,3 +144,95 @@ let authenticationTests = Target.target(
 
 package.targets += [authentication, authenticationUI, authenticationTests]
 package.products.append(.library(name: authentication.name, targets: [authentication.name, authenticationUI.name]))
+
+// MARK: - (PURCHASE)
+
+let purchase = Target.target(
+  name: "PurchaseService",
+  dependencies: [
+    .product(name: "Concurrency", package: "LeosSwift"),
+    .product(name: "Previews", package: "LeosSwift")
+  ],
+  path: "src/purchase/base"
+)
+
+let purchaseUI = Target.target(
+  name: "\(purchase.name)UI",
+  dependencies: [
+    .target(name: purchase.name),
+    .product(name: "LeosMisc", package: "LeosSwift"),
+    .product(name: "Errors", package: "LeosSwift"),
+    .product(name: "Previews", package: "LeosSwift")
+  ],
+  path: "src/purchase/ui",
+  resources: [.process("res")]
+)
+
+let storekit = Target.target(
+  name: "StoreKitService",
+  dependencies: [
+    .target(name: purchase.name),
+    .product(name: "Concurrency", package: "LeosSwift"),
+    .product(name: "Errors", package: "LeosSwift")
+  ],
+  path: "src/purchase/storekit"
+)
+
+let purchaseTests = Target.target(
+  name: "\(purchase.name)Tests",
+  dependencies: [
+    .target(name: purchase.name)
+  ],
+  path: "test/purchase/base"
+)
+
+let storekitTests = Target.testTarget(
+  name: "\(storekit.name)Tests",
+  dependencies: [
+    .target(name: purchaseTests.name),
+    .target(name: storekit.name)
+  ],
+  path: "test/purchase/storekit"
+)
+
+package.targets += [purchase, purchaseUI, storekit, purchaseTests, storekitTests]
+package.products.append(.library(name: purchase.name, targets: [purchase.name, purchaseUI.name, storekit.name]))
+
+// MARK: - (NOTIFICATION)
+
+let notification = Target.target(
+  name: "NotificationService",
+  dependencies: [
+    .product(name: "Concurrency", package: "LeosSwift")
+  ],
+  path: "src/notification/base"
+)
+
+let usernotifications = Target.target(
+  name: "UserNotificationsService",
+  dependencies: [
+    .target(name: notification.name),
+    .product(name: "Concurrency", package: "LeosSwift")
+  ],
+  path: "src/notification/usernotifications"
+)
+
+let notificationTests = Target.target(
+  name: "\(notification.name)Tests",
+  dependencies: [
+    .target(name: notification.name)
+  ],
+  path: "test/notification/base"
+)
+
+let usernotificationsTests = Target.testTarget(
+  name: "\(usernotifications.name)Tests",
+  dependencies: [
+    .target(name: usernotifications.name),
+    .target(name: notificationTests.name)
+  ],
+  path: "test/notification/usernotifications"
+)
+
+package.targets += [notification, usernotifications, notificationTests, usernotificationsTests]
+package.products.append(.library(name: notification.name, targets: [notification.name, usernotifications.name]))

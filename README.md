@@ -2,6 +2,8 @@
 
 Swift services for abstracting different functionality:
 
-* [DatabaseService](src/database/README.md)
 * [AssociationService](src/association/README.md)
 * [AuthenticationService](src/authentication/README.md)
+* [DatabaseService](src/database/README.md)
+* [NotificationService](src/notification/README.md)
+* [PurchaseService](src/purchase/README.md)

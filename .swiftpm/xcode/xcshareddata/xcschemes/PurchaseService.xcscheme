@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AuthenticationService"
-               BuildableName = "AuthenticationService"
-               BlueprintName = "AuthenticationService"
+               BlueprintIdentifier = "PurchaseService"
+               BuildableName = "PurchaseService"
+               BlueprintName = "PurchaseService"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:test/authentication/authentication.xctestplan"
+            reference = "container:test/purchase/purchase.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -54,9 +54,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AuthenticationService"
-            BuildableName = "AuthenticationService"
-            BlueprintName = "AuthenticationService"
+            BlueprintIdentifier = "PurchaseService"
+            BuildableName = "PurchaseService"
+            BlueprintName = "PurchaseService"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

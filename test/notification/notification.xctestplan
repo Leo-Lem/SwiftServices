@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "C0E7347B-F6AB-459B-B6AA-A7C43DAC3EDE",
+      "name" : "Config",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "NotificationService",
+          "name" : "NotificationService"
+        }
+      ]
+    },
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserNotificationsServiceTests",
+        "name" : "UserNotificationsServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}
