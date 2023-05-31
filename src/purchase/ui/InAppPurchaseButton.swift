@@ -67,7 +67,7 @@ private extension InAppPurchaseButton {
   var finished: Bool { result == .success || result == .pending }
   
   var formattedPrice: String {
-    purchase.price.formatted(.currency(code: Locale.current.currencyCode ?? "EUR"))
+    purchase.price.formatted(.currency(code: Locale.current.identifier))
   }
   
   @MainActor func buy() async {

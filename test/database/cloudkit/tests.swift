@@ -75,7 +75,7 @@ class MockCloudKitDatabase: CloudKitDatabase {
     matchResults: [(CKRecord.ID, Result<CKRecord, Error>)],
     queryCursor: CKQueryOperation.Cursor?
   ) {
-    // haven't found a way to initiaize the cursor yet
+    // haven't found a way to initialize the cursor yet
     ([], nil)
   }
 

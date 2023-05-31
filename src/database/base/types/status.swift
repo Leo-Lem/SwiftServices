@@ -4,8 +4,10 @@
 public enum DatabaseStatus: Equatable {
   /// Read and write operation are possible.
   case available
+
   /// Only read operations are possible.
   case readOnly
+  
   /// The database is unavailable.
   case unavailable
 }

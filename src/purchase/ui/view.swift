@@ -60,7 +60,7 @@ public struct InAppPurchaseView<S: InAppPurchaseService>: View {
   }
 
   private var formattedPrice: String {
-    purchase.price.formatted(.currency(code: Locale.current.identifier ?? "EUR"))
+    purchase.price.formatted(.currency(code: Locale.current.identifier))
   }
 }
 

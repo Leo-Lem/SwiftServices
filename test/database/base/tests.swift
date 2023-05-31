@@ -94,7 +94,7 @@ open class BaseTests<S: DatabaseService, T1: Example1Protocol, T2: Example2Proto
       }
     }
 
-    wait(for: [valuesAreReceived], timeout: 0.1)
+    await fulfillment(of: [valuesAreReceived], timeout: 0.1)
 
     task.cancel()
   }

@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "SwiftServices",
   defaultLocalization: "en",
-  platforms: [.iOS(.v16)]
+  platforms: [.iOS(.v16), .macOS(.v13)]
 )
 
 var libraryTargets = [String]()
@@ -13,7 +13,7 @@ var libraryTargets = [String]()
 // MARK: - (DEPENDENCIES)
 
 package.dependencies = [
-  .package(url: "https://github.com/leo-lem/leosswift", branch: "main")
+  .package(url: "https://github.com/leo-lem/leosswift", from: "0.1.0")
 ]
 
 // MARK: - (DATABASE)
@@ -31,6 +31,7 @@ let cloudkit = Target.target(
   name: "CloudKitService",
   dependencies: [
     .target(name: database.name),
+    .product(name: "Concurrency", package: "LeosSwift"),
     .product(name: "Errors", package: "LeosSwift")
   ],
   path: "src/database/cloudkit"
@@ -40,7 +41,8 @@ let coredata = Target.target(
   name: "CoreDataService",
   dependencies: [
     .target(name: database.name),
-    .product(name: "Concurrency", package: "LeosSwift")
+    .product(name: "Concurrency", package: "LeosSwift"),
+    .product(name: "Errors", package: "LeosSwift")
   ],
   path: "src/database/coredata"
 )
