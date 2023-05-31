@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "5E8A83D4-95B5-45F5-BF3E-806092BBB66C",
+      "name" : "Config",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "StoreKitServiceTests",
+        "name" : "StoreKitServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

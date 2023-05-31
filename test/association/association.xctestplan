@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "802A649A-B392-45D7-9B57-2AD58CFF2674",
+      "name" : "Config",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "AssociationService",
+          "name" : "AssociationService"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserDefaultsServiceTests",
+        "name" : "UserDefaultsServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

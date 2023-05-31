@@ -2,30 +2,24 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:LICENSE">
+      location = "container:README.md">
    </FileRef>
    <FileRef
-      location = "group:README.md">
+      location = "container:LICENSE">
    </FileRef>
    <FileRef
-      location = "group:auth">
+      location = "container:.gitignore">
    </FileRef>
    <FileRef
-      location = "group:database">
+      location = "container:Package.swift">
    </FileRef>
    <FileRef
-      location = "group:haptics">
+      location = "container:src">
    </FileRef>
    <FileRef
-      location = "group:iap">
+      location = "container:test">
    </FileRef>
    <FileRef
-      location = "group:indexing">
-   </FileRef>
-   <FileRef
-      location = "group:keyValue">
-   </FileRef>
-   <FileRef
-      location = "group:notifications">
+      location = "group:">
    </FileRef>
 </Workspace>

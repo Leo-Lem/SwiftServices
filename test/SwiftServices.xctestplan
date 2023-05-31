@@ -1,0 +1,52 @@
+{
+  "configurations" : [
+    {
+      "id" : "E460D423-8795-4169-8B7A-CE8DAFC0D493",
+      "name" : "Config",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CloudKitServiceTests",
+        "name" : "CloudKitServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CoreDataServiceTests",
+        "name" : "CoreDataServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "StoreKitServiceTests",
+        "name" : "StoreKitServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserDefaultsServiceTests",
+        "name" : "UserDefaultsServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UserNotificationsServiceTests",
+        "name" : "UserNotificationsServiceTests"
+      }
+    }
+  ],
+  "version" : 1
+}

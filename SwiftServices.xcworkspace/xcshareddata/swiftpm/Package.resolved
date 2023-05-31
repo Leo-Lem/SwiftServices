@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "leosswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leo-lem/leosswift",
+      "state" : {
+        "revision" : "a23502eaaf1f0724527bef30a8d27e0dd3dfcd6b",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}

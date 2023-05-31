@@ -1,0 +1,26 @@
+{
+  "configurations" : [
+    {
+      "id" : "E88065DD-C9D3-40AC-8AAE-F813AC996094",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "AuthenticationService",
+          "name" : "AuthenticationService"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}
