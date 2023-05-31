@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DatabaseService"
-               BuildableName = "DatabaseService"
-               BlueprintName = "DatabaseService"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AssociationService"
                BuildableName = "AssociationService"
                BlueprintName = "AssociationService"
@@ -43,11 +29,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:test/database/database.xctestplan"
+            reference = "container:test/association/association.xctestplan"
             default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:test/association/association.xctestplan">
          </TestPlanReference>
       </TestPlans>
    </TestAction>
@@ -71,9 +54,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DatabaseService"
-            BuildableName = "DatabaseService"
-            BlueprintName = "DatabaseService"
+            BlueprintIdentifier = "AssociationService"
+            BuildableName = "AssociationService"
+            BlueprintName = "AssociationService"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

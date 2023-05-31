@@ -74,7 +74,41 @@ let coredataTests = Target.testTarget(
 
 package.targets += [database, cloudkit, coredata, databaseTests, cloudkitTests, coredataTests]
 
-package.products += [.library(name: database.name, targets: [database.name, cloudkit.name, coredata.name])]
+package.products.append(.library(name: database.name, targets: [database.name, cloudkit.name, coredata.name]))
 
-// MARK: - (<#Next#>)
+// MARK: - (ASSOCIATION)
 
+let association = Target.target(
+  name: "AssociationService",
+  path: "src/association/base"
+)
+
+let userdefaults = Target.target(
+  name: "UserDefaultsService",
+  dependencies: [
+    .target(name: association.name),
+    .product(name: "Concurrency", package: "LeosSwift")
+  ],
+  path: "src/association/userdefaults"
+)
+
+let associationTests = Target.target(
+  name: "\(association.name)Tests",
+  dependencies: [
+    .target(name: association.name)
+  ],
+  path: "test/association/base"
+)
+
+let userdefaultsTests = Target.testTarget(
+  name: "\(userdefaults.name)Tests",
+  dependencies: [
+    .target(name: userdefaults.name),
+    .target(name: associationTests.name)
+  ],
+  path: "test/association/userdefaults"
+)
+
+
+package.targets += [association, userdefaults, associationTests, userdefaultsTests]
+package.products.append(.library(name: association.name, targets: [association.name, userdefaults.name]))

@@ -2,7 +2,7 @@
 
 import Concurrency
 import Foundation
-@_exported import KeyValueStorageService
+@_exported import AssociationService
 
 public extension AnyKeyValueStorageService {
   @available(iOS, obsoleted: 15)

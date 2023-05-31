@@ -14,7 +14,7 @@ extension UserDefaultsService {
       kSecClass: kSecClassGenericPassword,
       kSecAttrAccount: key.description,
       kSecReturnData: true
-    ] as CFDictionary, &result)
+    ] as [CFString : Any] as CFDictionary, &result)
 
     return result as? T
   }

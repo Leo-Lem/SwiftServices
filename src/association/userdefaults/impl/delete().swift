@@ -11,6 +11,6 @@ extension UserDefaultsService {
     SecItemDelete([
       kSecClass: kSecClassGenericPassword,
       kSecAttrAccount: key.description
-    ] as CFDictionary)
+    ] as [CFString : Any] as CFDictionary)
   }
 }
