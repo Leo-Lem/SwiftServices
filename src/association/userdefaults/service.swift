@@ -4,7 +4,7 @@ import Concurrency
 import Foundation
 @_exported import AssociationService
 
-public extension AnyKeyValueStorageService {
+public extension AnyAssociationService {
   @available(iOS, obsoleted: 15)
   @available(macOS, obsoleted: 12)
   static func userDefaults(_ defaults: UserDefaults = .standard) -> Self {
@@ -20,7 +20,7 @@ public extension AnyKeyValueStorageService {
   }
 }
 
-open class UserDefaultsService<Key: LosslessStringConvertible>: KeyValueStorageService {
+open class UserDefaultsService<Key: LosslessStringConvertible>: AssociationService {
   internal let local: UserDefaults
   internal let cloud: NSUbiquitousKeyValueStore?
 

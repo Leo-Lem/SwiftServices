@@ -1,11 +1,10 @@
-# Key-Value Storage Service
+# Association Service
 
-An abstraction for workign with key value storage (e.g., UserDefaults, NSUbiquitousKeyValueStore).
+An abstraction for working with key value storage (e.g., UserDefaults, NSUbiquitousKeyValueStore, Keychain).
 
 ## Features
 
 - storing, loading and deleting item for key.
-- storing items securely (e.g., in Keychain).
 - getting all keys.
 - storing codable items (with automatic encoding and decoding).
 

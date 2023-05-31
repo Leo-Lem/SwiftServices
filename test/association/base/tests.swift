@@ -4,7 +4,7 @@
 @_exported import XCTest
 
 // !!!: Subclass these tests and insert an implementation in the setUp method.
-open class KeyValueStorageServiceTests<S: KeyValueStorageService>: XCTestCase where S.Key == String {
+open class KeyValueStorageServiceTests<S: AssociationService>: XCTestCase where S.Key == String {
   public var service: S!
 
   func testStoringAndLoading() throws {

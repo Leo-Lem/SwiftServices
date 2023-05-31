@@ -1,10 +1,9 @@
 //	Created by Leopold Lemmermann on 03.12.22.
 
-import Foundation
+import class Foundation.JSONDecoder
 
-public extension KeyValueStorageService {
-  func load<T: Decodable>(decoder: JSONDecoder = .init(), objectFor key: Key, securely: Bool = false) throws -> T? {
-    try load(for: key, securely: securely)
-      .flatMap { try decoder.decode(T.self, from: $0) }
+public extension AssociationService {
+  func load<T: Decodable>(objectFor key: Key, decoder: JSONDecoder = .init()) throws -> T? {
+    try load(for: key).flatMap { try decoder.decode(T.self, from: $0) }
   }
 }

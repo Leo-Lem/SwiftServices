@@ -1,21 +1,13 @@
 //	Created by Leopold Lemmermann on 29.10.22.
 
-import Foundation
-
-public protocol KeyValueStorageService {
+public protocol AssociationService {
   associatedtype Key: LosslessStringConvertible
   
-  func store<T>(_ item: T, for key: Key, securely: Bool)
+  func store<T>(_ item: T, for key: Key)
 
-  func load<T>(for key: Key, securely: Bool) -> T?
+  func load<T>(for key: Key) -> T?
 
-  func delete(for key: Key, securely: Bool)
+  func delete(for key: Key)
 
   func allKeys() -> [Key]
-}
-
-public extension KeyValueStorageService {
-  func store<T>(_ item: T, for key: Key, securely: Bool = false) { store(item, for: key, securely: securely) }
-  func load<T>(for key: Key, securely: Bool = false) -> T? { load(for: key, securely: securely) }
-  func delete(for key: Key, securely: Bool = false) { delete(for: key, securely: securely) }
 }
