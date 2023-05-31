@@ -34,6 +34,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AuthenticationService"
+               BuildableName = "AuthenticationService"
+               BlueprintName = "AuthenticationService"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -48,6 +62,9 @@
          </TestPlanReference>
          <TestPlanReference
             reference = "container:test/association/association.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:test/authentication/authentication.xctestplan">
          </TestPlanReference>
       </TestPlans>
    </TestAction>
