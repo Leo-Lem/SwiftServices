@@ -3,19 +3,16 @@
 import class Foundation.NotificationCenter
 import class Foundation.NSUbiquitousKeyValueStore
 
-extension UserDefaultsService {
+extension CloudDefaultsService {
   @Sendable internal func handleRemoteChange() async {
     for await _ in NotificationCenter.default.notifications(
       named: NSUbiquitousKeyValueStore.didChangeExternallyNotification
     ) {
-      guard let cloud = cloud else { return }
-      
       ignoreChanges = true
       defer { ignoreChanges = false }
       
-      for (key, value) in cloud.dictionaryRepresentation {
-        guard key.hasPrefix(Self.cloudPrefix) else { continue }
-        local.set(value, forKey: key)
+      for (key, value) in _cloud.dictionaryRepresentation where key.hasPrefix(Self.cloudPrefix) {
+        _defaults.set(value, forKey: key)
       }
     }
   }

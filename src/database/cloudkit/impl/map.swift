@@ -2,7 +2,6 @@
 
 import Queries
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func mapToDatabaseObject<T: Convertible>(_ convertible: T) async throws -> T.DatabaseObject {
     var databaseObject = try await fetchDatabaseObject(T.self, with: convertible.id) ?? create(T.self, with: convertible.id)
@@ -16,7 +15,6 @@ extension CloudKitService {
   }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 extension CKRecord {
   static func castFrom(databaseObject: Any) -> Self {
     guard let record = databaseObject as? Self else {

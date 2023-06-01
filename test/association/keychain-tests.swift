@@ -1,8 +1,5 @@
 // Created by Leopold Lemmermann on 01.06.23.
 
-import AssociationServiceTests
-@testable import KeychainService
-
 final class KeychainServiceTests: AssociationServiceTests<KeychainService> {
   override func injectService() async throws -> KeychainService {
     KeychainService(valueClass: .genericPassword)

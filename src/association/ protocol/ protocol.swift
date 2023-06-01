@@ -1,5 +1,6 @@
 //	Created by Leopold Lemmermann on 29.10.22.
 
+/// An abstract wrapper service for key-value associated storage.
 public protocol AssociationService {
   /// Store an item.
   /// - Parameters:

@@ -1,2 +1,0 @@
-"DATABASE_UNAVAILABLE_ERROR" = "There was a problem communicating with the database.";
-"DATABASE_READONLY_ERROR" = "There was a problem writing to the database.";

@@ -21,54 +21,19 @@ package.dependencies = [
 
 let association = Target.target(
   name: "AssociationService",
-  path: "src/association/base"
+  path: "src/association",
+  exclude: ["README.md"]
 )
 
-let userdefaults = Target.target(
-  name: "UserDefaultsService",
-  dependencies: [
-    .target(name: association.name),
-    .product(name: "Concurrency", package: "LeosSwift")
-  ],
-  path: "src/association/userdefaults"
-)
-
-let keychain = Target.target(
-  name: "KeychainService",
-  dependencies: [
-    .target(name: association.name)
-  ],
-  path: "src/association/keychain"
-)
-
-let associationTests = Target.target(
+let associationTests = Target.testTarget(
   name: "\(association.name)Tests",
-  dependencies: [
-    .target(name: association.name)
-  ],
-  path: "test/association/base"
+  dependencies: [.target(name: association.name)],
+  path: "test/association",
+  exclude: ["association.xctestplan"]
 )
 
-let userdefaultsTests = Target.testTarget(
-  name: "\(userdefaults.name)Tests",
-  dependencies: [
-    .target(name: userdefaults.name),
-    .target(name: associationTests.name)
-  ],
-  path: "test/association/userdefaults"
-)
-
-let keychainTests = Target.testTarget(
-  name: "\(keychain.name)Tests",
-  dependencies: [
-    .target(name: keychain.name),
-    .target(name: associationTests.name)
-  ],
-  path: "test/association/keychain"
-)
-
-package.targets += [association, userdefaults, keychain, associationTests, userdefaultsTests, keychainTests]
-package.products.append(.library(name: association.name, targets: [association.name, userdefaults.name, keychain.name]))
+package.targets += [association, associationTests]
+package.products.append(.library(name: association.name, targets: [association.name]))
 
 // MARK: - (DATABASE)
 

@@ -1,9 +1,7 @@
 //	Created by Leopold Lemmermann on 14.11.22.
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CKDatabase: CloudKitDatabase {}
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 public protocol CloudKitDatabase {
   func record(for: CKRecord.ID) async throws -> CKRecord
 
@@ -33,7 +31,6 @@ public protocol CloudKitDatabase {
   func deleteRecord(withID: CKRecord.ID) async throws -> CKRecord.ID
 }
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 public extension CloudKitDatabase {
   func records(
     matching query: CKQuery,

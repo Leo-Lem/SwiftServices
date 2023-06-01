@@ -4,12 +4,10 @@
 @_exported import DatabaseService
 import Concurrency
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 open class CloudKitService: DatabaseService {
   public typealias Convertible = DatabaseObjectConvertible
 
   public internal(set) var status: DatabaseStatus = .unavailable
-  public let eventPublisher = Publisher<DatabaseEvent>()
 
   let container: CloudKitContainer
   private let scope: CloudKitDatabaseScope
@@ -35,7 +33,6 @@ open class CloudKitService: DatabaseService {
 
     return try await mapToDatabaseError {
       try await database.save(CKRecord.castFrom(databaseObject: try await mapToDatabaseObject(convertible)))
-      eventPublisher.send(.inserted(T.self, id: convertible.id))
       return convertible
     }
   }
@@ -46,7 +43,6 @@ open class CloudKitService: DatabaseService {
 
     try await mapToDatabaseError {
       try await database.deleteRecord(withID: CKRecord.ID(recordName: id.description))
-      eventPublisher.send(.deleted(T.self, id: id))
     }
     
     return nil

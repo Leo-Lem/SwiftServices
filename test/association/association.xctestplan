@@ -24,15 +24,8 @@
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "UserDefaultsServiceTests",
-        "name" : "UserDefaultsServiceTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:",
-        "identifier" : "KeychainServiceTests",
-        "name" : "KeychainServiceTests"
+        "identifier" : "AssociationServiceTests",
+        "name" : "AssociationServiceTests"
       }
     }
   ],

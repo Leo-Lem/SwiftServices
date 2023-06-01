@@ -1,10 +1,9 @@
 //	Created by Leopold Lemmermann on 21.10.22.
 
-import Concurrency
 import Foundation
 @_exported import Queries
 
-public protocol DatabaseService: ObservableObject, EventDriver where Event == DatabaseEvent {
+public protocol DatabaseService: ObservableObject {
   /// The database's current status.
   var status: DatabaseStatus { get }
 

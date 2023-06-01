@@ -1,7 +1,6 @@
 // Created by Leopold Lemmermann on 01.06.23.
 
-@_exported import protocol AssociationService.AssociationService
-
+/// A wrapper around Apple's KeychainServices implementing the ``AssociationService`` protocol.
 open class KeychainService: AssociationService {
   public var valueClass: ValueClass
 

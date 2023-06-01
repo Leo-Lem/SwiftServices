@@ -1,6 +1,6 @@
 //  Created by Leopold Lemmermann on 10.11.22.
 
-@_exported @testable import AssociationService
+@_exported import AssociationService
 @_exported import XCTest
 
 open class AssociationServiceTests<S: AssociationService>: XCTestCase {

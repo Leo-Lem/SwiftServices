@@ -9,7 +9,6 @@ extension CloudKitService {
       let status = await getStatus()
       if status != self.status {
         self.status = status
-        eventPublisher.send(.status(status))
       }
     }
   }

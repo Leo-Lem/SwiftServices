@@ -3,14 +3,11 @@
 import class Foundation.NotificationCenter
 import class Foundation.UserDefaults
 
-extension UserDefaultsService {
+extension CloudDefaultsService {
   @Sendable internal func handleLocalChange() async {
     for await _ in NotificationCenter.default.notifications(named: UserDefaults.didChangeNotification) {
-      guard let cloud = cloud else { return }
-      
-      for (key, value) in local.dictionaryRepresentation() {
-        guard key.hasPrefix(Self.cloudPrefix) else { continue }
-        cloud.set(value, forKey: key)
+      for (key, value) in _defaults.dictionaryRepresentation() where key.hasPrefix(Self.cloudPrefix) {
+        _cloud.set(value, forKey: key)
       }
     }
   }

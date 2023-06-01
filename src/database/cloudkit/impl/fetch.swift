@@ -1,6 +1,5 @@
 //	Created by Leopold Lemmermann on 09.11.22.
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func fetchDatabaseObject<T: Convertible>(_: T.Type, with id: T.ID) async throws -> T.DatabaseObject? {
     do {
@@ -18,14 +17,12 @@ extension CloudKitService {
   }
 }
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension Query where ResultType: CloudKitService.Convertible {
   func getCKQuery() -> CKQuery {
     CKQuery(recordType: ResultType.typeID, predicate: getNSPredicate())
   }
 }
 
-@available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
 extension CloudKitService {
   func fetch(ckQuery: CKQuery, maxItems: Int?, batchSize: Int) -> AsyncThrowingStream<[CKRecord], Error> {
     AsyncThrowingStream { [weak self] continuation in
