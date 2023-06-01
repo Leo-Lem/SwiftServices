@@ -7,7 +7,7 @@ public extension KeychainService {
     guard let data = item as? Data else { fatalError("You can only store raw Data securely.") }
 
     let baseAttributes: [CFString: Any] = [
-      kSecClass: valueClass,
+      kSecClass: valueClass.kSecClass,
       kSecAttrAccount: key.description
     ]
 

@@ -7,7 +7,7 @@ public extension KeychainService {
     var result: AnyObject?
 
     SecItemCopyMatching([
-      kSecClass: valueClass,
+      kSecClass: valueClass.kSecClass,
       kSecMatchLimit: kSecMatchLimitAll,
       kSecReturnData: true
     ] as [CFString: Any] as CFDictionary, &result)

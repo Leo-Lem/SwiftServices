@@ -5,7 +5,7 @@ import AssociationServiceTests
 
 final class KeychainServiceTests: AssociationServiceTests<KeychainService> {
   override func injectService() async throws -> KeychainService {
-    KeychainService(valueClass: kSecClassGenericPassword)
+    KeychainService(valueClass: .genericPassword)
   }
 
   override func testStoringAndLoading_givenItemHasBeenStored_whenLoadingForKey_thenReturnsItem() async throws {

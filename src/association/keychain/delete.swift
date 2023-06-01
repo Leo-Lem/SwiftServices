@@ -5,7 +5,7 @@ import Foundation
 public extension KeychainService {
   func delete(for key: any LosslessStringConvertible) {
     SecItemDelete([
-      kSecClass: valueClass,
+      kSecClass: valueClass.kSecClass,
       kSecAttrAccount: key.description
     ] as [CFString: Any] as CFDictionary)
   }
