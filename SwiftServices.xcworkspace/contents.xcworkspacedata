@@ -8,6 +8,9 @@
       location = "container:LICENSE">
    </FileRef>
    <FileRef
+      location = "group:.github/FUNDING.yml">
+   </FileRef>
+   <FileRef
       location = "container:.gitignore">
    </FileRef>
    <FileRef

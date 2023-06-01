@@ -13,7 +13,8 @@ var libraryTargets = [String]()
 // MARK: - (DEPENDENCIES)
 
 package.dependencies = [
-  .package(url: "https://github.com/leo-lem/leosswift", from: "0.1.0")
+  .package(url: "https://github.com/leo-lem/leosswift", from: "0.1.0"),
+  .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
 ]
 
 // MARK: - (ASSOCIATION)
