@@ -4,7 +4,7 @@ import class Foundation.NotificationCenter
 import class Foundation.NSUbiquitousKeyValueStore
 
 extension UserDefaultsService {
-  @Sendable func handleRemoteChange() async {
+  @Sendable internal func handleRemoteChange() async {
     for await _ in NotificationCenter.default.notifications(
       named: NSUbiquitousKeyValueStore.didChangeExternallyNotification
     ) {

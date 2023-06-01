@@ -4,7 +4,7 @@ import class Foundation.NotificationCenter
 import class Foundation.UserDefaults
 
 extension UserDefaultsService {
-  @Sendable func handleLocalChange() async {
+  @Sendable internal func handleLocalChange() async {
     for await _ in NotificationCenter.default.notifications(named: UserDefaults.didChangeNotification) {
       guard let cloud = cloud else { return }
       

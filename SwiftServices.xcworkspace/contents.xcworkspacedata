@@ -11,7 +11,7 @@
       location = "group:.github/FUNDING.yml">
    </FileRef>
    <FileRef
-      location = "group:.github/workflows/deploy-docs.yml">
+      location = "group:/Users/leolem/dev/packages/services/.github/workflows/deploy-docs.not-yml">
    </FileRef>
    <FileRef
       location = "container:.gitignore">

@@ -5,7 +5,5 @@
 open class KeychainService: AssociationService {
   public var valueClass: ValueClass
 
-  /// Initialize a new `KeychainService`.
-  /// - Parameter valueClass: The ``ValueClass-swift.enum`` to use for storing items.
   public init(valueClass: ValueClass) { self.valueClass = valueClass }
 }
