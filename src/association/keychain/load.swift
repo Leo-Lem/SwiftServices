@@ -3,7 +3,7 @@
 import Foundation
 
 public extension KeychainService {
-  func load<T>(for key: any LosslessStringConvertible) -> T? {
+  func load<T>(for key: any CustomStringConvertible) -> T? {
     var result: AnyObject?
 
     SecItemCopyMatching([

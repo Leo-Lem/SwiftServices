@@ -3,7 +3,7 @@
 import Foundation
 
 public extension KeychainService {
-  func store<T>(_ item: T, for key: any LosslessStringConvertible) {
+  func store<T>(_ item: T, for key: any CustomStringConvertible) {
     guard let data = item as? Data else { fatalError("You can only store raw Data securely.") }
 
     let baseAttributes: [CFString: Any] = [

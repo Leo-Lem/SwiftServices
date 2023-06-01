@@ -27,15 +27,15 @@ open class UserDefaultsService: AssociationService {
     }
   }
 
-  public func store<T>(_ item: T, for key: any LosslessStringConvertible) {
+  public func store<T>(_ item: T, for key: any CustomStringConvertible) {
     local.set(item, forKey: key.description)
   }
 
-  public func load<T>(for key: any LosslessStringConvertible) -> T? {
+  public func load<T>(for key: any CustomStringConvertible) -> T? {
     local.object(forKey: key.description) as? T
   }
 
-  public func delete(for key: any LosslessStringConvertible) {
+  public func delete(for key: any CustomStringConvertible) {
     local.removeObject(forKey: key.description)
   }
 
