@@ -14,6 +14,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  TARGET: "AssociationService"
+
 jobs:
   build:
     runs-on: macos-latest
@@ -28,7 +31,7 @@ jobs:
         run: |
           swift package generate-documentation
           --allow-writing-to-directory docs --output-path docs
-          --target SwiftServices --hosting-base-path SwiftServices
+          --target ${{env.TARGET}} --hosting-base-path ${{env.TARGET}}
           --disable-indexing --transform-for-static-hosting
       - name: Upload documentation
         uses: actions/upload-artifact@v3

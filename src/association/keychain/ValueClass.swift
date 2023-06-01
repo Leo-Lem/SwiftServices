@@ -3,6 +3,7 @@
 import Foundation
 
 public extension KeychainService {
+  /// A Swift wrapper for KeychainServices' `kSecClasses`.
   enum ValueClass {
     case genericPassword
     case internetPassword
@@ -13,6 +14,7 @@ public extension KeychainService {
 }
 
 public extension KeychainService.ValueClass {
+  /// The corresponding `kSecClass` `CFString`.
   var kSecClass: CFString {
     switch self {
     case .genericPassword: return kSecClassGenericPassword
@@ -23,4 +25,3 @@ public extension KeychainService.ValueClass {
     }
   }
 }
-
