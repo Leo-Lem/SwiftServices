@@ -3,9 +3,6 @@
 @testable import UserDefaultsService
 import AssociationServiceTests
 
-final class UserDefaultsServiceTests: KeyValueStorageServiceTests<UserDefaultsService<String>> {
-  override func setUp() {
-    service = .init()
-    service.deleteAll()
-  }
+final class UserDefaultsServiceTests: AssociationServiceTests<UserDefaultsService> {
+  override func injectService() async throws -> UserDefaultsService { UserDefaultsService() }
 }
