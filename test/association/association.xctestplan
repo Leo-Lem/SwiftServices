@@ -26,6 +26,13 @@
         "identifier" : "UserDefaultsServiceTests",
         "name" : "UserDefaultsServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "KeychainServiceTests",
+        "name" : "KeychainServiceTests"
+      }
     }
   ],
   "version" : 1
