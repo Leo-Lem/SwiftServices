@@ -1,0 +1,61 @@
+name: Deploy documentation to Pages
+
+on:
+  push:
+    branches: ["main", "docs"] # TODO: remove docs once ready
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  TARGET: "AssociationService"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: "5"
+      - uses: actions/checkout@v3
+      - name: Create docs directory
+        run: mkdir docs
+      - name: Build documentation
+        run: |
+          swift package generate-documentation
+          --allow-writing-to-directory docs --output-path docs
+          --target ${{env.TARGET}} --hosting-base-path ${{env.TARGET}}
+          --disable-indexing --transform-for-static-hosting
+      - name: Upload documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: docs/
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download documentation
+        uses: actions/download-artifact@v3
+        with:
+          name: documentation
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
