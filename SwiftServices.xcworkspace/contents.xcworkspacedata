@@ -23,6 +23,9 @@
       location = "container:test">
    </FileRef>
    <FileRef
+      location = "group:docs">
+   </FileRef>
+   <FileRef
       location = "group:">
    </FileRef>
 </Workspace>
