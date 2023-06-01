@@ -70,38 +70,6 @@ let keychainTests = Target.testTarget(
 package.targets += [association, userdefaults, keychain, associationTests, userdefaultsTests, keychainTests]
 package.products.append(.library(name: association.name, targets: [association.name, userdefaults.name, keychain.name]))
 
-// MARK: - (AUTHENTICATION)
-
-let authentication = Target.target(
-  name: "AuthenticationService",
-  dependencies: [
-    .product(name: "Concurrency", package: "LeosSwift")
-  ],
-  path: "src/authentication/base"
-)
-
-let authenticationUI = Target.target(
-  name: "\(authentication.name)UI",
-  dependencies: [
-    .target(name: authentication.name),
-    .product(name: "Errors", package: "LeosSwift"),
-    .product(name: "LeosMisc", package: "LeosSwift")
-  ],
-  path: "src/authentication/ui",
-  resources: [.process("res")]
-)
-
-let authenticationTests = Target.target(
-  name: "\(authentication.name)Tests",
-  dependencies: [
-    .target(name: authentication.name)
-  ],
-  path: "test/authentication/base"
-)
-
-package.targets += [authentication, authenticationUI, authenticationTests]
-package.products.append(.library(name: authentication.name, targets: [authentication.name, authenticationUI.name]))
-
 // MARK: - (DATABASE)
 
 let database = Target.target(
