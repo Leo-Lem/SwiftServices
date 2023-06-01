@@ -11,6 +11,9 @@
       location = "group:.github/FUNDING.yml">
    </FileRef>
    <FileRef
+      location = "group:.github/workflows/deploy-docs.yml">
+   </FileRef>
+   <FileRef
       location = "container:.gitignore">
    </FileRef>
    <FileRef
@@ -21,9 +24,6 @@
    </FileRef>
    <FileRef
       location = "container:test">
-   </FileRef>
-   <FileRef
-      location = "group:docs">
    </FileRef>
    <FileRef
       location = "group:">
